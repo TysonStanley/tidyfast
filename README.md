@@ -1,19 +1,34 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.0.1` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.0` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
 <!-- badges: end -->
 
 The goal of `tidyfast` is to provide fast and efficient alternatives to
-some `tidyr` functions, including:
+some `tidyr` and `dplyr` functions using `data.table` under the hood.
+Each have the prefix of `dt_` to allow for autocomplete in IDEs such as
+RStudio. These should compliment some of the current functionality in
+`dtplyr` (but notably does not use the `lazy_dt()` framework of
+`dtplyr`).
 
-  - `nest_dt()` for nesting data tables
-  - `unnest_dt()` for unnesting data tables
-  - `unnest_vec_dt()` for unnesting vectors in a list-column in a data
+The current functions include:
+
+**Nesting and unnesting** (similar to `tidyr::nest()` or
+`dplyr::group_nest()` and `tidyr::unnest()`):
+
+  - `dt_nest()` for nesting data tables
+  - `dt_unnest()` for unnesting data tables
+  - `dt_unnest_vec()` for unnesting vectors in a list-column in a data
     table
+
+**If Else** (similar to `dplyr::nest()` or `dplyr::group_nest()` and
+`tidyr::unnest()`):
+
+  - `dt_case_when()` for `dplyr::case_when()` syntax with the speed of
+    `data.table::fifelse()`
 
 Package is still in active development.
 

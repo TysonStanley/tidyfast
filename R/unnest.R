@@ -36,7 +36,7 @@ unnest_vec_dt <- function(dt, cols, id, name){
   by <- substitute(id)
   cols <- substitute(unlist(cols,recursive = FALSE))
 
-  dt <- dt[,eval(cols), by = eval(by)]
+  dt <- dt[, eval(cols), by = eval(by)]
   setnames(dt, old = paste0("V", 1:length(name)), new = name)
   dt
 }

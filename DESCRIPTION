@@ -9,7 +9,9 @@ Authors@R:
            comment = c(ORCID = "0000-0002-2137-1391"))
 Description: Some tidying functions built on data.table
     to provide quick and efficient data manipulation.
-Imports: data.table
+Imports: 
+    data.table,
+    magrittr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

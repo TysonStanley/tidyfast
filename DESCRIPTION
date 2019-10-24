@@ -1,0 +1,16 @@
+Package: tidyfast
+Title: Fast Tidying of Data
+Version: 0.0.1
+Authors@R: 
+    person(given = "Tyson",
+           family = "Barrett",
+           role = c("aut", "cre"),
+           email = "t.barrett@aggiemail.usu.edu",
+           comment = c(ORCID = "0000-0002-2137-1391"))
+Description: Some tidying functions built on data.table
+    to provide quick and efficient data manipulation.
+Imports: data.table
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1

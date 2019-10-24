@@ -118,7 +118,7 @@ identical(x_cat, x_cat_fif)
 
 Notably, `dt_case_when()` is very fast and memory efficient, given it is built on `data.table::fifelse()`.
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.width=6, fig.height=5, dpi=300}
 marks <-
   bench::mark(dt_case_when(x < medianx ~ "low",
                            x >= medianx ~ "high",

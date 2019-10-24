@@ -24,8 +24,7 @@ The current functions include:
   - `dt_unnest_vec()` for unnesting vectors in a list-column in a data
     table
 
-**If Else** (similar to `dplyr::nest()` or `dplyr::group_nest()` and
-`tidyr::unnest()`):
+**If Else** (similar to `dplyr::case_when()`):
 
   - `dt_case_when()` for `dplyr::case_when()` syntax with the speed of
     `data.table::fifelse()`
@@ -45,8 +44,10 @@ devtools::install_github("TysonStanley/tidyfast")
 ## Example
 
 The nesting and unnesting functions were shown in a [previous
-preprint](https://psyarxiv.com/u8ekc/). Herein, I show more simple
-applications. The following data table will be used for the examples.
+preprint](https://psyarxiv.com/u8ekc/) while `dt_case_when()` is really
+new. Herein, I show more simple applications.
+
+The following data table will be used for the examples.
 
 ``` r
 library(tidyfast)
@@ -62,14 +63,16 @@ dt <- data.table(
    id = 1:1e5)
 ```
 
+### Nesting and Unnesting
+
 We can nest this data using `dt_nest()`:
 
 ``` r
 nested <- dt_nest(dt, grp)
 nested
 #>    grp         data
-#> 1:   2 <data.table>
-#> 2:   3 <data.table>
+#> 1:   3 <data.table>
+#> 2:   2 <data.table>
 #> 3:   1 <data.table>
 ```
 
@@ -77,30 +80,30 @@ We can also unnest this with `dt_unnest()`:
 
 ``` r
 dt_unnest(nested, col = data, id = grp)
-#>         grp            x         y         nested1
-#>      1:   2 -0.466175094 0.3422832 1,1,1,1,1,1,...
-#>      2:   2  0.265780291 0.2455631 3,1,3,3,2,1,...
-#>      3:   2 -0.093891857 0.4328516 4,6,1,3,4,3,...
-#>      4:   2  0.311893935 0.1344532 1,1,1,1,1,1,...
-#>      5:   2  1.319435010 0.2268143 3,1,3,3,2,1,...
-#>     ---                                           
-#>  99996:   1  0.382158499 0.9283831 3,1,3,3,2,1,...
-#>  99997:   1 -0.308199299 0.6770861 1,4,1,3,1,1,...
-#>  99998:   1  0.755625357 0.1174685 5,1,7,3,2,6,...
-#>  99999:   1 -1.776906123 0.6054173 6,8,4,3,5,7,...
-#> 100000:   1  0.009290152 0.5044402 4,6,1,3,4,3,...
+#>         grp           x         y         nested1
+#>      1:   3  0.16504029 0.7144019 1,1,1,1,1,1,...
+#>      2:   3  2.35014655 0.2198366 4,3,4,4,3,3,...
+#>      3:   3 -1.69117925 0.1658480 2,3,2,5,2,5,...
+#>      4:   3  0.42003559 0.1705831 5,6,6,3,6,3,...
+#>      5:   3  1.19147946 0.5009870 1,1,2,2,1,2,...
+#>     ---                                          
+#>  99996:   1 -0.05003083 0.1343591 7,1,9,7,7,8,...
+#>  99997:   1 -0.66727859 0.3307577 2,2,2,1,2,3,...
+#>  99998:   1  0.01633706 0.4221727 4,3,4,4,3,3,...
+#>  99999:   1 -0.69458994 0.7131046 2,3,2,5,2,5,...
+#> 100000:   1  0.50203405 0.1427996 3,1,8,4,8,5,...
 #>                                               nested2    id
 #>      1: thing1,thing1,thing1,thing1,thing1,thing1,...     1
-#>      2: thing1,thing1,thing1,thing1,thing1,thing1,...     3
-#>      3: thing1,thing1,thing1,thing1,thing1,thing1,...     9
-#>      4: thing1,thing1,thing1,thing1,thing1,thing1,...    11
-#>      5: thing1,thing1,thing1,thing1,thing1,thing1,...    13
+#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...     4
+#>      3: thing1,thing1,thing1,thing1,thing1,thing1,...     5
+#>      4: thing1,thing1,thing1,thing1,thing1,thing1,...     7
+#>      5: thing2,thing2,thing2,thing2,thing2,thing2,...    12
 #>     ---                                                    
-#>  99996: thing1,thing1,thing1,thing1,thing1,thing1,... 99993
-#>  99997: thing1,thing1,thing1,thing1,thing1,thing1,... 99995
-#>  99998: thing1,thing1,thing1,thing1,thing1,thing1,... 99997
-#>  99999: thing2,thing2,thing2,thing2,thing2,thing2,... 99998
-#> 100000: thing1,thing1,thing1,thing1,thing1,thing1,... 99999
+#>  99996: thing2,thing2,thing2,thing2,thing2,thing2,... 99990
+#>  99997: thing1,thing1,thing1,thing1,thing1,thing1,... 99993
+#>  99998: thing2,thing2,thing2,thing2,thing2,thing2,... 99994
+#>  99999: thing1,thing1,thing1,thing1,thing1,thing1,... 99995
+#> 100000: thing2,thing2,thing2,thing2,thing2,thing2,... 99998
 ```
 
 When our list columns don’t have data tables (as output from
@@ -120,11 +123,13 @@ dt_unnest_vec(dt,
 #>       5:      1       1  thing1
 #>      ---                       
 #>  999996: 100000       8  thing2
-#>  999997: 100000      10  thing2
-#>  999998: 100000       9  thing2
-#>  999999: 100000       2  thing2
-#> 1000000: 100000       5  thing2
+#>  999997: 100000       3  thing2
+#>  999998: 100000       4  thing2
+#>  999999: 100000       9  thing2
+#> 1000000: 100000       3  thing2
 ```
+
+### If Else
 
 Also, the new `dt_case_when()` function is built on the very fast
 `data.table::fiflese()` but has syntax like unto `dplyr::case_when()`.
@@ -171,9 +176,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when       133ms   148.8MB
-    #> 2 dt_case_when   34.9ms    34.3MB
-    #> 3 fifelse        34.3ms    34.3MB
+    #> 1 case_when     127.4ms   148.8MB
+    #> 2 dt_case_when   35.1ms    34.3MB
+    #> 3 fifelse        33.4ms    34.3MB
 
 ## Note
 

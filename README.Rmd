@@ -28,7 +28,7 @@ The current functions include:
 - `dt_unnest()` for unnesting data tables
 - `dt_unnest_vec()` for unnesting vectors in a list-column in a data table
 
-**If Else** (similar to `dplyr::nest()` or `dplyr::group_nest()` and `tidyr::unnest()`):
+**If Else** (similar to `dplyr::case_when()`):
 
 - `dt_case_when()` for `dplyr::case_when()` syntax with the speed of `data.table::fifelse()`
 
@@ -46,7 +46,9 @@ devtools::install_github("TysonStanley/tidyfast")
 
 ## Example
 
-The nesting and unnesting functions were shown in a [previous preprint](https://psyarxiv.com/u8ekc/). Herein, I show more simple applications. The following data table will be used for the examples.
+The nesting and unnesting functions were shown in a [previous preprint](https://psyarxiv.com/u8ekc/) while `dt_case_when()` is really new. Herein, I show more simple applications. 
+
+The following data table will be used for the examples.
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyfast)
@@ -61,6 +63,9 @@ dt <- data.table(
    nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
    id = 1:1e5)
 ```
+
+
+### Nesting and Unnesting
 
 We can nest this data using `dt_nest()`:
 
@@ -84,6 +89,7 @@ dt_unnest_vec(dt,
               name = c("nested1", "nested2"))
 ```
 
+### If Else
 
 Also, the new `dt_case_when()` function is built on the very fast `data.table::fiflese()` but has syntax like unto `dplyr::case_when()`. That is, it looks like:
 

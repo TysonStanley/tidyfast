@@ -10,7 +10,7 @@ Authors@R:
 Description: Some tidying functions built on data.table
     to provide quick and efficient data manipulation.
 Imports: 
-    data.table,
+    data.table (>= 1.12.4),
     magrittr
 License: GPL-3
 Encoding: UTF-8

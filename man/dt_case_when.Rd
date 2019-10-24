@@ -13,3 +13,14 @@ dt_case_when(...)
 Does what `dplyr::case_when()` does, with the same syntax, but with
 `data.table::fifelse()` under the hood
 }
+\examples{
+
+x <- rnorm(1e5)
+
+dt_case_when(
+  x < median(x) ~ "low",
+  x >= median(x) ~ "high",
+  is.na(x) ~ "other"
+  )
+
+}

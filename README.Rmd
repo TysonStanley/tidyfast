@@ -43,12 +43,120 @@ You can install the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("TysonStanley/tidyfast")
 ```
+
 ## Example
 
-This will be added soon.
+The nesting and unnesting functions were shown in a [previous preprint](https://psyarxiv.com/u8ekc/). Herein, I show more simple applications. The following data table will be used for the examples.
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyfast)
+library(data.table)
+library(dplyr)       # to compare with case_when()
+
+dt <- data.table(
+   x = rnorm(1e5),
+   y = runif(1e5),
+   grp = sample(1L:3L, 1e5, replace = TRUE),
+   nested1 = lapply(1:10, sample, 10, replace = TRUE),
+   nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
+   id = 1:1e5)
+```
+
+We can nest this data using `dt_nest()`:
+
+```{r}
+nested <- dt_nest(dt, grp)
+nested
+```
+
+We can also unnest this with `dt_unnest()`:
+
+```{r}
+dt_unnest(nested, col = data, id = grp)
+```
+
+When our list columns don't have data tables (as output from `dt_nest()`) we can use the `dt_unnest_vec()` function, that will unnest vectors.
+
+```{r}
+dt_unnest_vec(dt, 
+              cols = list(nested1, nested2), 
+              id = id, 
+              name = c("nested1", "nested2"))
+```
+
+
+Also, the new `dt_case_when()` function is built on the very fast `data.table::fiflese()` but has syntax like unto `dplyr::case_when()`. That is, it looks like:
+
+```{r, eval = FALSE}
+dt_case_when(condition1 ~ label1,
+             condition2 ~ label2,
+             ...)
+```
+
+To show that each method, `dt_case_when()`, `dplyr::case_when()`, and `data.table::fifelse()` produce the same result, consider the following example. 
+
+```{r}
+x <- rnorm(1e6)
+
+medianx <- median(x)
+x_cat <-
+  dt_case_when(x < medianx ~ "low",
+               x >= medianx ~ "high",
+               is.na(x) ~ "unknown")
+x_cat_dplyr <-
+  case_when(x < medianx ~ "low",
+            x >= medianx ~ "high",
+            is.na(x) ~ "unknown")
+x_cat_fif <-
+  fifelse(x < medianx, "low",
+  fifelse(x >= medianx, "high",
+  fifelse(is.na(x), "unknown", NA_character_)))
+
+identical(x_cat, x_cat_dplyr)
+identical(x_cat, x_cat_fif)
+```
+
+Notably, `dt_case_when()` is very fast and memory efficient, given it is built on `data.table::fifelse()`.
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+marks <-
+  bench::mark(dt_case_when(x < medianx ~ "low",
+                           x >= medianx ~ "high",
+                           is.na(x) ~ "unknown"),
+              case_when(x < medianx ~ "low",
+                        x >= medianx ~ "high",
+                        is.na(x) ~ "unknown"),
+              fifelse(x < medianx, "low",
+              fifelse(x >= medianx, "high",
+              fifelse(is.na(x), "unknown", NA_character_))),
+              iterations = 50)
+
+library(ggbeeswarm)  # for the speed comparison plot
+
+marks$time %>% 
+  setNames(c("dt_case_when", "case_when", "fifelse")) %>% 
+  data.frame() %>% 
+  tidyr::gather() %>% 
+  mutate(value = as.numeric(value)) %>% 
+  ggplot(aes(key, value, color = key)) +
+  ggbeeswarm::geom_beeswarm() +
+  labs(x = "",
+       y = "Time (seconds)") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_color_viridis_d()
+
+marks %>% 
+  select(expression, median, mem_alloc) %>% 
+  mutate(expression = c("dt_case_when", "case_when", "fifelse")) %>% 
+  arrange(expression)
+```
 
 
 
 ## Note
 
-Please note that the 'tidyfast' project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
+Please note that the `tidyfast` project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
+
+Also, `ggplot2`, `ggbeeswarm`, and `tidyr` were used herein for creating the plot.

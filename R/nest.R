@@ -7,7 +7,7 @@
 #' @param .key the name of the list column; default is "data"
 #'
 #'
-#' @example
+#' @examples
 #'
 #' library(data.table)
 #' dt <- data.table(

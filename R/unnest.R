@@ -6,7 +6,7 @@
 #' @param col  the column to unnest
 #' @param id the ID variable to unnest by
 #'
-#' @example
+#' @examples
 #'
 #' library(data.table)
 #' dt <- data.table(
@@ -37,11 +37,11 @@ dt_unnest <- function(dt, col, id){
 #' Quickly nest vectors nested in a list column.
 #'
 #' @param dt the data table to nest
-#' @param cols  the columns to unnest (must all be the sample length within ids)
+#' @param cols a list of the columns to unnest (must all be the sample length within ids); use bare names of the variables
 #' @param id the ID variable to unnest by
-#' @param name the names of the unnested vectors
+#' @param name a character vector of the names to give the unnested vectors
 #'
-#' @example
+#' @examples
 #'
 #' library(data.table)
 #' dt <- data.table(
@@ -72,16 +72,3 @@ dt_unnest_vec <- function(dt, cols, id, name){
            new = c(name, paste(substitute(id))))
   dt
 }
-
-dt <- data.table(
-  x = rnorm(1e5),
-  y = runif(1e5),
-  nested1 = lapply(1:10, sample, 10, replace = TRUE),
-  nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
-  id = 1:1e5
-  )
-
-dt_unnest_vec(dt,
-              cols = list(nested1, nested2),
-              id = id,
-              name = c("nested1", "nested2"))

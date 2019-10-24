@@ -5,9 +5,9 @@
 #'
 #' @param ... statements of the form: `condition ~ label``, where the label is applied if the condition is met
 #'
-#' @importFrom data.table fifelse
+#' @import data.table
 #'
-#' @example
+#' @examples
 #'
 #' x <- rnorm(1e5)
 #'
@@ -44,6 +44,16 @@ dt_case_when <- function(...){
 
   eval(calls, envir = parent.frame())
 }
+
+#' fifelse from data.table
+#'
+#' See \code{data.table::\link[data.table:fifelse]{fifelse()}} for details.
+#'
+#' @name fifelse
+#' @keywords internal
+#' @export
+#' @importFrom data.table fifelse
+NULL
 
 # Helpers -----------------
 

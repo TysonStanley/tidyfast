@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tidyfast
+# `tidyfast v0.0.1`
 
 <!-- badges: start -->
 

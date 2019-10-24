@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# tidyfast
+# `tidyfast v0.0.1`
 
 <!-- badges: start -->
 <!-- badges: end -->

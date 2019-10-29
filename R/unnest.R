@@ -22,7 +22,8 @@
 #'
 #' @export
 dt_unnest <- function(dt, col, id){
-  stopifnot(is.data.table(dt))
+  if (isFALSE(is.data.table(dt)))
+    dt <- as.data.table(dt)
 
   by <- substitute(id)
   col <- substitute(unlist(col, recursive = FALSE))
@@ -61,7 +62,8 @@ dt_unnest <- function(dt, col, id){
 #'
 #' @export
 dt_unnest_vec <- function(dt, cols, id, name){
-  stopifnot(is.data.table(dt))
+  if (isFALSE(is.data.table(dt)))
+    dt <- as.data.table(dt)
 
   by <- substitute(id)
   cols <- substitute(unlist(cols,recursive = FALSE))

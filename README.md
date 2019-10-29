@@ -72,37 +72,37 @@ nested <- dt_nest(dt, grp)
 nested
 #>    grp         data
 #> 1:   1 <data.table>
-#> 2:   3 <data.table>
-#> 3:   2 <data.table>
+#> 2:   2 <data.table>
+#> 3:   3 <data.table>
 ```
 
 We can also unnest this with `dt_unnest()`:
 
 ``` r
 dt_unnest(nested, col = data, id = grp)
-#>         grp           x         y         nested1
-#>      1:   1  1.74430355 0.1236198 1,1,1,1,1,1,...
-#>      2:   1 -1.22134546 0.1930840 2,1,2,2,2,2,...
-#>      3:   1 -0.74284192 0.1967749 1,2,1,1,3,3,...
-#>      4:   1 -2.41169525 0.7422440 4,4,3,1,3,4,...
-#>      5:   1 -0.59810376 0.1565031 6,5,1,5,3,6,...
-#>     ---                                          
-#>  99996:   2  1.14510593 0.9404775 2,3,6,6,3,4,...
-#>  99997:   2  0.04006474 0.8370938 2,1,2,2,2,2,...
-#>  99998:   2  1.21159489 0.6585533 5,3,2,1,1,1,...
-#>  99999:   2 -0.41479408 0.4716028 2,3,6,6,3,4,...
-#> 100000:   2  0.31899842 0.9813373 3,7,4,4,5,3,...
+#>         grp          x           y         nested1
+#>      1:   1 -1.0115211 0.766285956 1,1,1,1,1,1,...
+#>      2:   1  0.5076320 0.736638242 4,2,3,4,2,4,...
+#>      3:   1 -0.3789664 0.768455267 5,4,4,2,2,2,...
+#>      4:   1 -0.5891213 0.184406583 1,5,8,5,6,7,...
+#>      5:   1  0.3052274 0.453607633 1,1,1,2,2,1,...
+#>     ---                                           
+#>  99996:   3  1.2093696 0.792701916 4,3,6,5,5,2,...
+#>  99997:   3 -1.2967363 0.184104990 1,1,1,2,2,1,...
+#>  99998:   3 -0.6568024 0.008231117 3,1,3,3,3,1,...
+#>  99999:   3  2.2081483 0.596119758 4,2,2,1,4,2,...
+#> 100000:   3  1.0749996 0.645412731 1,5,8,5,6,7,...
 #>                                               nested2    id
 #>      1: thing1,thing1,thing1,thing1,thing1,thing1,...     1
-#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...     2
-#>      3: thing1,thing1,thing1,thing1,thing1,thing1,...     3
-#>      4: thing2,thing2,thing2,thing2,thing2,thing2,...     4
-#>      5: thing2,thing2,thing2,thing2,thing2,thing2,...     6
+#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...    14
+#>      3: thing1,thing1,thing1,thing1,thing1,thing1,...    15
+#>      4: thing1,thing1,thing1,thing1,thing1,thing1,...    19
+#>      5: thing2,thing2,thing2,thing2,thing2,thing2,...    22
 #>     ---                                                    
-#>  99996: thing2,thing2,thing2,thing2,thing2,thing2,... 99988
+#>  99996: thing1,thing1,thing1,thing1,thing1,thing1,... 99977
 #>  99997: thing2,thing2,thing2,thing2,thing2,thing2,... 99992
-#>  99998: thing1,thing1,thing1,thing1,thing1,thing1,... 99995
-#>  99999: thing2,thing2,thing2,thing2,thing2,thing2,... 99998
+#>  99998: thing1,thing1,thing1,thing1,thing1,thing1,... 99993
+#>  99999: thing2,thing2,thing2,thing2,thing2,thing2,... 99996
 #> 100000: thing1,thing1,thing1,thing1,thing1,thing1,... 99999
 ```
 
@@ -122,10 +122,10 @@ dt_unnest_vec(dt,
 #>       4:      1       1  thing1
 #>       5:      1       1  thing1
 #>      ---                       
-#>  999996: 100000       8  thing2
-#>  999997: 100000       7  thing2
-#>  999998: 100000       8  thing2
-#>  999999: 100000       6  thing2
+#>  999996: 100000       3  thing2
+#>  999997: 100000       6  thing2
+#>  999998: 100000       4  thing2
+#>  999999: 100000      10  thing2
 #> 1000000: 100000       7  thing2
 ```
 
@@ -176,9 +176,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     123.7ms   148.8MB
-    #> 2 dt_case_when   34.9ms    34.3MB
-    #> 3 fifelse        33.4ms    34.3MB
+    #> 1 case_when     132.3ms   148.8MB
+    #> 2 dt_case_when   37.5ms    34.3MB
+    #> 3 fifelse          34ms    34.3MB
 
 ## Note
 

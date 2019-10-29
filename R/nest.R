@@ -22,7 +22,8 @@
 #'
 #' @export
 dt_nest <- function(dt, ..., .key = "data"){
-  stopifnot(is.data.table(dt))
+  if (isFALSE(is.data.table(dt)))
+    dt <- as.data.table(dt)
 
   by <- substitute(list(...))
 
@@ -31,7 +32,3 @@ dt_nest <- function(dt, ..., .key = "data"){
   dt
 }
 
-thing = function(...){
-  length(list(...))
-}
-thing()

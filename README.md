@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.1.0` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.1` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -71,9 +71,9 @@ We can nest this data using `dt_nest()`:
 nested <- dt_nest(dt, grp)
 nested
 #>    grp         data
-#> 1:   3 <data.table>
-#> 2:   2 <data.table>
-#> 3:   1 <data.table>
+#> 1:   1 <data.table>
+#> 2:   3 <data.table>
+#> 3:   2 <data.table>
 ```
 
 We can also unnest this with `dt_unnest()`:
@@ -81,29 +81,29 @@ We can also unnest this with `dt_unnest()`:
 ``` r
 dt_unnest(nested, col = data, id = grp)
 #>         grp           x         y         nested1
-#>      1:   3  0.16504029 0.7144019 1,1,1,1,1,1,...
-#>      2:   3  2.35014655 0.2198366 4,3,4,4,3,3,...
-#>      3:   3 -1.69117925 0.1658480 2,3,2,5,2,5,...
-#>      4:   3  0.42003559 0.1705831 5,6,6,3,6,3,...
-#>      5:   3  1.19147946 0.5009870 1,1,2,2,1,2,...
+#>      1:   1  1.74430355 0.1236198 1,1,1,1,1,1,...
+#>      2:   1 -1.22134546 0.1930840 2,1,2,2,2,2,...
+#>      3:   1 -0.74284192 0.1967749 1,2,1,1,3,3,...
+#>      4:   1 -2.41169525 0.7422440 4,4,3,1,3,4,...
+#>      5:   1 -0.59810376 0.1565031 6,5,1,5,3,6,...
 #>     ---                                          
-#>  99996:   1 -0.05003083 0.1343591 7,1,9,7,7,8,...
-#>  99997:   1 -0.66727859 0.3307577 2,2,2,1,2,3,...
-#>  99998:   1  0.01633706 0.4221727 4,3,4,4,3,3,...
-#>  99999:   1 -0.69458994 0.7131046 2,3,2,5,2,5,...
-#> 100000:   1  0.50203405 0.1427996 3,1,8,4,8,5,...
+#>  99996:   2  1.14510593 0.9404775 2,3,6,6,3,4,...
+#>  99997:   2  0.04006474 0.8370938 2,1,2,2,2,2,...
+#>  99998:   2  1.21159489 0.6585533 5,3,2,1,1,1,...
+#>  99999:   2 -0.41479408 0.4716028 2,3,6,6,3,4,...
+#> 100000:   2  0.31899842 0.9813373 3,7,4,4,5,3,...
 #>                                               nested2    id
 #>      1: thing1,thing1,thing1,thing1,thing1,thing1,...     1
-#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...     4
-#>      3: thing1,thing1,thing1,thing1,thing1,thing1,...     5
-#>      4: thing1,thing1,thing1,thing1,thing1,thing1,...     7
-#>      5: thing2,thing2,thing2,thing2,thing2,thing2,...    12
+#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...     2
+#>      3: thing1,thing1,thing1,thing1,thing1,thing1,...     3
+#>      4: thing2,thing2,thing2,thing2,thing2,thing2,...     4
+#>      5: thing2,thing2,thing2,thing2,thing2,thing2,...     6
 #>     ---                                                    
-#>  99996: thing2,thing2,thing2,thing2,thing2,thing2,... 99990
-#>  99997: thing1,thing1,thing1,thing1,thing1,thing1,... 99993
-#>  99998: thing2,thing2,thing2,thing2,thing2,thing2,... 99994
-#>  99999: thing1,thing1,thing1,thing1,thing1,thing1,... 99995
-#> 100000: thing2,thing2,thing2,thing2,thing2,thing2,... 99998
+#>  99996: thing2,thing2,thing2,thing2,thing2,thing2,... 99988
+#>  99997: thing2,thing2,thing2,thing2,thing2,thing2,... 99992
+#>  99998: thing1,thing1,thing1,thing1,thing1,thing1,... 99995
+#>  99999: thing2,thing2,thing2,thing2,thing2,thing2,... 99998
+#> 100000: thing1,thing1,thing1,thing1,thing1,thing1,... 99999
 ```
 
 When our list columns don’t have data tables (as output from
@@ -123,10 +123,10 @@ dt_unnest_vec(dt,
 #>       5:      1       1  thing1
 #>      ---                       
 #>  999996: 100000       8  thing2
-#>  999997: 100000       3  thing2
-#>  999998: 100000       4  thing2
-#>  999999: 100000       9  thing2
-#> 1000000: 100000       3  thing2
+#>  999997: 100000       7  thing2
+#>  999998: 100000       8  thing2
+#>  999999: 100000       6  thing2
+#> 1000000: 100000       7  thing2
 ```
 
 ### If Else
@@ -171,13 +171,13 @@ identical(x_cat, x_cat_fif)
 Notably, `dt_case_when()` is very fast and memory efficient, given it is
 built on `data.table::fifelse()`.
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     127.4ms   148.8MB
-    #> 2 dt_case_when   35.1ms    34.3MB
+    #> 1 case_when     123.7ms   148.8MB
+    #> 2 dt_case_when   34.9ms    34.3MB
     #> 3 fifelse        33.4ms    34.3MB
 
 ## Note

@@ -9,13 +9,21 @@
 #'
 #' @examples
 #'
-#' x <- rnorm(1e5)
-#'
+#' x <- rnorm(100)
 #' dt_case_when(
 #'   x < median(x) ~ "low",
 #'   x >= median(x) ~ "high",
 #'   is.na(x) ~ "other"
 #'   )
+#'
+#' library(data.table)
+#' temp <- data.table(pseudo_id = c(1, 2, 3, 4, 5),
+#'                    x = sample(1:5, 5, replace = TRUE))
+#' temp[, y := dt_case_when(pseudo_id == 1 ~ x * 1,
+#'                          pseudo_id == 2 ~ x * 2,
+#'                          pseudo_id == 3 ~ x * 3,
+#'                          pseudo_id == 4 ~ x * 4,
+#'                          pseudo_id == 5 ~ x * 5)]
 #'
 #' @export
 dt_case_when <- function(...){
@@ -32,9 +40,11 @@ dt_case_when <- function(...){
   # make the right NA based on assigned labels
   na_type <-
     switch(class,
+           "logical"   = NA,
+           "complex"   = NA_complex_,
            "character" = NA_character_,
-           "integer" = NA_integer_,
-           "numeric" = NA_real_)
+           "integer"   = NA_integer_,
+           NA_real_)
 
   # create fifelse() call
   calls <- call("fifelse", conds[[n]], labels[[n]], eval(na_type))
@@ -44,6 +54,7 @@ dt_case_when <- function(...){
 
   eval(calls, envir = parent.frame())
 }
+
 
 #' fifelse from data.table
 #'

@@ -34,7 +34,9 @@ dt_case_when <- function(...){
     switch(class,
            "character" = NA_character_,
            "integer" = NA_integer_,
-           "numeric" = NA_real_)
+           "numeric" = NA_real_,
+           "double" = NA_real_,
+           "Date" = as.Date(NA_real_, "1970-01-01"))
 
   # create fifelse() call
   calls <- call("fifelse", conds[[n]], labels[[n]], eval(na_type))

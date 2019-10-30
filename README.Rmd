@@ -11,11 +11,13 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "70%"
 )
+set.seed(843)
 ```
 
-# `tidyfast v0.1.1` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.2` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of `tidyfast` is to provide fast and efficient alternatives to some `tidyr` and `dplyr` functions using `data.table` under the hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in `dtplyr` (but notably does not use the `lazy_dt()` framework of `dtplyr`).
@@ -32,6 +34,15 @@ The current functions include:
 
 - `dt_case_when()` for `dplyr::case_when()` syntax with the speed of `data.table::fifelse()`
 
+**Fill** (similar to `tidyr::fill()`)
+
+- `dt_fill()` for filling `NA` values with values before it, after it, or both. This can be done by a grouping variable (e.g. fill in `NA` values with values within an individual).
+
+**Separate** (similar to `tidyr::separate()`)
+
+- `dt_separate()` for splitting a single column into multiple based on a match within the column (e.g., column with "A.B" could be split into two columns by using the period as the separator). It is built on `data.table::tstrsplit()`. This is not well tested yet and lacks some functionality of `tidyr::separate()`.
+
+
 
 Package is still in active development.
 
@@ -44,11 +55,13 @@ You can install the development version from [GitHub](https://github.com/) with:
 devtools::install_github("TysonStanley/tidyfast")
 ```
 
-## Example
+## Examples
+
+### Nesting and Unnesting
 
 The nesting and unnesting functions were shown in a [previous preprint](https://psyarxiv.com/u8ekc/) while `dt_case_when()` is really new. Herein, I show more simple applications. 
 
-The following data table will be used for the examples.
+The following data table will be used for the nesting/unnesting examples.
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyfast)
@@ -64,8 +77,6 @@ dt <- data.table(
    id = 1:1e5)
 ```
 
-
-### Nesting and Unnesting
 
 We can nest this data using `dt_nest()`:
 
@@ -157,6 +168,30 @@ marks %>%
   select(expression, median, mem_alloc) %>% 
   mutate(expression = c("dt_case_when", "case_when", "fifelse")) %>% 
   arrange(expression)
+```
+
+
+## Fill
+
+A new function is `dt_fill()`, which fulfills the role of `tidyr::fill()` to fill in `NA` values with values around it (either the value above, below, or trying both). This currently relies on the efficient `C++` code from `tidyr` (`fillUp()` and `fillDown()`).
+
+```{r}
+x = 1:10
+dt_with_nas <- data.table(
+  x = x,
+  y = shift(x),
+  z = shift(x, -1L),
+  a = sample(c(rep(NA, 10), x), 10),
+  grp = sample(1:3, 10, replace = TRUE))
+
+# All defaults
+dt_fill(dt_with_nas)
+
+# by id variable called `grp`
+dt_fill(dt_with_nas, id = grp)
+
+# both down and then up filling by group
+dt_fill(dt_with_nas, id = grp, .direction = "downup")
 ```
 
 

@@ -41,11 +41,14 @@ dt_fill <- function(dt, ..., id = NULL, order = NULL, .direction = c("down", "up
 
   dots <- paste_dots(...)
   by <- substitute(id)
+  order <- substitute(order)
 
-  if (isFALSE(is.null(order)))
-    dt <- dt[order(order)]
+  if (isFALSE(is.null(order))){
+    dt <- dt[order(eval(order)), lapply(.SD, fun), by = eval(by), .SDcols = dots]
+  } else {
+    dt <- dt[, lapply(.SD, fun), by = eval(by), .SDcols = dots]
+  }
 
-  dt <- dt[, lapply(.SD, fun), keyby = eval(by), .SDcols = dots]
   #if (length(paste(substitute(id))) == 1) setnames(dt, old = "by", new = paste(substitute(id)))
   dt
 }

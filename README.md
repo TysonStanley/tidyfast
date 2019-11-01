@@ -193,9 +193,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     125.4ms   148.8MB
+    #> 1 case_when     128.2ms   148.8MB
     #> 2 dt_case_when   34.8ms    34.3MB
-    #> 3 fifelse        32.8ms    34.3MB
+    #> 3 fifelse        33.8ms    34.3MB
 
 ## Fill
 
@@ -211,49 +211,63 @@ dt_with_nas <- data.table(
   y = shift(x),
   z = shift(x, -1L),
   a = sample(c(rep(NA, 10), x), 10),
-  grp = sample(1:3, 10, replace = TRUE))
+  id = sample(1:3, 10, replace = TRUE))
+
+# Original
+dt_with_nas
+#>      x  y  z  a id
+#>  1:  1 NA  2 NA  2
+#>  2:  2  1  3  2  1
+#>  3:  3  2  4  7  3
+#>  4:  4  3  5  4  3
+#>  5:  5  4  6  3  3
+#>  6:  6  5  7  5  2
+#>  7:  7  6  8  9  1
+#>  8:  8  7  9 NA  1
+#>  9:  9  8 10 NA  2
+#> 10: 10  9 NA NA  3
 
 # All defaults
-dt_fill(dt_with_nas)
-#>      x  y  z  a grp
-#>  1:  1 NA  2 NA   2
-#>  2:  2  1  3  2   1
-#>  3:  3  2  4  7   3
-#>  4:  4  3  5  4   3
-#>  5:  5  4  6  3   3
-#>  6:  6  5  7  5   2
-#>  7:  7  6  8  9   1
-#>  8:  8  7  9  9   1
-#>  9:  9  8 10  9   2
-#> 10: 10  9 10  9   3
+dt_fill(dt_with_nas, y, z, a)
+#>      y  z  a
+#>  1: NA  2 NA
+#>  2:  1  3  2
+#>  3:  2  4  7
+#>  4:  3  5  4
+#>  5:  4  6  3
+#>  6:  5  7  5
+#>  7:  6  8  9
+#>  8:  7  9  9
+#>  9:  8 10  9
+#> 10:  9 10  9
 
 # by id variable called `grp`
-dt_fill(dt_with_nas, id = grp)
-#>     grp  x  y  z  a
-#>  1:   1  2  1  3  2
-#>  2:   1  7  6  8  9
-#>  3:   1  8  7  9  9
-#>  4:   2  1 NA  2 NA
-#>  5:   2  6  5  7  5
-#>  6:   2  9  8 10  5
-#>  7:   3  3  2  4  7
-#>  8:   3  4  3  5  4
-#>  9:   3  5  4  6  3
-#> 10:   3 10  9  6  3
+dt_fill(dt_with_nas, y, z, a, id = id)
+#>     by  y  z  a
+#>  1:  2 NA  2 NA
+#>  2:  2  5  7  5
+#>  3:  2  8 10  5
+#>  4:  1  1  3  2
+#>  5:  1  6  8  9
+#>  6:  1  7  9  9
+#>  7:  3  2  4  7
+#>  8:  3  3  5  4
+#>  9:  3  4  6  3
+#> 10:  3  9  6  3
 
 # both down and then up filling by group
-dt_fill(dt_with_nas, id = grp, .direction = "downup")
-#>     grp  x y  z a
-#>  1:   1  2 1  3 2
-#>  2:   1  7 6  8 9
-#>  3:   1  8 7  9 9
-#>  4:   2  1 5  2 5
-#>  5:   2  6 5  7 5
-#>  6:   2  9 8 10 5
-#>  7:   3  3 2  4 7
-#>  8:   3  4 3  5 4
-#>  9:   3  5 4  6 3
-#> 10:   3 10 9  6 3
+dt_fill(dt_with_nas, y, z, a, id = id, .direction = "downup")
+#>     by y  z a
+#>  1:  2 5  2 5
+#>  2:  2 5  7 5
+#>  3:  2 8 10 5
+#>  4:  1 1  3 2
+#>  5:  1 6  8 9
+#>  6:  1 7  9 9
+#>  7:  3 2  4 7
+#>  8:  3 3  5 4
+#>  9:  3 4  6 3
+#> 10:  3 9  6 3
 ```
 
 ## Note

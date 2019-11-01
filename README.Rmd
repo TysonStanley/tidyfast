@@ -182,16 +182,19 @@ dt_with_nas <- data.table(
   y = shift(x),
   z = shift(x, -1L),
   a = sample(c(rep(NA, 10), x), 10),
-  grp = sample(1:3, 10, replace = TRUE))
+  id = sample(1:3, 10, replace = TRUE))
+
+# Original
+dt_with_nas
 
 # All defaults
-dt_fill(dt_with_nas)
+dt_fill(dt_with_nas, y, z, a)
 
 # by id variable called `grp`
-dt_fill(dt_with_nas, id = grp)
+dt_fill(dt_with_nas, y, z, a, id = id)
 
 # both down and then up filling by group
-dt_fill(dt_with_nas, id = grp, .direction = "downup")
+dt_fill(dt_with_nas, y, z, a, id = id, .direction = "downup")
 ```
 
 

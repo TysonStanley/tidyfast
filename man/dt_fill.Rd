@@ -4,8 +4,8 @@
 \alias{dt_fill}
 \title{Fill with data.table}
 \usage{
-dt_fill(dt, ..., id = NULL, order = NULL, .direction = c("down",
-  "up", "downup", "updown"))
+dt_fill(dt, ..., id = NULL, .direction = c("down", "up", "downup",
+  "updown"))
 }
 \arguments{
 \item{dt}{the data table (or if not a data.table then it is coerced with as.data.table)}
@@ -13,8 +13,6 @@ dt_fill(dt, ..., id = NULL, order = NULL, .direction = c("down",
 \item{...}{the columns to fill}
 
 \item{id}{the grouping variable(s) to fill within}
-
-\item{order}{should the table be ordered first? default is NULL (which assumes the table is already in the right order). Other option is to indicate variable(s) to order by.}
 
 \item{.direction}{either "down" or "up" (down fills values down, up fills values up), or "downup" (down first then up) or "updown" (up first then down)}
 }

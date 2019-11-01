@@ -7,6 +7,8 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Travis build
+status](https://travis-ci.org/TysonStanley/tidyfast.svg?branch=master)](https://travis-ci.org/TysonStanley/tidyfast)
 <!-- badges: end -->
 
 The goal of `tidyfast` is to provide fast and efficient alternatives to
@@ -40,12 +42,13 @@ The current functions include:
 **Separate** (similar to `tidyr::separate()`)
 
   - `dt_separate()` for splitting a single column into multiple based on
-    a match within the column (e.g., column with “A.B” could be split
-    into two columns by using the period as the separator). It is built
-    on `data.table::tstrsplit()`. This is not well tested yet and lacks
+    a match within the column (e.g., column with values like “A.B” could
+    be split into two columns by using the period as the separator where
+    column 1 would have “A” and 2 would have “B”). It is built on
+    `data.table::tstrsplit()`. This is not well tested yet and lacks
     some functionality of `tidyr::separate()`.
 
-Package is still in active development.
+*Package is still in active development.*
 
 ## Installation
 
@@ -53,17 +56,17 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("TysonStanley/tidyfast")
+# install.packages("remotes")
+remotes::install_github("TysonStanley/tidyfast")
 ```
 
 ## Examples
 
-### Nesting and Unnesting
-
 The nesting and unnesting functions were shown in a [previous
-preprint](https://psyarxiv.com/u8ekc/) while `dt_case_when()` is really
-new. Herein, I show more simple applications.
+preprint](https://psyarxiv.com/u8ekc/) while the other functions are
+new. Herein, I show some simple applications.
+
+### Nesting and Unnesting
 
 The following data table will be used for the nesting/unnesting
 examples.
@@ -72,6 +75,7 @@ examples.
 library(tidyfast)
 library(data.table)
 library(dplyr)       # to compare with case_when()
+library(tidyr)       # to compare with fill() and separate()
 
 dt <- data.table(
    x = rnorm(1e5),
@@ -193,8 +197,8 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     128.2ms   148.8MB
-    #> 2 dt_case_when   34.8ms    34.3MB
+    #> 1 case_when     131.5ms   148.8MB
+    #> 2 dt_case_when   34.2ms    34.3MB
     #> 3 fifelse        33.8ms    34.3MB
 
 ## Fill
@@ -208,67 +212,108 @@ efficient `C++` code from `tidyr` (`fillUp()` and `fillDown()`).
 x = 1:10
 dt_with_nas <- data.table(
   x = x,
-  y = shift(x),
-  z = shift(x, -1L),
+  y = shift(x, 2L),
+  z = shift(x, -2L),
   a = sample(c(rep(NA, 10), x), 10),
   id = sample(1:3, 10, replace = TRUE))
 
 # Original
 dt_with_nas
 #>      x  y  z  a id
-#>  1:  1 NA  2 NA  2
-#>  2:  2  1  3  2  1
-#>  3:  3  2  4  7  3
-#>  4:  4  3  5  4  3
-#>  5:  5  4  6  3  3
-#>  6:  6  5  7  5  2
-#>  7:  7  6  8  9  1
-#>  8:  8  7  9 NA  1
-#>  9:  9  8 10 NA  2
-#> 10: 10  9 NA NA  3
+#>  1:  1 NA  3 NA  2
+#>  2:  2 NA  4  2  1
+#>  3:  3  1  5  7  3
+#>  4:  4  2  6  4  3
+#>  5:  5  3  7  3  3
+#>  6:  6  4  8  5  2
+#>  7:  7  5  9  9  1
+#>  8:  8  6 10 NA  1
+#>  9:  9  7 NA NA  2
+#> 10: 10  8 NA NA  3
 
 # All defaults
 dt_fill(dt_with_nas, y, z, a)
 #>      y  z  a
-#>  1: NA  2 NA
-#>  2:  1  3  2
-#>  3:  2  4  7
-#>  4:  3  5  4
-#>  5:  4  6  3
-#>  6:  5  7  5
-#>  7:  6  8  9
-#>  8:  7  9  9
-#>  9:  8 10  9
-#> 10:  9 10  9
+#>  1: NA  3 NA
+#>  2: NA  4  2
+#>  3:  1  5  7
+#>  4:  2  6  4
+#>  5:  3  7  3
+#>  6:  4  8  5
+#>  7:  5  9  9
+#>  8:  6 10  9
+#>  9:  7 10  9
+#> 10:  8 10  9
 
 # by id variable called `grp`
-dt_fill(dt_with_nas, y, z, a, id = id)
-#>     by  y  z  a
-#>  1:  2 NA  2 NA
-#>  2:  2  5  7  5
-#>  3:  2  8 10  5
-#>  4:  1  1  3  2
-#>  5:  1  6  8  9
-#>  6:  1  7  9  9
-#>  7:  3  2  4  7
-#>  8:  3  3  5  4
-#>  9:  3  4  6  3
-#> 10:  3  9  6  3
+dt_fill(dt_with_nas, 
+        y, z, a, 
+        id = list(id))
+#>     id  y  z  a
+#>  1:  2 NA  3 NA
+#>  2:  2  4  8  5
+#>  3:  2  7  8  5
+#>  4:  1 NA  4  2
+#>  5:  1  5  9  9
+#>  6:  1  6 10  9
+#>  7:  3  1  5  7
+#>  8:  3  2  6  4
+#>  9:  3  3  7  3
+#> 10:  3  8  7  3
 
 # both down and then up filling by group
-dt_fill(dt_with_nas, y, z, a, id = id, .direction = "downup")
-#>     by y  z a
-#>  1:  2 5  2 5
-#>  2:  2 5  7 5
-#>  3:  2 8 10 5
-#>  4:  1 1  3 2
-#>  5:  1 6  8 9
-#>  6:  1 7  9 9
-#>  7:  3 2  4 7
-#>  8:  3 3  5 4
-#>  9:  3 4  6 3
-#> 10:  3 9  6 3
+dt_fill(dt_with_nas, 
+        y, z, a, 
+        id = list(id), 
+        .direction = "downup")
+#>     id y  z a
+#>  1:  2 4  3 5
+#>  2:  2 4  8 5
+#>  3:  2 7  8 5
+#>  4:  1 5  4 2
+#>  5:  1 5  9 9
+#>  6:  1 6 10 9
+#>  7:  3 1  5 7
+#>  8:  3 2  6 4
+#>  9:  3 3  7 3
+#> 10:  3 8  7 3
 ```
+
+In its current form, `dt_fill()` is faster than `tidyr::fill()` and uses
+slightly less memory. Below are the results of filling in the `NA`s
+within each `id` on a 19 MB data set.
+
+``` r
+x = 1:1e6
+dt3 <- data.table(
+  x = x,
+  y = shift(x, 10L),
+  z = shift(x, -10L),
+  a = sample(c(rep(NA, 10), x), 10),
+  id = sample(1:3, 10, replace = TRUE))
+df3 <- data.frame(dt3)
+
+marks3 <-
+  bench::mark(
+    tidyr::fill(dplyr::group_by(df3, id), x, y),
+    tidyfast::dt_fill(dt3, x, y, id = list(id)),
+    check = FALSE,
+    iterations = 50
+  )
+```
+
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" />
+
+    #> # A tibble: 2 x 3
+    #>   expression                                    median mem_alloc
+    #>   <bch:expr>                                  <bch:tm> <bch:byt>
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.9ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   16.6ms    29.1MB
+
+## Separate
+
+The `dt_separate()` function is still under heavy development and is
+therefore not recommended for use yet.
 
 ## Note
 
@@ -276,5 +321,4 @@ Please note that the `tidyfast` project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms.
 
-Also, `ggplot2`, `ggbeeswarm`, and `tidyr` were used herein for creating
-the plot.
+Also, `ggplot2` and `ggbeeswarm` were used herein for creating plots.

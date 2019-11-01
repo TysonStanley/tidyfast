@@ -1,6 +1,6 @@
 Package: tidyfast
 Title: Fast Tidying of Data
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: 
     person(given = "Tyson",
            family = "Barrett",
@@ -8,10 +8,10 @@ Authors@R:
            email = "t.barrett@aggiemail.usu.edu",
            comment = c(ORCID = "0000-0002-2137-1391"))
 Description: Some tidying functions built on data.table
-    to provide quick and efficient data manipulation.
+    to provide quick and efficient data manipulation with
+    minimal overhead.
 Imports: 
     data.table (>= 1.12.4),
-    magrittr,
     Rcpp
 Suggests:
     tidyr,

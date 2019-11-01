@@ -3,3 +3,4 @@
 ^README\.Rmd$
 ^\.github$
 ^\.graphics$
+^\.travis\.yml$

@@ -4,7 +4,7 @@
 \alias{dt_fill}
 \title{Fill with data.table}
 \usage{
-dt_fill(dt, id = NULL, .direction = c("down", "up", "downup",
+dt_fill(dt, ..., id = NULL, .direction = c("down", "up", "downup",
   "updown"))
 }
 \arguments{
@@ -16,7 +16,7 @@ dt_fill(dt, id = NULL, .direction = c("down", "up", "downup",
 }
 \description{
 Fills in values, similar to `tidyr::fill()`, by within `data.table`. This function relies on the
-`Rcpp` functions that drive `tidyr::fill()`.
+`Rcpp` functions that drive `tidyr::fill()` but applies them within `data.table`.
 }
 \examples{
 

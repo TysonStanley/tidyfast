@@ -1,7 +1,7 @@
 #' Fill with data.table
 #'
 #' Fills in values, similar to `tidyr::fill()`, by within `data.table`. This function relies on the
-#' `Rcpp` functions that drive `tidyr::fill()`.
+#' `Rcpp` functions that drive `tidyr::fill()` but applies them within `data.table`.
 #'
 #' @param dt the data table (or if not a data.table then it is coerced with as.data.table)
 #' @param id the grouping variable(s) to fill within
@@ -25,7 +25,7 @@
 #' @importFrom data.table as.data.table
 #'
 #' @export
-dt_fill <- function(dt, id = NULL, .direction = c("down", "up", "downup", "updown")){
+dt_fill <- function(dt, ..., id = NULL, .direction = c("down", "up", "downup", "updown")){
 
   if (isFALSE(is.data.table(dt)))
     dt <- data.table::as.data.table(dt)
@@ -37,10 +37,12 @@ dt_fill <- function(dt, id = NULL, .direction = c("down", "up", "downup", "updow
                 "downup" = function(x) fillUp(fillDown(x)),
                 "updown" = function(x) fillDown(fillUp(x)))
 
+  dots <- substitute(list(...))
   by <- substitute(id)
 
-  dt <- dt[, lapply(.SD, fun), keyby = eval(by)]
-  if (length(paste(substitute(id))) > 0) setnames(dt, old = "by", new = paste(substitute(id)))
+  dt <- dt[, lapply(dots, fun), keyby = eval(by)]
+  if (length(paste(substitute(id))) == 1) setnames(dt, old = "by", new = paste(substitute(id)))
   dt
 }
+
 

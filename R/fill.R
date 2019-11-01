@@ -20,8 +20,8 @@
 #'                 v3 = shift(x, -1L),
 #'                 v4 = sample(c(rep(NA, 10), x), 10),
 #'                 grp = sample(1:3, 10, replace = TRUE))
-#' dt_fill(dt, id = grp, .direction = "downup")
-#' dt_fill(dt, id = grp)
+#' dt_fill(dt, v2, v3, v4, id = grp, .direction = "downup")
+#' dt_fill(dt, v2, v3, v4, id = grp)
 #' dt_fill(dt, .direction = "up")
 #'
 #' @importFrom data.table as.data.table

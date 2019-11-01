@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.1.2` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.4` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -16,7 +16,8 @@ some `tidyr` and `dplyr` functions using `data.table` under the hood.
 Each have the prefix of `dt_` to allow for autocomplete in IDEs such as
 RStudio. These should compliment some of the current functionality in
 `dtplyr` (but notably does not use the `lazy_dt()` framework of
-`dtplyr`).
+`dtplyr`). This package imports `data.table` and `Rcpp` (no other
+dependencies).
 
 The current functions include:
 
@@ -197,9 +198,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     131.5ms   148.8MB
-    #> 2 dt_case_when   34.2ms    34.3MB
-    #> 3 fifelse        33.8ms    34.3MB
+    #> 1 case_when     129.5ms   148.8MB
+    #> 2 dt_case_when     35ms    34.3MB
+    #> 3 fifelse        33.6ms    34.3MB
 
 ## Fill
 
@@ -307,13 +308,44 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.9ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   16.6ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.7ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   16.9ms    29.1MB
 
 ## Separate
 
-The `dt_separate()` function is still under heavy development and is
-therefore not recommended for use yet.
+The `dt_separate()` function is still under heavy development. Its
+behavior is similar to `tidyr::separate()` but is lacking some
+functionality currently. For example, `into` needs to be supplied the
+maximum number of possible columns to separate.
+
+``` r
+dt_separate(data.table(col = "A.B.C"), col, into = c("A", "B"))
+#> Error in `[.data.table`(dt, , eval(split_it)) : 
+#>   Supplied 2 columns to be assigned 3 items. Please see NEWS for v1.12.2.
+```
+
+For current functionality, consider the following example.
+
+``` r
+dt_to_split <- data.table(
+  x = paste(letters, LETTERS, sep = ".")
+)
+
+dt_separate(dt_to_split, x, into = c("lower", "upper"))
+```
+
+Testing with a 4 MB data set with one variable that has columns of “A.B”
+repeatedly, shows that `dt_separate()` is fast but less memory efficient
+than `tidyr::separate()`.
+
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="70%" />
+
+    #> # A tibble: 3 x 3
+    #>   expression            median mem_alloc
+    #>   <chr>               <bch:tm> <bch:byt>
+    #> 1 separate               333ms    11.6MB
+    #> 2 dt_separate            114ms    30.6MB
+    #> 3 dt_separate-mutable    109ms    26.7MB
 
 ## Note
 

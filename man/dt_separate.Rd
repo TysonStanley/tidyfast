@@ -5,7 +5,7 @@
 \title{Separate with data.table}
 \usage{
 dt_separate(dt, col, into, sep = ".", remove = TRUE, fill = NA,
-  fixed = TRUE, by_reference = TRUE, ...)
+  fixed = TRUE, immutable = TRUE, ...)
 }
 \arguments{
 \item{dt}{the data table (or if not a data.table then it is coerced with as.data.table)}
@@ -22,7 +22,7 @@ dt_separate(dt, col, into, sep = ".", remove = TRUE, fill = NA,
 
 \item{fixed}{logical. If TRUE match split exactly, otherwise use regular expressions. Has priority over perl.}
 
-\item{by_reference}{should the data table be copied before separating? Default is no (i.e. mutate by reference).}
+\item{immutable}{If `TRUE`, `dt` is treated as immutable (it will not be modified in place). Alternatively, you can set `immutable = FALSE` to modify the input object.}
 
 \item{...}{arguments passed to `data.table::tstrplit()`}
 }
@@ -34,13 +34,19 @@ Separates a column of data into others, by splitting based a separator or regula
 library(data.table)
 d <- data.table(x = c("A.B", "A", "B", "B.A"),
                 y = 1:4)
-# need to assign when `by_reference = FALSE`
-separated <- dt_separate(d, x, c("c1", "c2"), by_reference = FALSE)
-separated
-# don't need to assign when `by_reference = TRUE` (default)
-dt_separate(d, x, c("c1", "c2"), remove = FALSE)
-d
+
+# defaults
 dt_separate(d, x, c("c1", "c2"))
+
+# can keep the original column with `remove = FALSE`
+dt_separate(d, x, c("c1", "c2"), remove = FALSE)
+
+# need to assign when `immutable = TRUE`
+separated <- dt_separate(d, x, c("c1", "c2"), immutable = TRUE)
+separated
+
+# don't need to assign when `immutable = FALSE` (default)
+dt_separate(d, x, c("c1", "c2"), immutable = FALSE)
 d
 
 }

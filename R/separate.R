@@ -9,7 +9,7 @@
 #' @param remove should `col` be removed in the returned data table? Default is `TRUE`
 #' @param fill if empty, fill is inserted. Default is `NA`.
 #' @param fixed logical. If TRUE match split exactly, otherwise use regular expressions. Has priority over perl.
-#' @param by_reference should the data table be copied before separating? Default is no (i.e. mutate by reference).
+#' @param immutable If `TRUE`, `dt` is treated as immutable (it will not be modified in place). Alternatively, you can set `immutable = FALSE` to modify the input object.
 #' @param ... arguments passed to `data.table::tstrplit()`
 #'
 #' @examples
@@ -17,13 +17,19 @@
 #' library(data.table)
 #' d <- data.table(x = c("A.B", "A", "B", "B.A"),
 #'                 y = 1:4)
-#' # need to assign when `by_reference = FALSE`
-#' separated <- dt_separate(d, x, c("c1", "c2"), by_reference = FALSE)
-#' separated
-#' # don't need to assign when `by_reference = TRUE` (default)
-#' dt_separate(d, x, c("c1", "c2"), remove = FALSE)
-#' d
+#'
+#' # defaults
 #' dt_separate(d, x, c("c1", "c2"))
+#'
+#' # can keep the original column with `remove = FALSE`
+#' dt_separate(d, x, c("c1", "c2"), remove = FALSE)
+#'
+#' # need to assign when `immutable = TRUE`
+#' separated <- dt_separate(d, x, c("c1", "c2"), immutable = TRUE)
+#' separated
+#'
+#' # don't need to assign when `immutable = FALSE` (default)
+#' dt_separate(d, x, c("c1", "c2"), immutable = FALSE)
 #' d
 #'
 #' @importFrom data.table tstrsplit as.data.table copy
@@ -34,13 +40,13 @@ dt_separate <- function(dt, col, into,
                         remove = TRUE,
                         fill = NA,
                         fixed = TRUE,
-                        by_reference = TRUE,
+                        immutable = TRUE,
                         ...){
 
   # checks and nse
   if (isFALSE(is.data.table(dt))) dt <- data.table::as.data.table(dt)
   if (isTRUE(remove)) to_remove <- substitute(col)
-  if (isFALSE(by_reference)) dt <- data.table::copy(dt)
+  if (isTRUE(immutable)) dt <- data.table::copy(dt)
   j <- substitute(col)
 
   # use data.table::tstrsplit() to do the heavy lifting
@@ -59,6 +65,8 @@ dt_separate <- function(dt, col, into,
   # keep col if remove = FALSE
   if (isFALSE(remove))
     dt[, eval(split_it)]
+
+  dt
 }
 
 

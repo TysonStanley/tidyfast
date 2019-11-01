@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// Currently, these functions are taken verbatim from tidyr
+// Currently, these functions are used verbatim from tidyr
 //   https://github.com/tidyverse/tidyr/blob/master/src/fill.cpp
 
 // [[Rcpp::export]]

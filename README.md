@@ -87,6 +87,13 @@ dt <- data.table(
    id = 1:1e5)
 ```
 
+To make all the comparisons herein more equal, we will set the number of
+threads that `data.table` will use to 1.
+
+``` r
+setDTthreads(1)
+```
+
 We can nest this data using `dt_nest()`:
 
 ``` r
@@ -193,14 +200,14 @@ identical(x_cat, x_cat_fif)
 Notably, `dt_case_when()` is very fast and memory efficient, given it is
 built on `data.table::fifelse()`.
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     129.5ms   148.8MB
-    #> 2 dt_case_when     35ms    34.3MB
-    #> 3 fifelse        33.6ms    34.3MB
+    #> 1 case_when     129.2ms   148.8MB
+    #> 2 dt_case_when   34.8ms    34.3MB
+    #> 3 fifelse        34.2ms    34.3MB
 
 ## Fill
 
@@ -303,13 +310,13 @@ marks3 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" />
 
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.7ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   16.9ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.3ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.1ms    29.1MB
 
 ## Separate
 
@@ -334,17 +341,25 @@ dt_to_split <- data.table(
 dt_separate(dt_to_split, x, into = c("lower", "upper"))
 ```
 
+    #>    lower upper
+    #> 1:     a     A
+    #> 2:     b     B
+    #> 3:     c     C
+    #> 4:     d     D
+    #> 5:     e     E
+    #> 6:     f     F
+
 Testing with a 4 MB data set with one variable that has columns of “A.B”
 repeatedly, shows that `dt_separate()` is fast but less memory efficient
 than `tidyr::separate()`.
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               333ms    11.6MB
-    #> 2 dt_separate            114ms    30.6MB
+    #> 1 separate               328ms    11.6MB
+    #> 2 dt_separate            125ms    30.6MB
     #> 3 dt_separate-mutable    109ms    26.7MB
 
 ## Note

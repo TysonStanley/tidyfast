@@ -80,6 +80,11 @@ dt <- data.table(
    id = 1:1e5)
 ```
 
+To make all the comparisons herein more equal, we will set the number of threads that `data.table` will use to 1.
+
+```{r}
+setDTthreads(1)
+```
 
 We can nest this data using `dt_nest()`:
 
@@ -266,6 +271,11 @@ dt_to_split <- data.table(
 
 dt_separate(dt_to_split, x, into = c("lower", "upper"))
 ```
+
+```{r, echo = FALSE}
+head(dt_separate(dt_to_split, x, into = c("lower", "upper")))
+```
+
 
 Testing with a 4 MB data set with one variable that has columns of "A.B" repeatedly, shows that `dt_separate()` is fast but less memory efficient than `tidyr::separate()`.
 

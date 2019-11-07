@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.1.4` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.5` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
@@ -44,6 +44,11 @@ The current functions include:
 **Separate** (similar to `tidyr::separate()`)
 
 - `dt_separate()` for splitting a single column into multiple based on a match within the column (e.g., column with values like "A.B" could be split into two columns by using the period as the separator where column 1 would have "A" and 2 would have "B"). It is built on `data.table::tstrsplit()`. This is not well tested yet and lacks some functionality of `tidyr::separate()`.
+
+**Count** and **Uncount** (similar to `tidyr::uncount()` and `dplyr::count()`)
+
+- `dt_count()` for fast counting by group(s)
+- `dt_uncount()` for creating full data from a count table
 
 
 *Package is still in active development.*
@@ -314,6 +319,20 @@ marks4 %>%
   mutate(expression = c("separate", "dt_separate", "dt_separate-mutable")) %>% 
   select(expression, median, mem_alloc)
 ```
+
+
+## Count and Uncount
+
+The following examples show how count and uncount can work. We'll use the `dt` data table from the nesting examples.
+
+```{r}
+counted <- dt_count(dt, grp)
+counted
+
+uncounted <- dt_uncount(counted, N)
+print(uncounted)
+```
+
 
 
 ## Note

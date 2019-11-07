@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.1.4` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.5` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -48,6 +48,12 @@ The current functions include:
     column 1 would have “A” and 2 would have “B”). It is built on
     `data.table::tstrsplit()`. This is not well tested yet and lacks
     some functionality of `tidyr::separate()`.
+
+**Count** and **Uncount** (similar to `tidyr::uncount()` and
+`dplyr::count()`)
+
+  - `dt_count()` for fast counting by group(s)
+  - `dt_uncount()` for creating full data from a count table
 
 *Package is still in active development.*
 
@@ -205,9 +211,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     129.2ms   148.8MB
-    #> 2 dt_case_when   34.8ms    34.3MB
-    #> 3 fifelse        34.2ms    34.3MB
+    #> 1 case_when     127.5ms   148.8MB
+    #> 2 dt_case_when   35.9ms    34.3MB
+    #> 3 fifelse        34.3ms    34.3MB
 
 ## Fill
 
@@ -315,8 +321,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.3ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.1ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   59.8ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.7ms    29.1MB
 
 ## Separate
 
@@ -358,9 +364,38 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               328ms    11.6MB
-    #> 2 dt_separate            125ms    30.6MB
-    #> 3 dt_separate-mutable    109ms    26.7MB
+    #> 1 separate               321ms    11.6MB
+    #> 2 dt_separate            117ms    30.6MB
+    #> 3 dt_separate-mutable   96.6ms    26.7MB
+
+## Count and Uncount
+
+The following examples show how count and uncount can work. We’ll use
+the `dt` data table from the nesting examples.
+
+``` r
+counted <- dt_count(dt, grp)
+counted
+#>    grp     N
+#> 1:   2 33217
+#> 2:   3 33453
+#> 3:   1 33330
+
+uncounted <- dt_uncount(counted, N)
+print(uncounted)
+#>         grp
+#>      1:   2
+#>      2:   2
+#>      3:   2
+#>      4:   2
+#>      5:   2
+#>     ---    
+#>  99996:   1
+#>  99997:   1
+#>  99998:   1
+#>  99999:   1
+#> 100000:   1
+```
 
 ## Note
 

@@ -32,6 +32,6 @@ dt_count <- function(dt, ..., na.rm = FALSE){
   if (na.rm)
     dt <- dt[complete.cases(dt)]
 
-  dt[, .N, by = eval(dots)]
+  dt[, .N, keyby = eval(dots)]
 }
 

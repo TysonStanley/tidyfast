@@ -323,15 +323,57 @@ marks4 %>%
 
 ## Count and Uncount
 
+The `dt_count()` function does essentially what `dplyr::count()` does. Notably, this, unlike the majority of other `dt_` functions, wraps a very simple statement in `data.table`. That is, `data.table` makes getting counts very simple and concise. Nonetheless, `dt_count()` fits the general API of `tidyfast`. To some degree, `dt_uncount()` is also a fairly simple wrapper, although the approach may not be as straightforward as that for `dt_count()`.
+
 The following examples show how count and uncount can work. We'll use the `dt` data table from the nesting examples.
 
 ```{r}
 counted <- dt_count(dt, grp)
 counted
+```
 
+```{r}
 uncounted <- dt_uncount(counted, N)
 print(uncounted)
 ```
+
+These are also quick (not that the `tidyverse` functions were at all slow here).
+
+```{r}
+dt5 <- copy(dt)
+df5 <- data.frame(dt5)
+
+marks5 <-
+  bench::mark(
+    counted_tbl <- dplyr::count(df5, grp),
+    counted_dt <- tidyfast::dt_count(dt5, grp),
+    tidyr::uncount(counted_tbl, n),
+    tidyfast::dt_uncount(counted_dt, N),
+    check = FALSE,
+    iterations = 25
+  )
+```
+
+```{r, echo = FALSE, fig.width=6, fig.height=5, dpi=300}
+marks5$time %>% 
+  setNames(c("count", "dt_count", "uncount", "dt_uncount")) %>% 
+  data.frame() %>% 
+  tidyr::gather() %>% 
+  mutate(value = as.numeric(value)) %>% 
+  mutate(type = dt_case_when(stringr::str_detect(key, "uncount") ~ "Uncounting",
+                             TRUE ~ "Counting")) %>% 
+  ggplot(aes(key, value, color = key)) +
+  ggbeeswarm::geom_beeswarm() +
+  labs(x = "",
+       y = "Time (seconds)") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_color_viridis_d() +
+  facet_grid(~type, space = "free", scales = "free") +
+  coord_cartesian(ylim = c(0, .007))
+```
+
 
 
 
@@ -339,4 +381,4 @@ print(uncounted)
 
 Please note that the `tidyfast` project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
 
-Also, `ggplot2` and `ggbeeswarm` were used herein for creating plots.
+Also, `ggplot2`, `stringr`, and `ggbeeswarm` were used herein for creating plots.

@@ -211,9 +211,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     127.5ms   148.8MB
-    #> 2 dt_case_when   35.9ms    34.3MB
-    #> 3 fifelse        34.3ms    34.3MB
+    #> 1 case_when     124.5ms   148.8MB
+    #> 2 dt_case_when   33.9ms    34.3MB
+    #> 3 fifelse          34ms    34.3MB
 
 ## Fill
 
@@ -321,8 +321,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   59.8ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.7ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.1ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   20.3ms    29.1MB
 
 ## Separate
 
@@ -364,11 +364,19 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               321ms    11.6MB
-    #> 2 dt_separate            117ms    30.6MB
-    #> 3 dt_separate-mutable   96.6ms    26.7MB
+    #> 1 separate               350ms    11.6MB
+    #> 2 dt_separate            144ms    30.6MB
+    #> 3 dt_separate-mutable    130ms    26.7MB
 
 ## Count and Uncount
+
+The `dt_count()` function does essentially what `dplyr::count()` does.
+Notably, this, unlike the majority of other `dt_` functions, wraps a
+very simple statement in `data.table`. That is, `data.table` makes
+getting counts very simple and concise. Nonetheless, `dt_count()` fits
+the general API of `tidyfast`. To some degree, `dt_uncount()` is also a
+fairly simple wrapper, although the approach may not be as
+straightforward as that for `dt_count()`.
 
 The following examples show how count and uncount can work. We’ll use
 the `dt` data table from the nesting examples.
@@ -380,7 +388,9 @@ counted
 #> 1:   2 33217
 #> 2:   3 33453
 #> 3:   1 33330
+```
 
+``` r
 uncounted <- dt_uncount(counted, N)
 print(uncounted)
 #>         grp
@@ -397,10 +407,31 @@ print(uncounted)
 #> 100000:   1
 ```
 
+These are also quick (not that the `tidyverse` functions were at all
+slow here).
+
+``` r
+dt5 <- copy(dt)
+df5 <- data.frame(dt5)
+
+marks5 <-
+  bench::mark(
+    counted_tbl <- dplyr::count(df5, grp),
+    counted_dt <- tidyfast::dt_count(dt5, grp),
+    tidyr::uncount(counted_tbl, n),
+    tidyfast::dt_uncount(counted_dt, N),
+    check = FALSE,
+    iterations = 25
+  )
+```
+
+<img src="man/figures/README-unnamed-chunk-21-1.png" width="70%" />
+
 ## Note
 
 Please note that the `tidyfast` project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms.
 
-Also, `ggplot2` and `ggbeeswarm` were used herein for creating plots.
+Also, `ggplot2`, `stringr`, and `ggbeeswarm` were used herein for
+creating plots.

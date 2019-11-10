@@ -75,7 +75,7 @@ assigned_label <- function(list){
   unlist(lapply(list, function(x) x[[3]]))
 }
 is_formula <- function(x){
-  class(x) == "formula"
+  is.call(x) && x[[1]] == quote(`~`)
 }
 
 # Check functions -------------------

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.1.5` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.5` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -211,9 +211,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     126.6ms   148.8MB
-    #> 2 dt_case_when   33.5ms    34.3MB
-    #> 3 fifelse        35.1ms    34.3MB
+    #> 1 case_when     128.1ms   148.8MB
+    #> 2 dt_case_when   36.2ms    34.3MB
+    #> 3 fifelse          32ms    34.3MB
 
 ## Fill
 
@@ -321,8 +321,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.6ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   20.9ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.3ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.8ms    29.1MB
 
 ## Separate
 
@@ -364,9 +364,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               367ms    11.6MB
+    #> 1 separate               353ms    11.6MB
     #> 2 dt_separate            127ms    30.6MB
-    #> 3 dt_separate-mutable    119ms    26.7MB
+    #> 3 dt_separate-mutable    108ms    26.7MB
 
 ## Count and Uncount
 

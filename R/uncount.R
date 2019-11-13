@@ -2,7 +2,7 @@
 #'
 #' Uncount a counted data table
 #'
-#' @param dt the data table to uncount
+#' @param dt_ the data table to uncount
 #' @param weights the counts for each
 #' @param .remove should the weights variable be removed?
 #' @param .id an optional new id variable, providing a unique id for each row
@@ -24,19 +24,19 @@
 #' @import data.table
 #'
 #' @export
-dt_uncount <- function(dt, weights, .remove = TRUE, .id = NULL){
+dt_uncount <- function(dt_, weights, .remove = TRUE, .id = NULL){
 
-  if (isFALSE(is.data.table(dt)))
-    dt <- as.data.table(dt)
+  if (isFALSE(is.data.table(dt_)))
+    dt_ <- as.data.table(dt_)
 
   w <- substitute(weights)
-  dt <- dt[rep(1:.N, eval(w))]
+  dt_ <- dt_[rep(1:.N, eval(w))]
 
   if (.remove)
-    dt[, `:=`(paste(w), NULL)]
+    dt_[, `:=`(paste(w), NULL)]
 
   if (!is.null(.id))
-    dt[, `:=`(.id, 1:.N)]
+    dt_[, `:=`(.id, 1:.N)]
 
-  dt
+  dt_
 }

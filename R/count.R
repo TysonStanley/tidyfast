@@ -2,7 +2,7 @@
 #'
 #' Count the numbers of observations within groups
 #'
-#' @param dt the data table to uncount
+#' @param dt_ the data table to uncount
 #' @param ... groups
 #' @param na.rm should any rows with missingness be removed before the count? Default is `FALSE`.
 #' @param wt the wt assigned to the counts (same number of rows as the data)
@@ -25,20 +25,20 @@
 #' @importFrom stats complete.cases
 #'
 #' @export
-dt_count <- function(dt, ..., na.rm = FALSE, wt = NULL){
+dt_count <- function(dt_, ..., na.rm = FALSE, wt = NULL){
 
-  if (isFALSE(is.data.table(dt)))
-    dt <- as.data.table(dt)
+  if (isFALSE(is.data.table(dt_)))
+    .dt <- as.data.table(dt_)
 
   dots <- substitute(list(...))
   wt <- substitute(wt)
 
   if (na.rm)
-    dt <- dt[complete.cases(dt)]
+    dt_ <- dt_[complete.cases(dt_)]
 
   if (!is.null(wt))
-    return(dt[, list(N = sum(eval(wt))), keyby = eval(dots)])
+    return(dt_[, list(N = sum(eval(wt))), keyby = eval(dots)])
 
-  dt[, .N, keyby = eval(dots)]
+  dt_[, .N, keyby = eval(dots)]
 }
 

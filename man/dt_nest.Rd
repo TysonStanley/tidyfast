@@ -4,10 +4,10 @@
 \alias{dt_nest}
 \title{Fast Nesting}
 \usage{
-dt_nest(dt, ..., .key = "data")
+dt_nest(dt_, ..., .key = "data")
 }
 \arguments{
-\item{dt}{the data table to nest}
+\item{dt_}{the data table to nest}
 
 \item{...}{the variables to group by}
 

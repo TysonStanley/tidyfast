@@ -4,10 +4,10 @@
 \alias{dt_count}
 \title{Count}
 \usage{
-dt_count(dt, ..., na.rm = FALSE, wt = NULL)
+dt_count(dt_, ..., na.rm = FALSE, wt = NULL)
 }
 \arguments{
-\item{dt}{the data table to uncount}
+\item{dt_}{the data table to uncount}
 
 \item{...}{groups}
 

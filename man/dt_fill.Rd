@@ -4,11 +4,11 @@
 \alias{dt_fill}
 \title{Fill with data.table}
 \usage{
-dt_fill(dt, ..., id = NULL, .direction = c("down", "up", "downup",
+dt_fill(dt_, ..., id = NULL, .direction = c("down", "up", "downup",
   "updown"))
 }
 \arguments{
-\item{dt}{the data table (or if not a data.table then it is coerced with as.data.table)}
+\item{dt_}{the data table (or if not a data.table then it is coerced with as.data.table)}
 
 \item{...}{the columns to fill}
 

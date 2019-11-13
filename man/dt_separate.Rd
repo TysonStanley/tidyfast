@@ -4,11 +4,11 @@
 \alias{dt_separate}
 \title{Separate with data.table}
 \usage{
-dt_separate(dt, col, into, sep = ".", remove = TRUE, fill = NA,
+dt_separate(dt_, col, into, sep = ".", remove = TRUE, fill = NA,
   fixed = TRUE, immutable = TRUE, ...)
 }
 \arguments{
-\item{dt}{the data table (or if not a data.table then it is coerced with as.data.table)}
+\item{dt_}{the data table (or if not a data.table then it is coerced with as.data.table)}
 
 \item{col}{the column to separate}
 
@@ -22,7 +22,7 @@ dt_separate(dt, col, into, sep = ".", remove = TRUE, fill = NA,
 
 \item{fixed}{logical. If TRUE match split exactly, otherwise use regular expressions. Has priority over perl.}
 
-\item{immutable}{If `TRUE`, `dt` is treated as immutable (it will not be modified in place). Alternatively, you can set `immutable = FALSE` to modify the input object.}
+\item{immutable}{If `TRUE`, `.dt` is treated as immutable (it will not be modified in place). Alternatively, you can set `immutable = FALSE` to modify the input object.}
 
 \item{...}{arguments passed to `data.table::tstrplit()`}
 }

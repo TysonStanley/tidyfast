@@ -4,10 +4,10 @@
 \alias{dt_uncount}
 \title{Uncount}
 \usage{
-dt_uncount(dt, weights, .remove = TRUE, .id = NULL)
+dt_uncount(dt_, weights, .remove = TRUE, .id = NULL)
 }
 \arguments{
-\item{dt}{the data table to uncount}
+\item{dt_}{the data table to uncount}
 
 \item{weights}{the counts for each}
 

@@ -2,19 +2,19 @@
 % Please edit documentation in R/unnest.R
 \name{dt_unnest}
 \alias{dt_unnest}
-\title{Fast Unnesting of Data Tables}
+\title{Unnest: Fast Unnesting of Data Tables}
 \usage{
-dt_unnest(dt, col, id)
+dt_unnest(dt_, col, by = NULL)
 }
 \arguments{
-\item{dt}{the data table to nest}
+\item{dt_}{the data table to unnest}
 
 \item{col}{the column to unnest}
 
-\item{id}{the ID variable to unnest by}
+\item{by}{the ID variable to unnest by. Default is `NULL`.}
 }
 \description{
-Quickly unnest data tables.
+Quickly unnest data tables, particularly those nested by `dt_nest()`.
 }
 \examples{
 
@@ -26,6 +26,6 @@ dt <- data.table(
   )
 
 nested <- dt_nest(dt, grp)
-dt_unnest(nested, col = data, id = grp)
+dt_unnest(nested, col = data, by = grp)
 
 }

@@ -9,9 +9,7 @@ Authors@R:
            comment = c(ORCID = "0000-0002-2137-1391"))
 Description: Some tidying functions built on data.table
     to provide quick and efficient data manipulation with
-    minimal overhead. Of particular note are the nesting 
-    (creating a list-column of data tables) and unnesting 
-    functions.
+    minimal overhead.
 Imports: 
     data.table (>= 1.12.4),
     Rcpp

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.1.5` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.6` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
@@ -25,13 +25,15 @@ set.seed(843)
 
 The goal of `tidyfast` is to provide fast and efficient alternatives to some `tidyr` and `dplyr` functions using `data.table` under the hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in `dtplyr` (but notably does not use the `lazy_dt()` framework of `dtplyr`). This package imports `data.table` and `Rcpp` (no other dependencies).
 
+These are, in essence, translations from a more `tidyverse` grammar to `data.table`. Most functions herein are in places where, in my opinion, the `data.table` syntax is not obvious or clear. As such, these functions can translate a simple function call into the fast, efficient, and concise syntax of `data.table`.
+
 The current functions include:
 
-**Nesting and unnesting** (similar to `tidyr::nest()` or `dplyr::group_nest()` and `tidyr::unnest()`):
+**Nesting and unnesting** (similar to `dplyr::group_nest()` and `tidyr::unnest()`):
 
 - `dt_nest()` for nesting data tables
 - `dt_unnest()` for unnesting data tables
-- `dt_unnest_vec()` for unnesting vectors in a list-column in a data table
+- `dt_hoist()` for unnesting vectors in a list-column in a data table (still experimental)
 
 **If Else** (similar to `dplyr::case_when()`):
 
@@ -101,16 +103,15 @@ nested
 We can also unnest this with `dt_unnest()`:
 
 ```{r}
-dt_unnest(nested, col = data, id = grp)
+dt_unnest(nested, col = data, by = grp)
 ```
 
 When our list columns don't have data tables (as output from `dt_nest()`) we can use the `dt_unnest_vec()` function, that will unnest vectors.
 
 ```{r}
-dt_unnest_vec(dt, 
-              cols = list(nested1, nested2), 
-              id = id, 
-              name = c("nested1", "nested2"))
+dt_hoist(dt, 
+         nested1, nested2, 
+         by = id)
 ```
 
 ### If Else

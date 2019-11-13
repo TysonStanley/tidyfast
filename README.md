@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.1.5` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.6` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -19,15 +19,21 @@ RStudio. These should compliment some of the current functionality in
 `dtplyr`). This package imports `data.table` and `Rcpp` (no other
 dependencies).
 
+These are, in essence, translations from a more `tidyverse` grammar to
+`data.table`. Most functions herein are in places where, in my opinion,
+the `data.table` syntax is not obvious or clear. As such, these
+functions can translate a simple function call into the fast, efficient,
+and concise syntax of `data.table`.
+
 The current functions include:
 
-**Nesting and unnesting** (similar to `tidyr::nest()` or
-`dplyr::group_nest()` and `tidyr::unnest()`):
+**Nesting and unnesting** (similar to `dplyr::group_nest()` and
+`tidyr::unnest()`):
 
   - `dt_nest()` for nesting data tables
   - `dt_unnest()` for unnesting data tables
-  - `dt_unnest_vec()` for unnesting vectors in a list-column in a data
-    table
+  - `dt_hoist()` for unnesting vectors in a list-column in a data table
+    (still experimental)
 
 **If Else** (similar to `dplyr::case_when()`):
 
@@ -106,39 +112,39 @@ We can nest this data using `dt_nest()`:
 nested <- dt_nest(dt, grp)
 nested
 #>    grp         data
-#> 1:   2 <data.table>
-#> 2:   3 <data.table>
-#> 3:   1 <data.table>
+#> 1:   1 <data.table>
+#> 2:   2 <data.table>
+#> 3:   3 <data.table>
 ```
 
 We can also unnest this with `dt_unnest()`:
 
 ``` r
-dt_unnest(nested, col = data, id = grp)
-#>         grp           x         y         nested1
-#>      1:   2 -1.71490559 0.1391240 1,1,1,1,1,1,...
-#>      2:   2 -1.63648042 0.5707004 2,2,1,1,1,1,...
-#>      3:   2 -0.35679806 0.7870723 2,4,2,2,3,4,...
-#>      4:   2 -2.28244999 0.9440325 6,2,4,8,7,6,...
-#>      5:   2  0.43548629 0.8904694 1,1,1,1,1,1,...
+dt_unnest(nested, col = data, by = grp)
+#>         grp          x          y         nested1
+#>      1:   1  0.1624127 0.11793103 2,3,5,9,1,3,...
+#>      2:   1 -0.8749771 0.01200319 6,2,4,8,7,6,...
+#>      3:   1 -1.2709261 0.99871440 2,3,5,9,1,3,...
+#>      4:   1  0.6252182 0.08392742 4,1,2,5,4,2,...
+#>      5:   1 -0.4269078 0.46730652 5,5,4,2,5,2,...
 #>     ---                                          
-#>  99996:   1 -0.62731313 0.7978934 6,2,4,8,7,6,...
-#>  99997:   1  0.05632578 0.6222600 2,8,2,4,6,6,...
-#>  99998:   1  0.69281606 0.4868225 2,2,1,1,1,1,...
-#>  99999:   1 -1.14218533 0.1367110 6,1,3,5,3,1,...
-#> 100000:   1  0.57943399 0.1675201 2,3,5,9,1,3,...
-#>                                               nested2     id
-#>      1: thing1,thing1,thing1,thing1,thing1,thing1,...      1
-#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...      2
-#>      3: thing2,thing2,thing2,thing2,thing2,thing2,...      4
-#>      4: thing2,thing2,thing2,thing2,thing2,thing2,...      8
-#>      5: thing1,thing1,thing1,thing1,thing1,thing1,...     11
-#>     ---                                                     
-#>  99996: thing2,thing2,thing2,thing2,thing2,thing2,...  99988
-#>  99997: thing1,thing1,thing1,thing1,thing1,thing1,...  99989
-#>  99998: thing2,thing2,thing2,thing2,thing2,thing2,...  99992
-#>  99999: thing2,thing2,thing2,thing2,thing2,thing2,...  99996
-#> 100000: thing2,thing2,thing2,thing2,thing2,thing2,... 100000
+#>  99996:   3 -1.3785841 0.65154073 1,1,1,1,1,1,...
+#>  99997:   3  1.7506497 0.35086904 1,3,1,3,1,3,...
+#>  99998:   3  1.7920949 0.57767072 2,4,2,2,3,4,...
+#>  99999:   3  1.3958509 0.20316446 5,5,4,2,5,2,...
+#> 100000:   3  0.4617428 0.64128894 2,8,2,4,6,6,...
+#>                                               nested2    id
+#>      1: thing2,thing2,thing2,thing2,thing2,thing2,...    10
+#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...    18
+#>      3: thing2,thing2,thing2,thing2,thing2,thing2,...    20
+#>      4: thing1,thing1,thing1,thing1,thing1,thing1,...    25
+#>      5: thing1,thing1,thing1,thing1,thing1,thing1,...    27
+#>     ---                                                    
+#>  99996: thing1,thing1,thing1,thing1,thing1,thing1,... 99991
+#>  99997: thing1,thing1,thing1,thing1,thing1,thing1,... 99993
+#>  99998: thing2,thing2,thing2,thing2,thing2,thing2,... 99994
+#>  99999: thing1,thing1,thing1,thing1,thing1,thing1,... 99997
+#> 100000: thing1,thing1,thing1,thing1,thing1,thing1,... 99999
 ```
 
 When our list columns don’t have data tables (as output from
@@ -146,10 +152,9 @@ When our list columns don’t have data tables (as output from
 vectors.
 
 ``` r
-dt_unnest_vec(dt, 
-              cols = list(nested1, nested2), 
-              id = id, 
-              name = c("nested1", "nested2"))
+dt_hoist(dt, 
+         nested1, nested2, 
+         by = id)
 #>              id nested1 nested2
 #>       1:      1       1  thing1
 #>       2:      1       1  thing1
@@ -211,9 +216,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     128.1ms   148.8MB
-    #> 2 dt_case_when   36.2ms    34.3MB
-    #> 3 fifelse          32ms    34.3MB
+    #> 1 case_when     124.9ms   148.8MB
+    #> 2 dt_case_when   35.1ms    34.3MB
+    #> 3 fifelse        31.7ms    34.3MB
 
 ## Fill
 
@@ -321,8 +326,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.3ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.8ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.7ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))     24ms    29.1MB
 
 ## Separate
 
@@ -364,8 +369,8 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               353ms    11.6MB
-    #> 2 dt_separate            127ms    30.6MB
+    #> 1 separate               351ms    11.6MB
+    #> 2 dt_separate            130ms    30.6MB
     #> 3 dt_separate-mutable    108ms    26.7MB
 
 ## Count and Uncount

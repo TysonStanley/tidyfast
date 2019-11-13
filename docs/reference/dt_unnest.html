@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast Unnesting of Data Tables — dt_unnest • tidyfast</title>
+<title>Unnest: Fast Unnesting of Data Tables — dt_unnest • tidyfast</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Fast Unnesting of Data Tables — dt_unnest" />
-<meta property="og:description" content="Quickly unnest data tables." />
+<meta property="og:title" content="Unnest: Fast Unnesting of Data Tables — dt_unnest" />
+<meta property="og:description" content="Quickly unnest data tables, particularly those nested by `dt_nest()`." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -100,31 +100,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fast Unnesting of Data Tables</h1>
+    <h1>Unnest: Fast Unnesting of Data Tables</h1>
     
     <div class="hidden name"><code>dt_unnest.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Quickly unnest data tables.</p>
+    <p>Quickly unnest data tables, particularly those nested by `dt_nest()`.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dt_unnest</span>(<span class='no'>dt</span>, <span class='no'>col</span>, <span class='no'>id</span>)</pre>
+    <pre class="usage"><span class='fu'>dt_unnest</span>(<span class='no'>dt_</span>, <span class='no'>col</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dt</th>
-      <td><p>the data table to nest</p></td>
+      <th>dt_</th>
+      <td><p>the data table to unnest</p></td>
     </tr>
     <tr>
       <th>col</th>
       <td><p>the column to unnest</p></td>
     </tr>
     <tr>
-      <th>id</th>
-      <td><p>the ID variable to unnest by</p></td>
+      <th>by</th>
+      <td><p>the ID variable to unnest by. Default is `NULL`.</p></td>
     </tr>
     </table>
 
@@ -139,18 +139,18 @@
   )
 
 <span class='no'>nested</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dt_nest.html'>dt_nest</a></span>(<span class='no'>dt</span>, <span class='no'>grp</span>)
-<span class='fu'>dt_unnest</span>(<span class='no'>nested</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>grp</span>)</div><div class='output co'>#&gt;         grp            x          y
-#&gt;      1:   2 -1.322607677 0.52219332
-#&gt;      2:   2 -0.001524281 0.52403616
-#&gt;      3:   2  1.212576304 0.01761890
-#&gt;      4:   2 -1.114391904 0.51424592
-#&gt;      5:   2 -0.383805902 0.85520175
-#&gt;     ---                            
-#&gt;  99996:   1 -0.087524883 0.96613901
-#&gt;  99997:   1 -0.608589333 0.40104912
-#&gt;  99998:   1 -0.402439146 0.07916855
-#&gt;  99999:   1  1.638901728 0.56469501
-#&gt; 100000:   1  1.575218054 0.01262481</div><div class='input'>
+<span class='fu'>dt_unnest</span>(<span class='no'>nested</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>grp</span>)</div><div class='output co'>#&gt;         grp          x          y
+#&gt;      1:   1  1.0132525 0.02937715
+#&gt;      2:   1  1.3222125 0.17566096
+#&gt;      3:   1  0.5065119 0.06658542
+#&gt;      4:   1 -0.9279822 0.55996602
+#&gt;      5:   1  0.7179084 0.85645944
+#&gt;     ---                          
+#&gt;  99996:   3  0.5534343 0.82439307
+#&gt;  99997:   3 -0.5466994 0.59113375
+#&gt;  99998:   3  0.0279944 0.50978427
+#&gt;  99999:   3  1.9397046 0.40044357
+#&gt; 100000:   3  1.4679262 0.38763369</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

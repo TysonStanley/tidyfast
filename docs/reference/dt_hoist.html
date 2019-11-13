@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Uncount — dt_uncount • tidyfast</title>
+<title>Hoist: Fast Unnesting of Vectors — dt_hoist • tidyfast</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Uncount — dt_uncount" />
-<meta property="og:description" content="Uncount a counted data table" />
+<meta property="og:title" content="Hoist: Fast Unnesting of Vectors — dt_hoist" />
+<meta property="og:description" content="Quickly unnest vectors nested in list columns. Still experimental (has some potentially unexpected behavior in some situations)!" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -100,35 +100,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Uncount</h1>
+    <h1>Hoist: Fast Unnesting of Vectors</h1>
     
-    <div class="hidden name"><code>dt_uncount.Rd</code></div>
+    <div class="hidden name"><code>dt_hoist.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Uncount a counted data table</p>
+    <p>Quickly unnest vectors nested in list columns. Still experimental (has some potentially unexpected behavior in some situations)!</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dt_uncount</span>(<span class='no'>dt_</span>, <span class='no'>weights</span>, <span class='kw'>.remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>.id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>dt_hoist</span>(<span class='no'>dt_</span>, <span class='no'>...</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dt_</th>
-      <td><p>the data table to uncount</p></td>
+      <td><p>the data table to unnest</p></td>
     </tr>
     <tr>
-      <th>weights</th>
-      <td><p>the counts for each</p></td>
+      <th>...</th>
+      <td><p>the columns to unnest (must all be the sample length when unnested); use bare names of the variables</p></td>
     </tr>
     <tr>
-      <th>.remove</th>
-      <td><p>should the weights variable be removed?</p></td>
-    </tr>
-    <tr>
-      <th>.id</th>
-      <td><p>an optional new id variable, providing a unique id for each row</p></td>
+      <th>by</th>
+      <td><p>the variable that indicates what to unnest by.</p></td>
     </tr>
     </table>
 
@@ -136,23 +132,28 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>data.table</span>)
+<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(
+   <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>1e5</span>),
+   <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>1e5</span>),
+   <span class='kw'>nested1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='no'>sample</span>, <span class='fl'>10</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+   <span class='kw'>nested2</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"thing1"</span>, <span class='st'>"thing2"</span>), <span class='no'>sample</span>, <span class='fl'>10</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+   <span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>1e5</span>
+   )
 
-<span class='no'>dt_count</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>LETTERS</span>[<span class='fl'>1</span>:<span class='fl'>3</span>],
-  <span class='kw'>w</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>4</span>)
-)
-<span class='no'>uncount</span> <span class='kw'>&lt;-</span> <span class='fu'>dt_uncount</span>(<span class='no'>dt_count</span>, <span class='no'>w</span>, <span class='kw'>.id</span> <span class='kw'>=</span> <span class='st'>"id"</span>)
-<span class='no'>uncount</span>   <span class='co'># note that if .remove = TRUE or .id is not null</span></div><div class='output co'>#&gt;    x .id
-#&gt; 1: A   1
-#&gt; 2: A   2
-#&gt; 3: B   3
-#&gt; 4: C   4
-#&gt; 5: C   5
-#&gt; 6: C   6
-#&gt; 7: C   7</div><div class='input'>          # this won't print the first time
-          # due to a printing behavior in data.table
-
-
+<span class='fu'>dt_hoist</span>(<span class='no'>dt</span>,
+         <span class='no'>nested1</span>, <span class='no'>nested2</span>,
+         <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>id</span>)</div><div class='output co'>#&gt;              id nested1 nested2
+#&gt;       1:      1       1  thing1
+#&gt;       2:      1       1  thing1
+#&gt;       3:      1       1  thing1
+#&gt;       4:      1       1  thing1
+#&gt;       5:      1       1  thing1
+#&gt;      ---                       
+#&gt;  999996: 100000       7  thing2
+#&gt;  999997: 100000       5  thing2
+#&gt;  999998: 100000       4  thing2
+#&gt;  999999: 100000       4  thing2
+#&gt; 1000000: 100000       1  thing2</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

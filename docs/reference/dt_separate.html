@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -109,14 +109,14 @@
     <p>Separates a column of data into others, by splitting based a separator or regular expression</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dt_separate</span>(<span class='no'>dt</span>, <span class='no'>col</span>, <span class='no'>into</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+    <pre class="usage"><span class='fu'>dt_separate</span>(<span class='no'>dt_</span>, <span class='no'>col</span>, <span class='no'>into</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>immutable</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dt</th>
+      <th>dt_</th>
       <td><p>the data table (or if not a data.table then it is coerced with as.data.table)</p></td>
     </tr>
     <tr>
@@ -145,7 +145,7 @@
     </tr>
     <tr>
       <th>immutable</th>
-      <td><p>If `TRUE`, `dt` is treated as immutable (it will not be modified in place). Alternatively, you can set `immutable = FALSE` to modify the input object.</p></td>
+      <td><p>If `TRUE`, `.dt` is treated as immutable (it will not be modified in place). Alternatively, you can set `immutable = FALSE` to modify the input object.</p></td>
     </tr>
     <tr>
       <th>...</th>

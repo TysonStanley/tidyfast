@@ -34,9 +34,18 @@ dt_unnest <- function(dt_, col, by = NULL){
     dt_ <- dt_[, eval(col), by = eval(by)]
   }
 
-  setnames(dt_, old = "by", paste(substitute(by)))
+  if (.length_by_1(by))
+    setnames(dt_, old = "by", paste(substitute(by)))
+
   dt_
 }
+
+.length_by_1 <- function(by){
+  char <- paste(by)
+  char <- char[-grepl("^\\.|^list|^c$", char)]
+  length(char) == 1
+}
+
 
 .is_null <- function(id){
   length(paste(id)) == 0

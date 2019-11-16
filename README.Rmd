@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.1.6` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.7` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)

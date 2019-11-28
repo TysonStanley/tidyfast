@@ -14,10 +14,15 @@
 #' @param names_from,values_from A pair of arguments describing which column
 #'   (or columns) to get the name of the output column (`name_from`), and
 #'   which column (or columns) to get the cell values from (`values_from`).
+#' @param drop will cast by including all missing combinations.
+#' c(FALSE, TRUE) will only include all missing combinations of formula LHS;
+#' c(TRUE, FALSE) will only include all missing combinations of formula RHS. See Examples.
 #'
 #' @export
 #'
 #' @examples
+#' library(data.table)
+#'
 #' example_dt <- data.table(z = rep(c("a", "b", "c"), 2),
 #'                          stuff = c(rep("x", 3), rep("y", 3)),
 #'                          things = 1:6)
@@ -28,7 +33,14 @@ dt_pivot_wider <- function(data,
                            id_cols = NULL,
                            names_from = name,
                            names_sep = "_",
-                           values_from = value) {
+                           values_from = value,
+                           drop = FALSE) {
+
+  is.data.frame(data) || is.data.table(data) || stop("data must be a data.frame or data.table")
+
+  if (!is.data.table(data)) {
+    data <- as.data.table(data)
+  }
 
   names_from <- characterize(substitute(names_from))
   values_from <- characterize(substitute(values_from))
@@ -50,16 +62,5 @@ dt_pivot_wider <- function(data,
                     value.var = values_from,
                     fun.aggregate = NULL,
                     sep = names_sep,
-                    drop = FALSE)
-}
-
-characterize <- function(vec_list_expr) {
-  vle_length <- length(vec_list_expr)
-  if (vle_length == 1) {
-    as.character(vec_list_expr)
-  } else if (as.character(vec_list_expr)[1] == "-"){
-    as.character(vec_list_expr)
-  } else {
-    as.character(vec_list_expr)[-1]
-  }
+                    drop = drop)
 }

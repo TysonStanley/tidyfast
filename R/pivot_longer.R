@@ -49,7 +49,7 @@ dt_pivot_longer <- function(data,
     drop_cols <- gsub("-", "", cols)
 
     cols <- colnames(data)[!colnames(data) %in% drop_cols]
-  } else if (any(grepl("-", cols)) && any(grepl("-", cols))) {
+  } else if (any(grepl("-", cols)) && any(!grepl("-", cols))) {
     # Ex: cols = c(x, -z)
     stop("cols must only contain columns to drop OR columns to add, not both")
   }

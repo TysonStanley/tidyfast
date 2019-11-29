@@ -27,8 +27,7 @@
 #'                          stuff = c(rep("x", 3), rep("y", 3)),
 #'                          things = 1:6)
 #'
-#' example_dt %>%
-#'   dt_pivot_wider(names_from = stuff, values_from = things)
+#' dt_pivot_wider(example_dt, names_from = stuff, values_from = things)
 dt_pivot_wider <- function(data,
                            id_cols = NULL,
                            names_from = name,

@@ -14,21 +14,25 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.1.2` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.8` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Travis build status](https://travis-ci.org/TysonStanley/tidyfast.svg?branch=master)](https://travis-ci.org/TysonStanley/tidyfast)
 <!-- badges: end -->
 
-The goal of `tidyfast` is to provide fast and efficient alternatives to some `tidyr` and `dplyr` functions using `data.table` under the hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in `dtplyr` (but notably does not use the `lazy_dt()` framework of `dtplyr`).
+The goal of `tidyfast` is to provide fast and efficient alternatives to some `tidyr` and `dplyr` functions using `data.table` under the hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in `dtplyr` (but notably does not use the `lazy_dt()` framework of `dtplyr`). This package imports `data.table` and `Rcpp` (no other dependencies).
+
+These are, in essence, translations from a more `tidyverse` grammar to `data.table`. Most functions herein are in places where, in my opinion, the `data.table` syntax is not obvious or clear. As such, these functions can translate a simple function call into the fast, efficient, and concise syntax of `data.table`.
 
 The current functions include:
 
-**Nesting and unnesting** (similar to `tidyr::nest()` or `dplyr::group_nest()` and `tidyr::unnest()`):
+**Nesting and unnesting** (similar to `dplyr::group_nest()` and `tidyr::unnest()`):
 
 - `dt_nest()` for nesting data tables
 - `dt_unnest()` for unnesting data tables
-- `dt_unnest_vec()` for unnesting vectors in a list-column in a data table
+- `dt_hoist()` for unnesting vectors in a list-column in a data table (still experimental)
 
 **If Else** (similar to `dplyr::case_when()`):
 
@@ -40,26 +44,30 @@ The current functions include:
 
 **Separate** (similar to `tidyr::separate()`)
 
-- `dt_separate()` for splitting a single column into multiple based on a match within the column (e.g., column with "A.B" could be split into two columns by using the period as the separator). It is built on `data.table::tstrsplit()`. This is not well tested yet and lacks some functionality of `tidyr::separate()`.
+- `dt_separate()` for splitting a single column into multiple based on a match within the column (e.g., column with values like "A.B" could be split into two columns by using the period as the separator where column 1 would have "A" and 2 would have "B"). It is built on `data.table::tstrsplit()`. This is not well tested yet and lacks some functionality of `tidyr::separate()`.
+
+**Count** and **Uncount** (similar to `tidyr::uncount()` and `dplyr::count()`)
+
+- `dt_count()` for fast counting by group(s)
+- `dt_uncount()` for creating full data from a count table
 
 
-
-Package is still in active development.
+*Package is still in active development.*
 
 ## Installation
 
 You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("TysonStanley/tidyfast")
+# install.packages("remotes")
+remotes::install_github("TysonStanley/tidyfast")
 ```
 
 ## Examples
 
-### Nesting and Unnesting
+The nesting and unnesting functions were shown in a [previous preprint](https://psyarxiv.com/u8ekc/) while the other functions are new. Herein, I show some simple applications. 
 
-The nesting and unnesting functions were shown in a [previous preprint](https://psyarxiv.com/u8ekc/) while `dt_case_when()` is really new. Herein, I show more simple applications. 
+### Nesting and Unnesting
 
 The following data table will be used for the nesting/unnesting examples.
 
@@ -67,7 +75,7 @@ The following data table will be used for the nesting/unnesting examples.
 library(tidyfast)
 library(data.table)
 library(dplyr)       # to compare with case_when()
-
+library(tidyr)       # to compare with fill() and separate()
 dt <- data.table(
    x = rnorm(1e5),
    y = runif(1e5),
@@ -77,6 +85,11 @@ dt <- data.table(
    id = 1:1e5)
 ```
 
+To make all the comparisons herein more equal, we will set the number of threads that `data.table` will use to 1.
+
+```{r}
+setDTthreads(1)
+```
 
 We can nest this data using `dt_nest()`:
 
@@ -88,16 +101,15 @@ nested
 We can also unnest this with `dt_unnest()`:
 
 ```{r}
-dt_unnest(nested, col = data, id = grp)
+dt_unnest(nested, col = data, by = grp)
 ```
 
 When our list columns don't have data tables (as output from `dt_nest()`) we can use the `dt_unnest_vec()` function, that will unnest vectors.
 
 ```{r}
-dt_unnest_vec(dt, 
-              cols = list(nested1, nested2), 
-              id = id, 
-              name = c("nested1", "nested2"))
+dt_hoist(dt, 
+         nested1, nested2, 
+         by = id)
 ```
 
 ### If Else
@@ -114,7 +126,6 @@ To show that each method, `dt_case_when()`, `dplyr::case_when()`, and `data.tabl
 
 ```{r}
 x <- rnorm(1e6)
-
 medianx <- median(x)
 x_cat <-
   dt_case_when(x < medianx ~ "low",
@@ -128,7 +139,6 @@ x_cat_fif <-
   fifelse(x < medianx, "low",
   fifelse(x >= medianx, "high",
   fifelse(is.na(x), "unknown", NA_character_)))
-
 identical(x_cat, x_cat_dplyr)
 identical(x_cat, x_cat_fif)
 ```
@@ -147,9 +157,7 @@ marks <-
               fifelse(x >= medianx, "high",
               fifelse(is.na(x), "unknown", NA_character_))),
               iterations = 50)
-
 library(ggbeeswarm)  # for the speed comparison plot
-
 marks$time %>% 
   setNames(c("dt_case_when", "case_when", "fifelse")) %>% 
   data.frame() %>% 
@@ -163,7 +171,6 @@ marks$time %>%
   theme(panel.grid.major.x = element_blank(),
         legend.position = "none") +
   scale_color_viridis_d()
-
 marks %>% 
   select(expression, median, mem_alloc) %>% 
   mutate(expression = c("dt_case_when", "case_when", "fifelse")) %>% 
@@ -179,25 +186,183 @@ A new function is `dt_fill()`, which fulfills the role of `tidyr::fill()` to fil
 x = 1:10
 dt_with_nas <- data.table(
   x = x,
-  y = shift(x),
-  z = shift(x, -1L),
+  y = shift(x, 2L),
+  z = shift(x, -2L),
   a = sample(c(rep(NA, 10), x), 10),
-  grp = sample(1:3, 10, replace = TRUE))
-
+  id = sample(1:3, 10, replace = TRUE))
+# Original
+dt_with_nas
 # All defaults
-dt_fill(dt_with_nas)
-
+dt_fill(dt_with_nas, y, z, a)
 # by id variable called `grp`
-dt_fill(dt_with_nas, id = grp)
-
+dt_fill(dt_with_nas, 
+        y, z, a, 
+        id = list(id))
 # both down and then up filling by group
-dt_fill(dt_with_nas, id = grp, .direction = "downup")
+dt_fill(dt_with_nas, 
+        y, z, a, 
+        id = list(id), 
+        .direction = "downup")
+```
+
+In its current form, `dt_fill()` is faster than `tidyr::fill()` and uses slightly less memory. Below are the results of filling in the `NA`s within each `id` on a 19 MB data set.
+
+```{r}
+x = 1:1e6
+dt3 <- data.table(
+  x = x,
+  y = shift(x, 10L),
+  z = shift(x, -10L),
+  a = sample(c(rep(NA, 10), x), 10),
+  id = sample(1:3, 10, replace = TRUE))
+df3 <- data.frame(dt3)
+marks3 <-
+  bench::mark(
+    tidyr::fill(dplyr::group_by(df3, id), x, y),
+    tidyfast::dt_fill(dt3, x, y, id = list(id)),
+    check = FALSE,
+    iterations = 50
+  )
 ```
 
 
+```{r, echo = FALSE, fig.width=6, fig.height=5, dpi=300}
+marks3$time %>% 
+  setNames(c("fill", "dt_fill")) %>% 
+  data.frame() %>% 
+  tidyr::gather() %>% 
+  mutate(value = as.numeric(value)) %>% 
+  ggplot(aes(key, value, color = key)) +
+  ggbeeswarm::geom_beeswarm() +
+  labs(x = "",
+       y = "Time (seconds)") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_color_viridis_d(begin = .5)
+marks3 %>% 
+  select(expression, median, mem_alloc)
+```
+
+
+## Separate
+
+The `dt_separate()` function is still under heavy development. Its behavior is similar to `tidyr::separate()` but is lacking some functionality currently. For example, `into` needs to be supplied the maximum number of possible columns to separate.
+
+```{r, eval = FALSE}
+dt_separate(data.table(col = "A.B.C"), col, into = c("A", "B"))
+#> Error in `[.data.table`(dt, , eval(split_it)) : 
+#>   Supplied 2 columns to be assigned 3 items. Please see NEWS for v1.12.2.
+```
+
+For current functionality, consider the following example. 
+
+```{r}
+dt_to_split <- data.table(
+  x = paste(letters, LETTERS, sep = ".")
+)
+dt_separate(dt_to_split, x, into = c("lower", "upper"))
+```
+
+```{r, echo = FALSE}
+head(dt_separate(dt_to_split, x, into = c("lower", "upper")))
+```
+
+
+Testing with a 4 MB data set with one variable that has columns of "A.B" repeatedly, shows that `dt_separate()` is fast but less memory efficient than `tidyr::separate()`.
+
+```{r, echo = FALSE, warning = FALSE}
+dt4 <- data.table(
+  col = paste(rep("A", 5e5), rep("B", 5e5), sep = ".")
+)
+df4 <- data.frame(dt4)
+marks4 <-
+  bench::mark(
+    tidyr::separate(df4, col, into = c("first", "second"), sep = "\\."),
+    tidyfast::dt_separate(dt4, col, into = c("first", "second"), sep = ".", remove = FALSE),
+    tidyfast::dt_separate(dt4, col, into = c("first", "second"), sep = ".", immutable = FALSE, remove = FALSE),
+    check = FALSE,
+    iterations = 25
+  )
+```
+
+```{r, echo = FALSE, fig.width=6, fig.height=5, dpi=300}
+marks4$time %>% 
+  setNames(c("separate", "dt_separate", "dt_separate-mutable")) %>% 
+  data.frame() %>% 
+  tidyr::gather() %>% 
+  mutate(value = as.numeric(value)) %>% 
+  ggplot(aes(key, value, color = key)) +
+  ggbeeswarm::geom_beeswarm() +
+  labs(x = "",
+       y = "Time (seconds)") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_color_viridis_d()
+marks4 %>% 
+  mutate(expression = c("separate", "dt_separate", "dt_separate-mutable")) %>% 
+  select(expression, median, mem_alloc)
+```
+
+
+## Count and Uncount
+
+The `dt_count()` function does essentially what `dplyr::count()` does. Notably, this, unlike the majority of other `dt_` functions, wraps a very simple statement in `data.table`. That is, `data.table` makes getting counts very simple and concise. Nonetheless, `dt_count()` fits the general API of `tidyfast`. To some degree, `dt_uncount()` is also a fairly simple wrapper, although the approach may not be as straightforward as that for `dt_count()`.
+
+The following examples show how count and uncount can work. We'll use the `dt` data table from the nesting examples.
+
+```{r}
+counted <- dt_count(dt, grp)
+counted
+```
+
+```{r}
+uncounted <- dt_uncount(counted, N)
+print(uncounted)
+```
+
+These are also quick (not that the `tidyverse` functions were at all slow here).
+
+```{r}
+dt5 <- copy(dt)
+df5 <- data.frame(dt5)
+marks5 <-
+  bench::mark(
+    counted_tbl <- dplyr::count(df5, grp),
+    counted_dt <- tidyfast::dt_count(dt5, grp),
+    tidyr::uncount(counted_tbl, n),
+    tidyfast::dt_uncount(counted_dt, N),
+    check = FALSE,
+    iterations = 25
+  )
+```
+
+```{r, echo = FALSE, fig.width=6, fig.height=5, dpi=300}
+marks5$time %>% 
+  setNames(c("count", "dt_count", "uncount", "dt_uncount")) %>% 
+  data.frame() %>% 
+  tidyr::gather() %>% 
+  mutate(value = as.numeric(value)) %>% 
+  mutate(type = dt_case_when(stringr::str_detect(key, "uncount") ~ "Uncounting",
+                             TRUE ~ "Counting")) %>% 
+  ggplot(aes(key, value, color = key)) +
+  ggbeeswarm::geom_beeswarm() +
+  labs(x = "",
+       y = "Time (seconds)") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_color_viridis_d() +
+  facet_grid(~type, space = "free", scales = "free") +
+  coord_cartesian(ylim = c(0, .007))
+```
+
+
+*Other functions are currently in progress.*
 
 ## Note
 
 Please note that the `tidyfast` project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
 
-Also, `ggplot2`, `ggbeeswarm`, and `tidyr` were used herein for creating the plot.
+Also, `ggplot2`, `stringr`, and `ggbeeswarm` were used herein for creating plots.

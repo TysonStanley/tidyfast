@@ -31,6 +31,7 @@ dt_case_when <- function(...){
   dots <- list(...)
   # checking the dots
   .check_dots(dots)
+
   # extract info from dots
   n <- length(dots)
   conds <- conditions(dots)
@@ -38,13 +39,7 @@ dt_case_when <- function(...){
   class <- class(labels)
 
   # make the right NA based on assigned labels
-  na_type <-
-    switch(class,
-           "logical"   = NA,
-           "complex"   = NA_complex_,
-           "character" = NA_character_,
-           "integer"   = NA_integer_,
-           NA_real_)
+  na_type <- na_type_fun(class)
 
   # create fifelse() call
   calls <- call("fifelse", conds[[n]], labels[[n]], eval(na_type))
@@ -67,6 +62,15 @@ dt_case_when <- function(...){
 NULL
 
 # Helpers -----------------
+
+na_type_fun <- function(class){
+  switch(class,
+         "logical"   = NA,
+         "complex"   = NA_complex_,
+         "character" = NA_character_,
+         "integer"   = NA_integer_,
+         NA_real_)
+}
 
 conditions <- function(list){
   unlist(lapply(list, function(x) x[[2]]))

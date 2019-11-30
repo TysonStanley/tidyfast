@@ -2,9 +2,9 @@
 #'
 #' Quickly unnest data tables.
 #'
-#' @param dt the data table to nest
+#' @param dt_ the data table to nest
 #' @param col  the column to unnest
-#' @param id the ID variable to unnest by
+#' @param by the ID variable to unnest by
 #'
 #' @examples
 #'
@@ -16,31 +16,53 @@
 #'   )
 #'
 #' nested <- dt_nest(dt, grp)
-#' dt_unnest(nested, col = data, id = grp)
+#' dt_unnest(nested, col = data, by = grp)
 #'
 #' @import data.table
 #'
 #' @export
-dt_unnest <- function(dt, col, id){
-  if (isFALSE(is.data.table(dt)))
-    dt <- as.data.table(dt)
+dt_unnest <- function(dt_, col, by = NULL){
+  UseMethod("dt_unnest", dt_)
+}
 
-  by <- substitute(id)
+#' @export
+dt_unnest.default <- function(dt_, col, by = NULL){
+  if (isFALSE(is.data.table(dt_)))
+    dt_ <- as.data.table(dt_)
+
+  by <- substitute(by)
   col <- substitute(unlist(col, recursive = FALSE))
 
-  dt <- dt[, eval(col), by = eval(by)]
-  setnames(dt, old = "by", paste(substitute(id)))
-  dt
+  if (.is_null(by)){
+    dt_ <- dt_[, eval(col)]
+  } else {
+    dt_ <- dt_[, eval(col), by = eval(by)]
+  }
+
+  if (.length_by_1(by))
+    setnames(dt_, old = "by", paste(substitute(by)))
+
+  dt_
+}
+
+.length_by_1 <- function(by){
+  char <- paste(by)
+  char <- char[-grepl("^\\.|^list|^c$", char)]
+  length(char) == 1
+}
+
+
+.is_null <- function(id){
+  length(paste(id)) == 0
 }
 
 #' Fast Unnesting of Vectors
 #'
 #' Quickly nest vectors nested in a list column.
 #'
-#' @param dt the data table to nest
-#' @param cols a list of the columns to unnest (must all be the sample length within ids); use bare names of the variables
-#' @param id the ID variable to unnest by
-#' @param name a character vector of the names to give the unnested vectors
+#' @param dt_ the data table to nest
+#' @param ... the columns to unnest (must all be the sample length within ids); use bare names of the variables
+#' @param by the ID variable to unnest by
 #'
 #' @examples
 #'
@@ -53,24 +75,41 @@ dt_unnest <- function(dt, col, id){
 #'    id = 1:1e5
 #'    )
 #'
-#' dt_unnest_vec(dt,
-#'               cols = list(nested1, nested2),
-#'               id = id,
-#'               name = c("nested1", "nested2"))
+#' dt_hoist(dt,
+#'          nested1, nested2,
+#'          by = id)
 #'
 #' @import data.table
 #'
 #' @export
-dt_unnest_vec <- function(dt, cols, id, name){
-  if (isFALSE(is.data.table(dt)))
-    dt <- as.data.table(dt)
+dt_hoist <- function(dt_, ..., by = NULL){
+  UseMethod("dt_hoist", dt_)
+}
 
-  by <- substitute(id)
-  cols <- substitute(unlist(cols,recursive = FALSE))
+#' @export
+dt_hoist.default <- function(dt_, ..., by = NULL){
+  if (isFALSE(is.data.table(dt_)))
+    dt_ <- as.data.table(dt_)
 
-  dt <- dt[, eval(cols), by = eval(by)]
-  setnames(dt,
-           old = c(paste0("V", 1:length(name)), "by"),
-           new = c(name, paste(substitute(id))))
-  dt
+  by <- substitute(by)
+  cols <- substitute(unlist(list(...), recursive = FALSE))
+
+  dt_ <- dt_[, eval(cols), by = eval(by)]
+  dt_ <- .naming(dt_, substitute(list(...)), by)
+  dt_
+}
+
+.naming <- function(dt_, cols, by){
+
+  new_names <- paste(cols)[-1]
+  old_names <- paste0("V", seq_along(new_names))
+
+  if (!.is_null(by))
+    old_names <- c(old_names, "by")
+
+  setnames(dt_,
+           old = old_names,
+           new = c(new_names, paste(by)),
+           skip_absent = TRUE)
+  dt_
 }

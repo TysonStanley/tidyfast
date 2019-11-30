@@ -1,12 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.1.2` <img src=".graphics/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.8` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Travis build
+status](https://travis-ci.org/TysonStanley/tidyfast.svg?branch=master)](https://travis-ci.org/TysonStanley/tidyfast)
 <!-- badges: end -->
 
 The goal of `tidyfast` is to provide fast and efficient alternatives to
@@ -14,17 +16,24 @@ some `tidyr` and `dplyr` functions using `data.table` under the hood.
 Each have the prefix of `dt_` to allow for autocomplete in IDEs such as
 RStudio. These should compliment some of the current functionality in
 `dtplyr` (but notably does not use the `lazy_dt()` framework of
-`dtplyr`).
+`dtplyr`). This package imports `data.table` and `Rcpp` (no other
+dependencies).
+
+These are, in essence, translations from a more `tidyverse` grammar to
+`data.table`. Most functions herein are in places where, in my opinion,
+the `data.table` syntax is not obvious or clear. As such, these
+functions can translate a simple function call into the fast, efficient,
+and concise syntax of `data.table`.
 
 The current functions include:
 
-**Nesting and unnesting** (similar to `tidyr::nest()` or
-`dplyr::group_nest()` and `tidyr::unnest()`):
+**Nesting and unnesting** (similar to `dplyr::group_nest()` and
+`tidyr::unnest()`):
 
   - `dt_nest()` for nesting data tables
   - `dt_unnest()` for unnesting data tables
-  - `dt_unnest_vec()` for unnesting vectors in a list-column in a data
-    table
+  - `dt_hoist()` for unnesting vectors in a list-column in a data table
+    (still experimental)
 
 **If Else** (similar to `dplyr::case_when()`):
 
@@ -40,12 +49,19 @@ The current functions include:
 **Separate** (similar to `tidyr::separate()`)
 
   - `dt_separate()` for splitting a single column into multiple based on
-    a match within the column (e.g., column with “A.B” could be split
-    into two columns by using the period as the separator). It is built
-    on `data.table::tstrsplit()`. This is not well tested yet and lacks
+    a match within the column (e.g., column with values like “A.B” could
+    be split into two columns by using the period as the separator where
+    column 1 would have “A” and 2 would have “B”). It is built on
+    `data.table::tstrsplit()`. This is not well tested yet and lacks
     some functionality of `tidyr::separate()`.
 
-Package is still in active development.
+**Count** and **Uncount** (similar to `tidyr::uncount()` and
+`dplyr::count()`)
+
+  - `dt_count()` for fast counting by group(s)
+  - `dt_uncount()` for creating full data from a count table
+
+*Package is still in active development.*
 
 ## Installation
 
@@ -53,17 +69,17 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("TysonStanley/tidyfast")
+# install.packages("remotes")
+remotes::install_github("TysonStanley/tidyfast")
 ```
 
 ## Examples
 
-### Nesting and Unnesting
-
 The nesting and unnesting functions were shown in a [previous
-preprint](https://psyarxiv.com/u8ekc/) while `dt_case_when()` is really
-new. Herein, I show more simple applications.
+preprint](https://psyarxiv.com/u8ekc/) while the other functions are
+new. Herein, I show some simple applications.
+
+### Nesting and Unnesting
 
 The following data table will be used for the nesting/unnesting
 examples.
@@ -72,7 +88,7 @@ examples.
 library(tidyfast)
 library(data.table)
 library(dplyr)       # to compare with case_when()
-
+library(tidyr)       # to compare with fill() and separate()
 dt <- data.table(
    x = rnorm(1e5),
    y = runif(1e5),
@@ -82,45 +98,52 @@ dt <- data.table(
    id = 1:1e5)
 ```
 
+To make all the comparisons herein more equal, we will set the number of
+threads that `data.table` will use to 1.
+
+``` r
+setDTthreads(1)
+```
+
 We can nest this data using `dt_nest()`:
 
 ``` r
 nested <- dt_nest(dt, grp)
 nested
 #>    grp         data
-#> 1:   2 <data.table>
-#> 2:   3 <data.table>
-#> 3:   1 <data.table>
+#> 1:   1 <data.table>
+#> 2:   2 <data.table>
+#> 3:   3 <data.table>
 ```
 
 We can also unnest this with `dt_unnest()`:
 
 ``` r
-dt_unnest(nested, col = data, id = grp)
-#>         grp           x         y         nested1
-#>      1:   2 -1.71490559 0.1391240 1,1,1,1,1,1,...
-#>      2:   2 -1.63648042 0.5707004 2,2,1,1,1,1,...
-#>      3:   2 -0.35679806 0.7870723 2,4,2,2,3,4,...
-#>      4:   2 -2.28244999 0.9440325 6,2,4,8,7,6,...
-#>      5:   2  0.43548629 0.8904694 1,1,1,1,1,1,...
-#>     ---                                          
-#>  99996:   1 -0.62731313 0.7978934 6,2,4,8,7,6,...
-#>  99997:   1  0.05632578 0.6222600 2,8,2,4,6,6,...
-#>  99998:   1  0.69281606 0.4868225 2,2,1,1,1,1,...
-#>  99999:   1 -1.14218533 0.1367110 6,1,3,5,3,1,...
-#> 100000:   1  0.57943399 0.1675201 2,3,5,9,1,3,...
-#>                                               nested2     id
-#>      1: thing1,thing1,thing1,thing1,thing1,thing1,...      1
-#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...      2
-#>      3: thing2,thing2,thing2,thing2,thing2,thing2,...      4
-#>      4: thing2,thing2,thing2,thing2,thing2,thing2,...      8
-#>      5: thing1,thing1,thing1,thing1,thing1,thing1,...     11
-#>     ---                                                     
-#>  99996: thing2,thing2,thing2,thing2,thing2,thing2,...  99988
-#>  99997: thing1,thing1,thing1,thing1,thing1,thing1,...  99989
-#>  99998: thing2,thing2,thing2,thing2,thing2,thing2,...  99992
-#>  99999: thing2,thing2,thing2,thing2,thing2,thing2,...  99996
-#> 100000: thing2,thing2,thing2,thing2,thing2,thing2,... 100000
+dt_unnest(nested, col = data, by = grp)
+#>         by          x          y         nested1
+#>      1:  1  0.1624127 0.11793103 2,3,5,9,1,3,...
+#>      2:  1 -0.8749771 0.01200319 6,2,4,8,7,6,...
+#>      3:  1 -1.2709261 0.99871440 2,3,5,9,1,3,...
+#>      4:  1  0.6252182 0.08392742 4,1,2,5,4,2,...
+#>      5:  1 -0.4269078 0.46730652 5,5,4,2,5,2,...
+#>     ---                                         
+#>  99996:  3 -1.3785841 0.65154073 1,1,1,1,1,1,...
+#>  99997:  3  1.7506497 0.35086904 1,3,1,3,1,3,...
+#>  99998:  3  1.7920949 0.57767072 2,4,2,2,3,4,...
+#>  99999:  3  1.3958509 0.20316446 5,5,4,2,5,2,...
+#> 100000:  3  0.4617428 0.64128894 2,8,2,4,6,6,...
+#>                                               nested2    id
+#>      1: thing2,thing2,thing2,thing2,thing2,thing2,...    10
+#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...    18
+#>      3: thing2,thing2,thing2,thing2,thing2,thing2,...    20
+#>      4: thing1,thing1,thing1,thing1,thing1,thing1,...    25
+#>      5: thing1,thing1,thing1,thing1,thing1,thing1,...    27
+#>     ---                                                    
+#>  99996: thing1,thing1,thing1,thing1,thing1,thing1,... 99991
+#>  99997: thing1,thing1,thing1,thing1,thing1,thing1,... 99993
+#>  99998: thing2,thing2,thing2,thing2,thing2,thing2,... 99994
+#>  99999: thing1,thing1,thing1,thing1,thing1,thing1,... 99997
+#> 100000: thing1,thing1,thing1,thing1,thing1,thing1,... 99999
 ```
 
 When our list columns don’t have data tables (as output from
@@ -128,10 +151,9 @@ When our list columns don’t have data tables (as output from
 vectors.
 
 ``` r
-dt_unnest_vec(dt, 
-              cols = list(nested1, nested2), 
-              id = id, 
-              name = c("nested1", "nested2"))
+dt_hoist(dt, 
+         nested1, nested2, 
+         by = id)
 #>              id nested1 nested2
 #>       1:      1       1  thing1
 #>       2:      1       1  thing1
@@ -164,7 +186,6 @@ example.
 
 ``` r
 x <- rnorm(1e6)
-
 medianx <- median(x)
 x_cat <-
   dt_case_when(x < medianx ~ "low",
@@ -178,7 +199,6 @@ x_cat_fif <-
   fifelse(x < medianx, "low",
   fifelse(x >= medianx, "high",
   fifelse(is.na(x), "unknown", NA_character_)))
-
 identical(x_cat, x_cat_dplyr)
 #> [1] TRUE
 identical(x_cat, x_cat_fif)
@@ -188,14 +208,14 @@ identical(x_cat, x_cat_fif)
 Notably, `dt_case_when()` is very fast and memory efficient, given it is
 built on `data.table::fifelse()`.
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     125.4ms   148.8MB
-    #> 2 dt_case_when   34.8ms    34.3MB
-    #> 3 fifelse        32.8ms    34.3MB
+    #> 1 case_when       129ms   148.8MB
+    #> 2 dt_case_when   35.8ms    34.3MB
+    #> 3 fifelse        32.5ms    34.3MB
 
 ## Fill
 
@@ -208,53 +228,201 @@ efficient `C++` code from `tidyr` (`fillUp()` and `fillDown()`).
 x = 1:10
 dt_with_nas <- data.table(
   x = x,
-  y = shift(x),
-  z = shift(x, -1L),
+  y = shift(x, 2L),
+  z = shift(x, -2L),
   a = sample(c(rep(NA, 10), x), 10),
-  grp = sample(1:3, 10, replace = TRUE))
-
+  id = sample(1:3, 10, replace = TRUE))
+# Original
+dt_with_nas
+#>      x  y  z  a id
+#>  1:  1 NA  3 NA  2
+#>  2:  2 NA  4  2  1
+#>  3:  3  1  5  7  3
+#>  4:  4  2  6  4  3
+#>  5:  5  3  7  3  3
+#>  6:  6  4  8  5  2
+#>  7:  7  5  9  9  1
+#>  8:  8  6 10 NA  1
+#>  9:  9  7 NA NA  2
+#> 10: 10  8 NA NA  3
 # All defaults
-dt_fill(dt_with_nas)
-#>      x  y  z  a grp
-#>  1:  1 NA  2 NA   2
-#>  2:  2  1  3  2   1
-#>  3:  3  2  4  7   3
-#>  4:  4  3  5  4   3
-#>  5:  5  4  6  3   3
-#>  6:  6  5  7  5   2
-#>  7:  7  6  8  9   1
-#>  8:  8  7  9  9   1
-#>  9:  9  8 10  9   2
-#> 10: 10  9 10  9   3
-
+dt_fill(dt_with_nas, y, z, a)
+#>      y  z  a
+#>  1: NA  3 NA
+#>  2: NA  4  2
+#>  3:  1  5  7
+#>  4:  2  6  4
+#>  5:  3  7  3
+#>  6:  4  8  5
+#>  7:  5  9  9
+#>  8:  6 10  9
+#>  9:  7 10  9
+#> 10:  8 10  9
 # by id variable called `grp`
-dt_fill(dt_with_nas, id = grp)
-#>     grp  x  y  z  a
-#>  1:   1  2  1  3  2
-#>  2:   1  7  6  8  9
-#>  3:   1  8  7  9  9
-#>  4:   2  1 NA  2 NA
-#>  5:   2  6  5  7  5
-#>  6:   2  9  8 10  5
-#>  7:   3  3  2  4  7
-#>  8:   3  4  3  5  4
-#>  9:   3  5  4  6  3
-#> 10:   3 10  9  6  3
-
+dt_fill(dt_with_nas, 
+        y, z, a, 
+        id = list(id))
+#>     id  y  z  a
+#>  1:  2 NA  3 NA
+#>  2:  2  4  8  5
+#>  3:  2  7  8  5
+#>  4:  1 NA  4  2
+#>  5:  1  5  9  9
+#>  6:  1  6 10  9
+#>  7:  3  1  5  7
+#>  8:  3  2  6  4
+#>  9:  3  3  7  3
+#> 10:  3  8  7  3
 # both down and then up filling by group
-dt_fill(dt_with_nas, id = grp, .direction = "downup")
-#>     grp  x y  z a
-#>  1:   1  2 1  3 2
-#>  2:   1  7 6  8 9
-#>  3:   1  8 7  9 9
-#>  4:   2  1 5  2 5
-#>  5:   2  6 5  7 5
-#>  6:   2  9 8 10 5
-#>  7:   3  3 2  4 7
-#>  8:   3  4 3  5 4
-#>  9:   3  5 4  6 3
-#> 10:   3 10 9  6 3
+dt_fill(dt_with_nas, 
+        y, z, a, 
+        id = list(id), 
+        .direction = "downup")
+#>     id y  z a
+#>  1:  2 4  3 5
+#>  2:  2 4  8 5
+#>  3:  2 7  8 5
+#>  4:  1 5  4 2
+#>  5:  1 5  9 9
+#>  6:  1 6 10 9
+#>  7:  3 1  5 7
+#>  8:  3 2  6 4
+#>  9:  3 3  7 3
+#> 10:  3 8  7 3
 ```
+
+In its current form, `dt_fill()` is faster than `tidyr::fill()` and uses
+slightly less memory. Below are the results of filling in the `NA`s
+within each `id` on a 19 MB data set.
+
+``` r
+x = 1:1e6
+dt3 <- data.table(
+  x = x,
+  y = shift(x, 10L),
+  z = shift(x, -10L),
+  a = sample(c(rep(NA, 10), x), 10),
+  id = sample(1:3, 10, replace = TRUE))
+df3 <- data.frame(dt3)
+marks3 <-
+  bench::mark(
+    tidyr::fill(dplyr::group_by(df3, id), x, y),
+    tidyfast::dt_fill(dt3, x, y, id = list(id)),
+    check = FALSE,
+    iterations = 50
+  )
+```
+
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" />
+
+    #> # A tibble: 2 x 3
+    #>   expression                                    median mem_alloc
+    #>   <bch:expr>                                  <bch:tm> <bch:byt>
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)     65ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.7ms    29.1MB
+
+## Separate
+
+The `dt_separate()` function is still under heavy development. Its
+behavior is similar to `tidyr::separate()` but is lacking some
+functionality currently. For example, `into` needs to be supplied the
+maximum number of possible columns to separate.
+
+``` r
+dt_separate(data.table(col = "A.B.C"), col, into = c("A", "B"))
+#> Error in `[.data.table`(dt, , eval(split_it)) : 
+#>   Supplied 2 columns to be assigned 3 items. Please see NEWS for v1.12.2.
+```
+
+For current functionality, consider the following example.
+
+``` r
+dt_to_split <- data.table(
+  x = paste(letters, LETTERS, sep = ".")
+)
+dt_separate(dt_to_split, x, into = c("lower", "upper"))
+```
+
+    #>    lower upper
+    #> 1:     a     A
+    #> 2:     b     B
+    #> 3:     c     C
+    #> 4:     d     D
+    #> 5:     e     E
+    #> 6:     f     F
+
+Testing with a 4 MB data set with one variable that has columns of “A.B”
+repeatedly, shows that `dt_separate()` is fast but less memory efficient
+than `tidyr::separate()`.
+
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
+
+    #> # A tibble: 3 x 3
+    #>   expression            median mem_alloc
+    #>   <chr>               <bch:tm> <bch:byt>
+    #> 1 separate               350ms    11.6MB
+    #> 2 dt_separate            128ms    30.6MB
+    #> 3 dt_separate-mutable    117ms    26.7MB
+
+## Count and Uncount
+
+The `dt_count()` function does essentially what `dplyr::count()` does.
+Notably, this, unlike the majority of other `dt_` functions, wraps a
+very simple statement in `data.table`. That is, `data.table` makes
+getting counts very simple and concise. Nonetheless, `dt_count()` fits
+the general API of `tidyfast`. To some degree, `dt_uncount()` is also a
+fairly simple wrapper, although the approach may not be as
+straightforward as that for `dt_count()`.
+
+The following examples show how count and uncount can work. We’ll use
+the `dt` data table from the nesting examples.
+
+``` r
+counted <- dt_count(dt, grp)
+counted
+#>    grp     N
+#> 1:   1 33330
+#> 2:   2 33217
+#> 3:   3 33453
+```
+
+``` r
+uncounted <- dt_uncount(counted, N)
+print(uncounted)
+#>         grp
+#>      1:   1
+#>      2:   1
+#>      3:   1
+#>      4:   1
+#>      5:   1
+#>     ---    
+#>  99996:   3
+#>  99997:   3
+#>  99998:   3
+#>  99999:   3
+#> 100000:   3
+```
+
+These are also quick (not that the `tidyverse` functions were at all
+slow here).
+
+``` r
+dt5 <- copy(dt)
+df5 <- data.frame(dt5)
+marks5 <-
+  bench::mark(
+    counted_tbl <- dplyr::count(df5, grp),
+    counted_dt <- tidyfast::dt_count(dt5, grp),
+    tidyr::uncount(counted_tbl, n),
+    tidyfast::dt_uncount(counted_dt, N),
+    check = FALSE,
+    iterations = 25
+  )
+```
+
+<img src="man/figures/README-unnamed-chunk-21-1.png" width="70%" />
+
+*Other functions are currently in progress.*
 
 ## Note
 
@@ -262,5 +430,5 @@ Please note that the `tidyfast` project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms.
 
-Also, `ggplot2`, `ggbeeswarm`, and `tidyr` were used herein for creating
-the plot.
+Also, `ggplot2`, `stringr`, and `ggbeeswarm` were used herein for
+creating plots.

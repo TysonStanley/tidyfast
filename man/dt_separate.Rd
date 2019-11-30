@@ -4,11 +4,11 @@
 \alias{dt_separate}
 \title{Separate with data.table}
 \usage{
-dt_separate(dt, col, into, sep = ".", remove = TRUE, fill = NA,
+dt_separate(dt_, col, into, sep = ".", remove = TRUE, fill = NA,
   fixed = TRUE, by_reference = TRUE, ...)
 }
 \arguments{
-\item{dt}{the data table (or if not a data.table then it is coerced with as.data.table)}
+\item{dt_}{the data table (or if not a data.table then it is coerced with as.data.table)}
 
 \item{col}{the column to separate}
 

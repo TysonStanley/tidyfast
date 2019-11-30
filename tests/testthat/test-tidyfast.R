@@ -35,44 +35,38 @@ test_that("dt_nest works", {
 test_that("dt_unnest works", {
 
   dt <- data.table(
-     x = rnorm(1e5),
-     y = runif(1e5),
-     grp = sample(1L:3L, 1e5, replace = TRUE),
-     nested1 = lapply(1:10, sample, 10, replace = TRUE),
-     nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
-     id = 1:1e5
-     )
+    x = rnorm(1e5),
+    y = runif(1e5),
+    grp = sample(1L:3L, 1e5, replace = TRUE),
+    nested1 = lapply(1:10, sample, 10, replace = TRUE),
+    nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
+    id = 1:1e5
+  )
 
   nest_dt <- dt_nest(dt, grp)
-  unnest_dt <- dt_unnest(nest_dt, col = data, id = grp)
+  unnest_dt <- dt_unnest(nest_dt, col = data, by = grp)
   unnest_vec <-
-    dt_unnest_vec(dt,
-                  cols = list(nested1, nested2),
-                  id = id,
-                  name = c("nested1", "nested2"))
+    dt_hoist(dt,
+             nested1, nested2,
+             by = id)
 
-  expect_equal(dim(dt_unnest(nest_dt, col = data, id = grp)), c(100000,6))
-  expect_equal(dim(dt_unnest_vec(dt,
-                                 cols = list(nested1, nested2),
-                                 id = id,
-                                 name = c("nested1", "nested2"))),
+  expect_equal(dim(dt_unnest(nest_dt, col = data, by = grp)), c(100000,6))
+  expect_equal(dim(dt_hoist(dt,
+                            nested1, nested2,
+                            by = id)),
                c(1000000, 3))
 
   d <- as.data.frame(dt)
   nest_d <- as.data.frame(nest_dt)
-  unnest_dt <- dt_unnest(nest_d, col = data, id = grp)
+  unnest_dt <- dt_unnest(nest_d, col = data, by = grp)
   unnest_vec <-
-    dt_unnest_vec(d,
-                  cols = list(nested1, nested2),
-                  id = id,
-                  name = c("nested1", "nested2"))
+    dt_hoist(d,
+             nested1, nested2,
+             by = id)
 
-  expect_equal(dim(dt_unnest(nest_d, col = data, id = grp)), c(100000,6))
-  expect_equal(dim(dt_unnest_vec(d,
-                                 cols = list(nested1, nested2),
-                                 id = id,
-                                 name = c("nested1", "nested2"))),
+  expect_equal(dim(dt_unnest(nest_d, col = data, by = grp)), c(100000,6))
+  expect_equal(dim(dt_hoist(dt,
+                            nested1, nested2,
+                            by = id)),
                c(1000000, 3))
 })
-
-

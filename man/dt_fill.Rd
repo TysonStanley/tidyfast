@@ -4,15 +4,15 @@
 \alias{dt_fill}
 \title{Fill with data.table}
 \usage{
-dt_fill(dt, ..., id = NULL, .direction = c("down", "up", "downup",
+dt_fill(dt_, ..., by = NULL, .direction = c("down", "up", "downup",
   "updown"))
 }
 \arguments{
-\item{dt}{the data table (or if not a data.table then it is coerced with as.data.table)}
+\item{dt_}{the data table (or if not a data.table then it is coerced with as.data.table)}
 
 \item{...}{the columns to fill}
 
-\item{id}{the grouping variable(s) to fill within}
+\item{by}{the grouping variable(s) to fill within}
 
 \item{.direction}{either "down" or "up" (down fills values down, up fills values up), or "downup" (down first then up) or "updown" (up first then down)}
 }
@@ -31,8 +31,8 @@ dt = data.table(v1 = x,
                 v3 = shift(x, -1L),
                 v4 = sample(c(rep(NA, 10), x), 10),
                 grp = sample(1:3, 10, replace = TRUE))
-dt_fill(dt, v2, v3, v4, id = grp, .direction = "downup")
-dt_fill(dt, v2, v3, v4, id = grp)
+dt_fill(dt, v2, v3, v4, by = grp, .direction = "downup")
+dt_fill(dt, v2, v3, v4, by = grp)
 dt_fill(dt, .direction = "up")
 
 }

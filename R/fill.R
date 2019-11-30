@@ -27,6 +27,11 @@
 #'
 #' @export
 dt_fill <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown")){
+  UseMethod("dt_fill", dt_)
+}
+
+#' @export
+dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown")){
 
   if (isFALSE(is.data.table(dt_)))
     dt_ <- data.table::as.data.table(dt_)

@@ -1,12 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.1.7` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.1.8` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis build
 status](https://travis-ci.org/TysonStanley/tidyfast.svg?branch=master)](https://travis-ci.org/TysonStanley/tidyfast)
 <!-- badges: end -->
@@ -121,18 +121,18 @@ We can also unnest this with `dt_unnest()`:
 
 ``` r
 dt_unnest(nested, col = data, by = grp)
-#>         grp          x          y         nested1
-#>      1:   1  0.1624127 0.11793103 2,3,5,9,1,3,...
-#>      2:   1 -0.8749771 0.01200319 6,2,4,8,7,6,...
-#>      3:   1 -1.2709261 0.99871440 2,3,5,9,1,3,...
-#>      4:   1  0.6252182 0.08392742 4,1,2,5,4,2,...
-#>      5:   1 -0.4269078 0.46730652 5,5,4,2,5,2,...
-#>     ---                                          
-#>  99996:   3 -1.3785841 0.65154073 1,1,1,1,1,1,...
-#>  99997:   3  1.7506497 0.35086904 1,3,1,3,1,3,...
-#>  99998:   3  1.7920949 0.57767072 2,4,2,2,3,4,...
-#>  99999:   3  1.3958509 0.20316446 5,5,4,2,5,2,...
-#> 100000:   3  0.4617428 0.64128894 2,8,2,4,6,6,...
+#>         by          x          y         nested1
+#>      1:  1  0.1624127 0.11793103 2,3,5,9,1,3,...
+#>      2:  1 -0.8749771 0.01200319 6,2,4,8,7,6,...
+#>      3:  1 -1.2709261 0.99871440 2,3,5,9,1,3,...
+#>      4:  1  0.6252182 0.08392742 4,1,2,5,4,2,...
+#>      5:  1 -0.4269078 0.46730652 5,5,4,2,5,2,...
+#>     ---                                         
+#>  99996:  3 -1.3785841 0.65154073 1,1,1,1,1,1,...
+#>  99997:  3  1.7506497 0.35086904 1,3,1,3,1,3,...
+#>  99998:  3  1.7920949 0.57767072 2,4,2,2,3,4,...
+#>  99999:  3  1.3958509 0.20316446 5,5,4,2,5,2,...
+#> 100000:  3  0.4617428 0.64128894 2,8,2,4,6,6,...
 #>                                               nested2    id
 #>      1: thing2,thing2,thing2,thing2,thing2,thing2,...    10
 #>      2: thing2,thing2,thing2,thing2,thing2,thing2,...    18
@@ -216,9 +216,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     121.8ms   148.8MB
-    #> 2 dt_case_when     34ms    34.3MB
-    #> 3 fifelse        31.7ms    34.3MB
+    #> 1 case_when     129.2ms   148.8MB
+    #> 2 dt_case_when   35.4ms    34.3MB
+    #> 3 fifelse        33.4ms    34.3MB
 
 ## Fill
 
@@ -326,8 +326,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.1ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.4ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.5ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.7ms    29.1MB
 
 ## Separate
 
@@ -369,9 +369,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               350ms    11.6MB
-    #> 2 dt_separate            126ms    30.6MB
-    #> 3 dt_separate-mutable    111ms    26.7MB
+    #> 1 separate               345ms    11.6MB
+    #> 2 dt_separate            131ms    30.6MB
+    #> 3 dt_separate-mutable    118ms    26.7MB
 
 ## Count and Uncount
 

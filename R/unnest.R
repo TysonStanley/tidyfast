@@ -22,6 +22,11 @@
 #'
 #' @export
 dt_unnest <- function(dt_, col, by = NULL){
+  UseMethod("dt_unnest", dt_)
+}
+
+#' @export
+dt_unnest.default <- function(dt_, col, by = NULL){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
@@ -80,6 +85,11 @@ dt_unnest <- function(dt_, col, by = NULL){
 #'
 #' @export
 dt_hoist <- function(dt_, ..., by = NULL){
+  UseMethod("dt_hoist", dt_)
+}
+
+#' @export
+dt_hoist.default <- function(dt_, ..., by = NULL){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 

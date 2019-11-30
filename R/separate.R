@@ -42,6 +42,17 @@ dt_separate <- function(dt_, col, into,
                         fixed = TRUE,
                         immutable = TRUE,
                         ...){
+  UseMethod("dt_separate", dt_)
+}
+
+#' @export
+dt_separate.default <- function(dt_, col, into,
+                                sep = ".",
+                                remove = TRUE,
+                                fill = NA,
+                                fixed = TRUE,
+                                immutable = TRUE,
+                                ...){
 
   # checks and nse
   if (isFALSE(is.data.table(dt_))) dt_ <- data.table::as.data.table(dt_)

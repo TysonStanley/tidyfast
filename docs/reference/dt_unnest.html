@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
       </span>
     </div>
 
@@ -139,18 +139,19 @@
   )
 
 <span class='no'>nested</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dt_nest.html'>dt_nest</a></span>(<span class='no'>dt</span>, <span class='no'>grp</span>)
-<span class='fu'>dt_unnest</span>(<span class='no'>nested</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>grp</span>)</div><div class='output co'>#&gt;         grp          x          y
-#&gt;      1:   1  1.0132525 0.02937715
-#&gt;      2:   1  1.3222125 0.17566096
-#&gt;      3:   1  0.5065119 0.06658542
-#&gt;      4:   1 -0.9279822 0.55996602
-#&gt;      5:   1  0.7179084 0.85645944
-#&gt;     ---                          
-#&gt;  99996:   3  0.5534343 0.82439307
-#&gt;  99997:   3 -0.5466994 0.59113375
-#&gt;  99998:   3  0.0279944 0.50978427
-#&gt;  99999:   3  1.9397046 0.40044357
-#&gt; 100000:   3  1.4679262 0.38763369</div><div class='input'>
+<span class='fu'>dt_unnest</span>(<span class='no'>nested</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>grp</span>)</div><div class='output co'>#&gt;            by          x          y
+#&gt;         &lt;int&gt;      &lt;num&gt;      &lt;num&gt;
+#&gt;      1:     1  1.0132525 0.02937715
+#&gt;      2:     1  1.3222125 0.17566096
+#&gt;      3:     1  0.5065119 0.06658542
+#&gt;      4:     1 -0.9279822 0.55996602
+#&gt;      5:     1  0.7179084 0.85645944
+#&gt;     ---                            
+#&gt;  99996:     3  0.5534343 0.82439307
+#&gt;  99997:     3 -0.5466994 0.59113375
+#&gt;  99998:     3  0.0279944 0.50978427
+#&gt;  99999:     3  1.9397046 0.40044357
+#&gt; 100000:     3  1.4679262 0.38763369</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
       </span>
     </div>
 
@@ -161,34 +161,39 @@
                 <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>)
 
 <span class='co'># defaults</span>
-<span class='fu'>dt_separate</span>(<span class='no'>d</span>, <span class='no'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c1"</span>, <span class='st'>"c2"</span>))</div><div class='output co'>#&gt;    y c1   c2
-#&gt; 1: 1  A    B
-#&gt; 2: 2  A &lt;NA&gt;
-#&gt; 3: 3  B &lt;NA&gt;
-#&gt; 4: 4  B    A</div><div class='input'>
+<span class='fu'>dt_separate</span>(<span class='no'>d</span>, <span class='no'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c1"</span>, <span class='st'>"c2"</span>))</div><div class='output co'>#&gt;        y     c1     c2
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;char&gt;
+#&gt; 1:     1      A      B
+#&gt; 2:     2      A   &lt;NA&gt;
+#&gt; 3:     3      B   &lt;NA&gt;
+#&gt; 4:     4      B      A</div><div class='input'>
 <span class='co'># can keep the original column with `remove = FALSE`</span>
-<span class='fu'>dt_separate</span>(<span class='no'>d</span>, <span class='no'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c1"</span>, <span class='st'>"c2"</span>), <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;      x y c1   c2
-#&gt; 1: A.B 1  A    B
-#&gt; 2:   A 2  A &lt;NA&gt;
-#&gt; 3:   B 3  B &lt;NA&gt;
-#&gt; 4: B.A 4  B    A</div><div class='input'>
+<span class='fu'>dt_separate</span>(<span class='no'>d</span>, <span class='no'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c1"</span>, <span class='st'>"c2"</span>), <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;         x     y     c1     c2
+#&gt;    &lt;char&gt; &lt;int&gt; &lt;char&gt; &lt;char&gt;
+#&gt; 1:    A.B     1      A      B
+#&gt; 2:      A     2      A   &lt;NA&gt;
+#&gt; 3:      B     3      B   &lt;NA&gt;
+#&gt; 4:    B.A     4      B      A</div><div class='input'>
 <span class='co'># need to assign when `immutable = TRUE`</span>
 <span class='no'>separated</span> <span class='kw'>&lt;-</span> <span class='fu'>dt_separate</span>(<span class='no'>d</span>, <span class='no'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c1"</span>, <span class='st'>"c2"</span>), <span class='kw'>immutable</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>separated</span></div><div class='output co'>#&gt;    y c1   c2
-#&gt; 1: 1  A    B
-#&gt; 2: 2  A &lt;NA&gt;
-#&gt; 3: 3  B &lt;NA&gt;
-#&gt; 4: 4  B    A</div><div class='input'>
+<span class='no'>separated</span></div><div class='output co'>#&gt;        y     c1     c2
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;char&gt;
+#&gt; 1:     1      A      B
+#&gt; 2:     2      A   &lt;NA&gt;
+#&gt; 3:     3      B   &lt;NA&gt;
+#&gt; 4:     4      B      A</div><div class='input'>
 <span class='co'># don't need to assign when `immutable = FALSE` (default)</span>
-<span class='fu'>dt_separate</span>(<span class='no'>d</span>, <span class='no'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c1"</span>, <span class='st'>"c2"</span>), <span class='kw'>immutable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;    y c1   c2
-#&gt; 1: 1  A    B
-#&gt; 2: 2  A &lt;NA&gt;
-#&gt; 3: 3  B &lt;NA&gt;
-#&gt; 4: 4  B    A</div><div class='input'><span class='no'>d</span></div><div class='output co'>#&gt;    y c1   c2
-#&gt; 1: 1  A    B
-#&gt; 2: 2  A &lt;NA&gt;
-#&gt; 3: 3  B &lt;NA&gt;
-#&gt; 4: 4  B    A</div><div class='input'>
+<span class='fu'>dt_separate</span>(<span class='no'>d</span>, <span class='no'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c1"</span>, <span class='st'>"c2"</span>), <span class='kw'>immutable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;        y     c1     c2
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;char&gt;
+#&gt; 1:     1      A      B
+#&gt; 2:     2      A   &lt;NA&gt;
+#&gt; 3:     3      B   &lt;NA&gt;
+#&gt; 4:     4      B      A</div><div class='input'><span class='no'>d</span></div><div class='output co'>#&gt;        y     c1     c2
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;char&gt;
+#&gt; 1:     1      A      B
+#&gt; 2:     2      A   &lt;NA&gt;
+#&gt; 3:     3      B   &lt;NA&gt;
+#&gt; 4:     4      B      A</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

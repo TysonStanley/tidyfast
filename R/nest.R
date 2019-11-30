@@ -22,6 +22,11 @@
 #'
 #' @export
 dt_nest <- function(dt_, ..., .key = "data"){
+  UseMethod("dt_nest", dt_)
+}
+
+#' @export
+dt_nest.default <- function(dt_, ..., .key = "data"){
 
   # work with grouped_df from dplyr
   by <- work_with_grouped_df(dt_, ...)

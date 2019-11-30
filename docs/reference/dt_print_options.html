@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • tidyfast</title>
+<title>Set Print Method — dt_print_options • tidyfast</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Set Print Method — dt_print_options" />
+<meta property="og:description" content="The function allows the user to define options relating to the print method for `data.table`." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -54,7 +56,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -96,90 +98,62 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Set Print Method</h1>
+    
+    <div class="hidden name"><code>dt_print_options.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>The function allows the user to define options relating to the print method for `data.table`.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>dt_print_options</span>(<span class='kw'>class</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>topn</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>rownames</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>nrows</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>trunc.cols</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="dt_case_when.html">dt_case_when()</a></code> </p>
-        </td>
-        <td><p>Case When with data.table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dt_count.html">dt_count()</a></code> </p>
-        </td>
-        <td><p>Count</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dt_fill.html">dt_fill()</a></code> </p>
-        </td>
-        <td><p>Fill with data.table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dt_hoist.html">dt_hoist()</a></code> </p>
-        </td>
-        <td><p>Hoist: Fast Unnesting of Vectors</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dt_nest.html">dt_nest()</a></code> </p>
-        </td>
-        <td><p>Fast Nesting</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dt_print_options.html">dt_print_options()</a></code> </p>
-        </td>
-        <td><p>Set Print Method</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dt_separate.html">dt_separate()</a></code> </p>
-        </td>
-        <td><p>Separate with data.table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dt_uncount.html">dt_uncount()</a></code> </p>
-        </td>
-        <td><p>Uncount</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dt_unnest.html">dt_unnest()</a></code> </p>
-        </td>
-        <td><p>Unnest: Fast Unnesting of Data Tables</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>class</th>
+      <td><p>should the variable class be printed? (`options("datatable.print.class")`)</p></td>
+    </tr>
+    <tr>
+      <th>topn</th>
+      <td><p>the number of rows to print (both head and tail) if `nrows(DT) &gt; nrows`. (`options("datatable.print.topn")`)</p></td>
+    </tr>
+    <tr>
+      <th>rownames</th>
+      <td><p>should rownames be printed? (`options("datatable.print.rownames")`)`</p></td>
+    </tr>
+    <tr>
+      <th>nrows</th>
+      <td><p>total number of rows to print (`options("datatable.print.nrows")``)</p></td>
+    </tr>
+    <tr>
+      <th>trunc.cols</th>
+      <td><p>if `TRUE`, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to `tibbles`; `options("datatable.print.trunc.cols")`). This only works on `data.table` versions higher than `1.12.6` (i.e. not currently available but anticipating the eventual release).</p></td>
+    </tr>
     </table>
-  </div>
 
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'>dt_print_options</span>(
+  <span class='kw'>class</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>topn</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+  <span class='kw'>rownames</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>nrows</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+  <span class='kw'>trunc.cols</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

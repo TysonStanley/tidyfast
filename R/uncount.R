@@ -25,6 +25,11 @@
 #'
 #' @export
 dt_uncount <- function(dt_, weights, .remove = TRUE, .id = NULL){
+  UseMethod("dt_uncount", dt_)
+}
+
+#' @export
+dt_uncount.default <- function(dt_, weights, .remove = TRUE, .id = NULL){
 
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)

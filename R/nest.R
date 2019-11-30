@@ -1,6 +1,6 @@
 #' Fast Nesting
 #'
-#' Quickly nest data tables.
+#' Quickly nest data tables (similar to \code{dplyr::group_nest()}).
 #'
 #' @param dt_ the data table to nest
 #' @param ... the variables to group by

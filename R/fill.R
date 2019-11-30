@@ -1,7 +1,7 @@
 #' Fill with data.table
 #'
-#' Fills in values, similar to `tidyr::fill()`, by within `data.table`. This function relies on the
-#' `Rcpp` functions that drive `tidyr::fill()` but applies them within `data.table`.
+#' Fills in values, similar to \code{tidyr::fill()}, by within \code{data.table}. This function relies on the
+#' \code{Rcpp} functions that drive \code{tidyr::fill()} but applies them within \code{data.table}.
 #'
 #' @param dt_ the data table (or if not a data.table then it is coerced with as.data.table)
 #' @param ... the columns to fill

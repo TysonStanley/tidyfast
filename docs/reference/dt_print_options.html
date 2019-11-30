@@ -36,7 +36,7 @@
 
 
 <meta property="og:title" content="Set Print Method — dt_print_options" />
-<meta property="og:description" content="The function allows the user to define options relating to the print method for `data.table`." />
+<meta property="og:description" content="The function allows the user to define options relating to the print method for data.table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -84,6 +84,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -106,7 +109,7 @@
     </div>
 
     <div class="ref-description">
-    <p>The function allows the user to define options relating to the print method for `data.table`.</p>
+    <p>The function allows the user to define options relating to the print method for <code>data.table</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>dt_print_options</span>(<span class='kw'>class</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>topn</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>rownames</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -117,23 +120,23 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>class</th>
-      <td><p>should the variable class be printed? (`options("datatable.print.class")`)</p></td>
+      <td><p>should the variable class be printed? (<code><a href='https://rdrr.io/r/base/options.html'>options("datatable.print.class")</a></code>)</p></td>
     </tr>
     <tr>
       <th>topn</th>
-      <td><p>the number of rows to print (both head and tail) if `nrows(DT) &gt; nrows`. (`options("datatable.print.topn")`)</p></td>
+      <td><p>the number of rows to print (both head and tail) if <code>nrows(DT) &gt; nrows</code>. (<code><a href='https://rdrr.io/r/base/options.html'>options("datatable.print.topn")</a></code>)</p></td>
     </tr>
     <tr>
       <th>rownames</th>
-      <td><p>should rownames be printed? (`options("datatable.print.rownames")`)`</p></td>
+      <td><p>should rownames be printed? (<code><a href='https://rdrr.io/r/base/options.html'>options("datatable.print.rownames")</a></code>)</p></td>
     </tr>
     <tr>
       <th>nrows</th>
-      <td><p>total number of rows to print (`options("datatable.print.nrows")``)</p></td>
+      <td><p>total number of rows to print (<code><a href='https://rdrr.io/r/base/options.html'>options("datatable.print.nrows")</a></code>)</p></td>
     </tr>
     <tr>
       <th>trunc.cols</th>
-      <td><p>if `TRUE`, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to `tibbles`; `options("datatable.print.trunc.cols")`). This only works on `data.table` versions higher than `1.12.6` (i.e. not currently available but anticipating the eventual release).</p></td>
+      <td><p>if <code>TRUE</code>, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to <code>tibbles</code>; <code><a href='https://rdrr.io/r/base/options.html'>options("datatable.print.trunc.cols")</a></code>). This only works on <code>data.table</code> versions higher than <code>1.12.6</code> (i.e. not currently available but anticipating the eventual release).</p></td>
     </tr>
     </table>
 

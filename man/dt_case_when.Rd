@@ -7,11 +7,11 @@
 dt_case_when(...)
 }
 \arguments{
-\item{...}{statements of the form: `condition ~ label``, where the label is applied if the condition is met}
+\item{...}{statements of the form: \code{condition ~ label}, where the label is applied if the condition is met}
 }
 \description{
-Does what `dplyr::case_when()` does, with the same syntax, but with
-`data.table::fifelse()` under the hood
+Does what \code{dplyr::case_when()} does, with the same syntax, but with
+\code{data.table::fifelse()} under the hood
 }
 \examples{
 

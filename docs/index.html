@@ -48,6 +48,9 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -90,17 +93,27 @@
 <li>
 <code><a href="reference/dt_fill.html">dt_fill()</a></code> for filling <code>NA</code> values with values before it, after it, or both. This can be done by a grouping variable (e.g. fill in <code>NA</code> values with values within an individual).</li>
 </ul>
-<p><strong>Separate</strong> (similar to <code><a href="https://tidyr.tidyverse.org/reference/separate.html">tidyr::separate()</a></code>)</p>
-<ul>
-<li>
-<code><a href="reference/dt_separate.html">dt_separate()</a></code> for splitting a single column into multiple based on a match within the column (e.g., column with values like “A.B” could be split into two columns by using the period as the separator where column 1 would have “A” and 2 would have “B”). It is built on <code><a href="https://Rdatatable.gitlab.io/data.table/reference/tstrsplit.html">data.table::tstrsplit()</a></code>. This is not well tested yet and lacks some functionality of <code><a href="https://tidyr.tidyverse.org/reference/separate.html">tidyr::separate()</a></code>.</li>
-</ul>
 <p><strong>Count</strong> and <strong>Uncount</strong> (similar to <code><a href="https://tidyr.tidyverse.org/reference/uncount.html">tidyr::uncount()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/tally.html">dplyr::count()</a></code>)</p>
 <ul>
 <li>
 <code><a href="reference/dt_count.html">dt_count()</a></code> for fast counting by group(s)</li>
 <li>
 <code><a href="reference/dt_uncount.html">dt_uncount()</a></code> for creating full data from a count table</li>
+</ul>
+<p><strong>Separate</strong> (similar to <code><a href="https://tidyr.tidyverse.org/reference/separate.html">tidyr::separate()</a></code>)</p>
+<ul>
+<li>
+<code><a href="reference/dt_separate.html">dt_separate()</a></code> for splitting a single column into multiple based on a match within the column (e.g., column with values like “A.B” could be split into two columns by using the period as the separator where column 1 would have “A” and 2 would have “B”). It is built on <code><a href="https://Rdatatable.gitlab.io/data.table/reference/tstrsplit.html">data.table::tstrsplit()</a></code>. This is not well tested yet and lacks some functionality of <code><a href="https://tidyr.tidyverse.org/reference/separate.html">tidyr::separate()</a></code>.</li>
+</ul>
+<p><strong>Pivoting</strong> (similar to <code>dplyr::pivot_longer()</code> and <code>dplyr::pivot_wider()</code>)</p>
+<ul>
+<li>In development still…</li>
+</ul>
+<p><strong>Adjust <code>data.table</code> print options</strong></p>
+<ul>
+<li>
+<code><a href="reference/dt_print_options.html">dt_print_options()</a></code> for adjusting the options for <code><a href="https://Rdatatable.gitlab.io/data.table/reference/print.data.table.html">print.data.table()</a></code>
+</li>
 </ul>
 <p><em>Package is still in active development.</em></p>
 <div id="installation" class="section level2">
@@ -215,9 +228,9 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co">#&gt; # A tibble: 3 x 3</span></a>
 <a class="sourceLine" id="cb9-2" title="2"><span class="co">#&gt;   expression     median mem_alloc</span></a>
 <a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt;   &lt;chr&gt;        &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt; 1 case_when     129.2ms   148.8MB</span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt; 2 dt_case_when   35.4ms    34.3MB</span></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt; 3 fifelse        33.4ms    34.3MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt; 1 case_when       121ms   148.8MB</span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt; 2 dt_case_when     35ms    34.3MB</span></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt; 3 fifelse        31.4ms    34.3MB</span></a></code></pre></div>
 </div>
 </div>
 <div id="fill" class="section level2">
@@ -313,8 +326,8 @@
 <div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
 <a class="sourceLine" id="cb12-2" title="2"><span class="co">#&gt;   expression                                    median mem_alloc</span></a>
 <a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt;   &lt;bch:expr&gt;                                  &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.5ms    30.9MB</span></a>
-<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.7ms    29.1MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.5ms    30.9MB</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.9ms    29.1MB</span></a></code></pre></div>
 </div>
 <div id="separate" class="section level2">
 <h2 class="hasAnchor">
@@ -341,9 +354,9 @@
 <div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co">#&gt; # A tibble: 3 x 3</span></a>
 <a class="sourceLine" id="cb16-2" title="2"><span class="co">#&gt;   expression            median mem_alloc</span></a>
 <a class="sourceLine" id="cb16-3" title="3"><span class="co">#&gt;   &lt;chr&gt;               &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb16-4" title="4"><span class="co">#&gt; 1 separate               345ms    11.6MB</span></a>
-<a class="sourceLine" id="cb16-5" title="5"><span class="co">#&gt; 2 dt_separate            131ms    30.6MB</span></a>
-<a class="sourceLine" id="cb16-6" title="6"><span class="co">#&gt; 3 dt_separate-mutable    118ms    26.7MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb16-4" title="4"><span class="co">#&gt; 1 separate               351ms    11.6MB</span></a>
+<a class="sourceLine" id="cb16-5" title="5"><span class="co">#&gt; 2 dt_separate            123ms    30.6MB</span></a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="co">#&gt; 3 dt_separate-mutable    116ms    26.7MB</span></a></code></pre></div>
 </div>
 <div id="count-and-uncount" class="section level2">
 <h2 class="hasAnchor">

@@ -4,7 +4,7 @@
 #'
 #' @param dt_ the data table to uncount
 #' @param ... groups
-#' @param na.rm should any rows with missingness be removed before the count? Default is `FALSE`.
+#' @param na.rm should any rows with missingness be removed before the count? Default is \code{FALSE}.
 #' @param wt the wt assigned to the counts (same number of rows as the data)
 #'
 #' @examples

@@ -14,7 +14,7 @@ dt_nest(dt_, ..., .key = "data")
 \item{.key}{the name of the list column; default is "data"}
 }
 \description{
-Quickly nest data tables.
+Quickly nest data tables (similar to \code{dplyr::group_nest()}).
 }
 \examples{
 

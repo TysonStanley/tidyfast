@@ -4,13 +4,13 @@
 #'
 #' @param dt_ the data table (or if not a data.table then it is coerced with as.data.table)
 #' @param col the column to separate
-#' @param into the names of the new columns created from splitting `col`.
-#' @param sep the regular expression stating how `col` should be separated. Default is `.`.
-#' @param remove should `col` be removed in the returned data table? Default is `TRUE`
-#' @param fill if empty, fill is inserted. Default is `NA`.
+#' @param into the names of the new columns created from splitting \code{col}.
+#' @param sep the regular expression stating how \code{col} should be separated. Default is \code{.}.
+#' @param remove should \code{col} be removed in the returned data table? Default is \code{TRUE}
+#' @param fill if empty, fill is inserted. Default is \code{NA}.
 #' @param fixed logical. If TRUE match split exactly, otherwise use regular expressions. Has priority over perl.
-#' @param immutable If `TRUE`, `.dt` is treated as immutable (it will not be modified in place). Alternatively, you can set `immutable = FALSE` to modify the input object.
-#' @param ... arguments passed to `data.table::tstrplit()`
+#' @param immutable If \code{TRUE}, \code{.dt} is treated as immutable (it will not be modified in place). Alternatively, you can set \code{immutable = FALSE} to modify the input object.
+#' @param ... arguments passed to \code{data.table::tstrplit()}
 #'
 #' @examples
 #'

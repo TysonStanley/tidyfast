@@ -11,10 +11,10 @@ dt_unnest(dt_, col, by = NULL)
 
 \item{col}{the column to unnest}
 
-\item{by}{the ID variable to unnest by. Default is `NULL`.}
+\item{by}{the ID variable to unnest by. Default is \code{NULL}.}
 }
 \description{
-Quickly unnest data tables, particularly those nested by `dt_nest()`.
+Quickly unnest data tables, particularly those nested by \code{dt_nest()}.
 }
 \examples{
 

@@ -1,10 +1,10 @@
 #' Unnest: Fast Unnesting of Data Tables
 #'
-#' Quickly unnest data tables, particularly those nested by `dt_nest()`.
+#' Quickly unnest data tables, particularly those nested by \code{dt_nest()}.
 #'
 #' @param dt_ the data table to unnest
 #' @param col  the column to unnest
-#' @param by the ID variable to unnest by. Default is `NULL`.
+#' @param by the ID variable to unnest by. Default is \code{NULL}.
 #'
 #' @examples
 #'

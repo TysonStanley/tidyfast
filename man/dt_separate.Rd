@@ -12,19 +12,19 @@ dt_separate(dt_, col, into, sep = ".", remove = TRUE, fill = NA,
 
 \item{col}{the column to separate}
 
-\item{into}{the names of the new columns created from splitting `col`.}
+\item{into}{the names of the new columns created from splitting \code{col}.}
 
-\item{sep}{the regular expression stating how `col` should be separated. Default is `.`.}
+\item{sep}{the regular expression stating how \code{col} should be separated. Default is \code{.}.}
 
-\item{remove}{should `col` be removed in the returned data table? Default is `TRUE`}
+\item{remove}{should \code{col} be removed in the returned data table? Default is \code{TRUE}}
 
-\item{fill}{if empty, fill is inserted. Default is `NA`.}
+\item{fill}{if empty, fill is inserted. Default is \code{NA}.}
 
 \item{fixed}{logical. If TRUE match split exactly, otherwise use regular expressions. Has priority over perl.}
 
-\item{immutable}{If `TRUE`, `.dt` is treated as immutable (it will not be modified in place). Alternatively, you can set `immutable = FALSE` to modify the input object.}
+\item{immutable}{If \code{TRUE}, \code{.dt} is treated as immutable (it will not be modified in place). Alternatively, you can set \code{immutable = FALSE} to modify the input object.}
 
-\item{...}{arguments passed to `data.table::tstrplit()`}
+\item{...}{arguments passed to \code{data.table::tstrplit()}}
 }
 \description{
 Separates a column of data into others, by splitting based a separator or regular expression

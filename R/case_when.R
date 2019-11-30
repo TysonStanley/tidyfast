@@ -1,9 +1,9 @@
 #' Case When with data.table
 #'
-#' Does what `dplyr::case_when()` does, with the same syntax, but with
-#' `data.table::fifelse()` under the hood
+#' Does what \code{dplyr::case_when()} does, with the same syntax, but with
+#' \code{data.table::fifelse()} under the hood
 #'
-#' @param ... statements of the form: `condition ~ label``, where the label is applied if the condition is met
+#' @param ... statements of the form: \code{condition ~ label}, where the label is applied if the condition is met
 #'
 #' @import data.table
 #'
@@ -31,6 +31,7 @@ dt_case_when <- function(...){
   dots <- list(...)
   # checking the dots
   .check_dots(dots)
+
   # extract info from dots
   n <- length(dots)
   conds <- conditions(dots)
@@ -38,13 +39,7 @@ dt_case_when <- function(...){
   class <- class(labels)
 
   # make the right NA based on assigned labels
-  na_type <-
-    switch(class,
-           "logical"   = NA,
-           "complex"   = NA_complex_,
-           "character" = NA_character_,
-           "integer"   = NA_integer_,
-           NA_real_)
+  na_type <- na_type_fun(class)
 
   # create fifelse() call
   calls <- call("fifelse", conds[[n]], labels[[n]], eval(na_type))
@@ -68,6 +63,14 @@ NULL
 
 # Helpers -----------------
 
+na_type_fun <- function(class){
+  switch(class,
+         "logical"   = NA,
+         "complex"   = NA_complex_,
+         "character" = NA_character_,
+         "integer"   = NA_integer_,
+         NA_real_)
+}
 conditions <- function(list){
   unlist(lapply(list, function(x) x[[2]]))
 }

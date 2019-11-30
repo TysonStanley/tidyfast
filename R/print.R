@@ -1,12 +1,12 @@
 #' Set Print Method
 #'
-#' The function allows the user to define options relating to the print method for `data.table`.
+#' The function allows the user to define options relating to the print method for \code{data.table}.
 #'
-#' @param class should the variable class be printed? (`options("datatable.print.class")`)
-#' @param topn the number of rows to print (both head and tail) if `nrows(DT) > nrows`. (`options("datatable.print.topn")`)
-#' @param rownames should rownames be printed? (`options("datatable.print.rownames")`)`
-#' @param nrows total number of rows to print (`options("datatable.print.nrows")``)
-#' @param trunc.cols if `TRUE`, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to `tibbles`; `options("datatable.print.trunc.cols")`). This only works on `data.table` versions higher than `1.12.6` (i.e. not currently available but anticipating the eventual release).
+#' @param class should the variable class be printed? (\code{options("datatable.print.class")})
+#' @param topn the number of rows to print (both head and tail) if \code{nrows(DT) > nrows}. (\code{options("datatable.print.topn")})
+#' @param rownames should rownames be printed? (\code{options("datatable.print.rownames")})
+#' @param nrows total number of rows to print (\code{options("datatable.print.nrows")})
+#' @param trunc.cols if \code{TRUE}, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to \code{tibbles}; \code{options("datatable.print.trunc.cols")}). This only works on \code{data.table} versions higher than \code{1.12.6} (i.e. not currently available but anticipating the eventual release).
 #'
 #'
 #' @examples

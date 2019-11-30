@@ -44,15 +44,22 @@ The current functions include:
 
 - `dt_fill()` for filling `NA` values with values before it, after it, or both. This can be done by a grouping variable (e.g. fill in `NA` values with values within an individual).
 
-**Separate** (similar to `tidyr::separate()`)
-
-- `dt_separate()` for splitting a single column into multiple based on a match within the column (e.g., column with values like "A.B" could be split into two columns by using the period as the separator where column 1 would have "A" and 2 would have "B"). It is built on `data.table::tstrsplit()`. This is not well tested yet and lacks some functionality of `tidyr::separate()`.
-
 **Count** and **Uncount** (similar to `tidyr::uncount()` and `dplyr::count()`)
 
 - `dt_count()` for fast counting by group(s)
 - `dt_uncount()` for creating full data from a count table
 
+**Separate** (similar to `tidyr::separate()`)
+
+- `dt_separate()` for splitting a single column into multiple based on a match within the column (e.g., column with values like "A.B" could be split into two columns by using the period as the separator where column 1 would have "A" and 2 would have "B"). It is built on `data.table::tstrsplit()`. This is not well tested yet and lacks some functionality of `tidyr::separate()`.
+
+**Pivoting** (similar to `dplyr::pivot_longer()` and `dplyr::pivot_wider()`)
+
+- In development still...
+
+**Adjust `data.table` print options**
+
+- `dt_print_options()` for adjusting the options for `print.data.table()`
 
 *Package is still in active development.*
 

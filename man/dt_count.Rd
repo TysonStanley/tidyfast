@@ -11,7 +11,7 @@ dt_count(dt_, ..., na.rm = FALSE, wt = NULL)
 
 \item{...}{groups}
 
-\item{na.rm}{should any rows with missingness be removed before the count? Default is `FALSE`.}
+\item{na.rm}{should any rows with missingness be removed before the count? Default is \code{FALSE}.}
 
 \item{wt}{the wt assigned to the counts (same number of rows as the data)}
 }

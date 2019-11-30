@@ -46,6 +46,12 @@ The current functions include:
     or both. This can be done by a grouping variable (e.g. fill in `NA`
     values with values within an individual).
 
+**Count** and **Uncount** (similar to `tidyr::uncount()` and
+`dplyr::count()`)
+
+  - `dt_count()` for fast counting by group(s)
+  - `dt_uncount()` for creating full data from a count table
+
 **Separate** (similar to `tidyr::separate()`)
 
   - `dt_separate()` for splitting a single column into multiple based on
@@ -55,11 +61,15 @@ The current functions include:
     `data.table::tstrsplit()`. This is not well tested yet and lacks
     some functionality of `tidyr::separate()`.
 
-**Count** and **Uncount** (similar to `tidyr::uncount()` and
-`dplyr::count()`)
+**Pivoting** (similar to `dplyr::pivot_longer()` and
+`dplyr::pivot_wider()`)
 
-  - `dt_count()` for fast counting by group(s)
-  - `dt_uncount()` for creating full data from a count table
+  - In development still…
+
+**Adjust `data.table` print options**
+
+  - `dt_print_options()` for adjusting the options for
+    `print.data.table()`
 
 *Package is still in active development.*
 
@@ -216,9 +226,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     129.2ms   148.8MB
-    #> 2 dt_case_when   35.4ms    34.3MB
-    #> 3 fifelse        33.4ms    34.3MB
+    #> 1 case_when       121ms   148.8MB
+    #> 2 dt_case_when     35ms    34.3MB
+    #> 3 fifelse        31.4ms    34.3MB
 
 ## Fill
 
@@ -326,8 +336,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.5ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.7ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.5ms    30.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.9ms    29.1MB
 
 ## Separate
 
@@ -369,9 +379,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               345ms    11.6MB
-    #> 2 dt_separate            131ms    30.6MB
-    #> 3 dt_separate-mutable    118ms    26.7MB
+    #> 1 separate               351ms    11.6MB
+    #> 2 dt_separate            123ms    30.6MB
+    #> 3 dt_separate-mutable    116ms    26.7MB
 
 ## Count and Uncount
 

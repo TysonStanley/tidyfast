@@ -8,18 +8,18 @@ dt_print_options(class = TRUE, topn = 5, rownames = TRUE,
   nrows = 100, trunc.cols = TRUE)
 }
 \arguments{
-\item{class}{should the variable class be printed? (`options("datatable.print.class")`)}
+\item{class}{should the variable class be printed? (\code{options("datatable.print.class")})}
 
-\item{topn}{the number of rows to print (both head and tail) if `nrows(DT) > nrows`. (`options("datatable.print.topn")`)}
+\item{topn}{the number of rows to print (both head and tail) if \code{nrows(DT) > nrows}. (\code{options("datatable.print.topn")})}
 
-\item{rownames}{should rownames be printed? (`options("datatable.print.rownames")`)`}
+\item{rownames}{should rownames be printed? (\code{options("datatable.print.rownames")})}
 
-\item{nrows}{total number of rows to print (`options("datatable.print.nrows")``)}
+\item{nrows}{total number of rows to print (\code{options("datatable.print.nrows")})}
 
-\item{trunc.cols}{if `TRUE`, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to `tibbles`; `options("datatable.print.trunc.cols")`). This only works on `data.table` versions higher than `1.12.6` (i.e. not currently available but anticipating the eventual release).}
+\item{trunc.cols}{if \code{TRUE}, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to \code{tibbles}; \code{options("datatable.print.trunc.cols")}). This only works on \code{data.table} versions higher than \code{1.12.6} (i.e. not currently available but anticipating the eventual release).}
 }
 \description{
-The function allows the user to define options relating to the print method for `data.table`.
+The function allows the user to define options relating to the print method for \code{data.table}.
 }
 \examples{
 

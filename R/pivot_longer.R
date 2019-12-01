@@ -26,9 +26,7 @@ dt_pivot_longer <- function(data,
 
   is.data.frame(data) || is.data.table(data) || stop("data must be a data.frame or data.table")
 
-  if (!is.data.table(data)) {
-    data <- as.data.table(data)
-  }
+  if (!is.data.table(data)) data <- as.data.table(data)
 
   if (missing(cols)) {
     # All columns if cols = NULL

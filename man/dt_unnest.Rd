@@ -4,14 +4,14 @@
 \alias{dt_unnest}
 \title{Unnest: Fast Unnesting of Data Tables}
 \usage{
-dt_unnest(dt_, col, by = NULL)
+dt_unnest(dt_, col, by)
 }
 \arguments{
 \item{dt_}{the data table to unnest}
 
 \item{col}{the column to unnest}
 
-\item{by}{the ID variable to unnest by. Default is \code{NULL}.}
+\item{by}{the ID variable to unnest by.}
 }
 \description{
 Quickly unnest data tables, particularly those nested by \code{dt_nest()}.

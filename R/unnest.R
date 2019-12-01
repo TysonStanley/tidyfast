@@ -4,7 +4,7 @@
 #'
 #' @param dt_ the data table to unnest
 #' @param col  the column to unnest
-#' @param by the ID variable to unnest by. Default is \code{NULL}.
+#' @param by the ID variable to unnest by.
 #'
 #' @examples
 #'
@@ -21,12 +21,12 @@
 #' @import data.table
 #'
 #' @export
-dt_unnest <- function(dt_, col, by = NULL){
+dt_unnest <- function(dt_, col, by){
   UseMethod("dt_unnest", dt_)
 }
 
 #' @export
-dt_unnest.default <- function(dt_, col, by = NULL){
+dt_unnest.default <- function(dt_, col, by){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
@@ -62,7 +62,7 @@ dt_unnest.default <- function(dt_, col, by = NULL){
 #'
 #' @param dt_ the data table to unnest
 #' @param ... the columns to unnest (must all be the sample length when unnested); use bare names of the variables
-#' @param by the variable that indicates what to unnest by.
+#' @param by the variable that indicates what to unnest by. Default is \code{NULL}.
 #'
 #' @aliases dt_unnest_vec
 #'

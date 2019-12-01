@@ -12,7 +12,7 @@ dt_hoist(dt_, ..., by = NULL)
 
 \item{...}{the columns to unnest (must all be the sample length when unnested); use bare names of the variables}
 
-\item{by}{the variable that indicates what to unnest by.}
+\item{by}{the variable that indicates what to unnest by. Default is \code{NULL}.}
 }
 \description{
 Quickly unnest vectors nested in list columns. Still experimental (has some potentially unexpected behavior in some situations)!

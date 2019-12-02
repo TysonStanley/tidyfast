@@ -4,14 +4,14 @@
 \alias{dt_unnest}
 \title{Unnest: Fast Unnesting of Data Tables}
 \usage{
-dt_unnest(dt_, col, by)
+dt_unnest(dt_, col, ...)
 }
 \arguments{
 \item{dt_}{the data table to unnest}
 
 \item{col}{the column to unnest}
 
-\item{by}{the ID variable to unnest by.}
+\item{...}{any of the other variables in the nested table that you want to keep in the unnested table. Bare variable names. If none are provided, all variables are kept.}
 }
 \description{
 Quickly unnest data tables, particularly those nested by \code{dt_nest()}.
@@ -26,6 +26,6 @@ dt <- data.table(
   )
 
 nested <- dt_nest(dt, grp)
-dt_unnest(nested, col = data, by = grp)
+dt_unnest(nested, col = data)
 
 }

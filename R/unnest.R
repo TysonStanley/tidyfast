@@ -4,7 +4,7 @@
 #'
 #' @param dt_ the data table to unnest
 #' @param col  the column to unnest
-#' @param by the ID variable to unnest by.
+#' @param ... any of the other variables in the nested table that you want to keep in the unnested table. Bare variable names. If none are provided, all variables are kept.
 #'
 #' @examples
 #'
@@ -16,45 +16,35 @@
 #'   )
 #'
 #' nested <- dt_nest(dt, grp)
-#' dt_unnest(nested, col = data, by = grp)
+#' dt_unnest(nested, col = data)
 #'
 #' @import data.table
 #'
 #' @export
-dt_unnest <- function(dt_, col, by){
+dt_unnest <- function(dt_, col, ...){
   UseMethod("dt_unnest", dt_)
 }
 
 #' @export
-dt_unnest.default <- function(dt_, col, by){
+dt_unnest.default <- function(dt_, col, ...){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
-  by <- substitute(by)
-  col <- substitute(unlist(col, recursive = FALSE))
+  col    <- substitute(col)
+  keep   <- substitute(alist(...))
+  names  <- colnames(dt_)
+  others <- names[-match(paste(col), names)]
+  rows   <- sapply(dt_[[paste(col)]], nrow)
 
-  if (.is_null(by)){
-    dt_ <- dt_[, eval(col)]
-  } else {
-    dt_ <- dt_[, eval(col), by = eval(by)]
-  }
+  if (length(keep) > 1)
+    others <- others[others %in% paste(keep)[-1]]
 
-  if (.length_by_1(by))
-    setnames(dt_, old = "by", paste(substitute(by)))
+  others_dt <- dt_[, ..others]
+  others_dt <- lapply(others_dt, rep, times = rows)
 
-  dt_
+  dt_[, list(do.call("cbind", others_dt), rbindlist(eval(col)))]
 }
 
-.length_by_1 <- function(by){
-  char <- paste(by)
-  char <- char[-grepl("^\\.|^list|^c$", char)]
-  length(char) == 1
-}
-
-
-.is_null <- function(id){
-  length(paste(id)) == 0
-}
 
 #' Hoist: Fast Unnesting of Vectors
 #'
@@ -115,4 +105,9 @@ dt_hoist.default <- function(dt_, ..., by = NULL){
            skip_absent = TRUE)
   dt_
 }
+
+.is_null <- function(id){
+  length(paste(id)) == 0
+}
+
 

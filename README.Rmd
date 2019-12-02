@@ -74,13 +74,15 @@ remotes::install_github("TysonStanley/tidyfast")
 
 ## Examples
 
-The nesting and unnesting functions were shown in a [previous preprint](https://psyarxiv.com/u8ekc/) while the other functions are new. Herein, I show some simple applications. 
+The initial versions of the nesting and unnesting functions were shown in a [preprint](https://psyarxiv.com/u8ekc/). Herein is shown some simple applications and the functions' speed/efficiency.
 
 ### Nesting and Unnesting
 
 The following data table will be used for the nesting/unnesting examples.
 
 ```{r, message = FALSE, warning = FALSE}
+set.seed(84322)
+
 library(tidyfast)
 library(data.table)
 library(dplyr)       # to compare with case_when()
@@ -89,7 +91,7 @@ library(tidyr)       # to compare with fill() and separate()
 dt <- data.table(
    x = rnorm(1e5),
    y = runif(1e5),
-   grp = sample(1L:3L, 1e5, replace = TRUE),
+   grp = sample(1L:5L, 1e5, replace = TRUE),
    nested1 = lapply(1:10, sample, 10, replace = TRUE),
    nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
    id = 1:1e5)
@@ -111,16 +113,59 @@ nested
 We can also unnest this with `dt_unnest()`:
 
 ```{r}
-dt_unnest(nested, col = data, by = grp)
+dt_unnest(nested, col = data)
 ```
 
-When our list columns don't have data tables (as output from `dt_nest()`) we can use the `dt_unnest_vec()` function, that will unnest vectors.
+When our list columns don't have data tables (as output from `dt_nest()`) we can use the `dt_hoist()` function, that will unnest vectors.
 
 ```{r}
 dt_hoist(dt, 
-         nested1, nested2, 
+         nested1, nested2,
          by = id)
 ```
+
+Speed comparisons (similar to those shown in the preprint) are highlighted below. Notably, the timings are without the `nested1` and `nested2` columns.
+
+```{r, echo = FALSE, fig.width=8, fig.height=4, dpi=300, warning=FALSE}
+tbl <- as_tibble(dt) %>% select(x, y, id, grp)
+dt2 <- dt[, .(x,y,id,grp)]
+nesting <- bench::mark(
+  nested1 <- dt_nest(dt2, grp),
+  group_nest(tbl, grp),
+  check = FALSE,
+  iterations = 50) %>% 
+  mutate(expression = c("dt_nest", "group_nest"))
+nested_tbl <- as_tibble(nested1)
+unnesting <- bench::mark(
+  dt_unnest(nested1, data),
+  unnest(nested_tbl, data),
+  check = FALSE,
+  iterations = 50) %>% 
+  mutate(expression = c("dt_unnest", "unnest"))
+
+nest_unnest <- bind_rows(nesting, unnesting)
+
+library(ggplot2)
+dt_hoist(nest_unnest, time, by = expression) %>% 
+  .[, type := dt_case_when(stringr::str_detect(expression, "unnest") ~ "Unnesting",
+                           TRUE ~ "Nesting")] %>% 
+  .[, time := as.numeric(time)] %>% 
+  ggplot(aes(expression, time, color = expression)) +
+  ggbeeswarm::geom_beeswarm(alpha = .6) +
+  labs(x = "",
+       y = "Time (seconds)") +
+  facet_grid(~type, space = "free", scales = "free") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_color_viridis_d() +
+  coord_cartesian(ylim = c(0, .03)) +
+  NULL
+
+select(nesting, expression, median, mem_alloc)
+select(unnesting, expression, median, mem_alloc)
+```
+
 
 ### If Else
 

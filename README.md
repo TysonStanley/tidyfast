@@ -85,9 +85,9 @@ remotes::install_github("TysonStanley/tidyfast")
 
 ## Examples
 
-The nesting and unnesting functions were shown in a [previous
-preprint](https://psyarxiv.com/u8ekc/) while the other functions are
-new. Herein, I show some simple applications.
+The initial versions of the nesting and unnesting functions were shown
+in a [preprint](https://psyarxiv.com/u8ekc/). Herein is shown some
+simple applications and the functions’ speed/efficiency.
 
 ### Nesting and Unnesting
 
@@ -95,6 +95,8 @@ The following data table will be used for the nesting/unnesting
 examples.
 
 ``` r
+set.seed(84322)
+
 library(tidyfast)
 library(data.table)
 library(dplyr)       # to compare with case_when()
@@ -103,7 +105,7 @@ library(tidyr)       # to compare with fill() and separate()
 dt <- data.table(
    x = rnorm(1e5),
    y = runif(1e5),
-   grp = sample(1L:3L, 1e5, replace = TRUE),
+   grp = sample(1L:5L, 1e5, replace = TRUE),
    nested1 = lapply(1:10, sample, 10, replace = TRUE),
    nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
    id = 1:1e5)
@@ -125,45 +127,47 @@ nested
 #> 1:   1 <data.table>
 #> 2:   2 <data.table>
 #> 3:   3 <data.table>
+#> 4:   4 <data.table>
+#> 5:   5 <data.table>
 ```
 
 We can also unnest this with `dt_unnest()`:
 
 ``` r
-dt_unnest(nested, col = data, by = grp)
-#>         by          x          y         nested1
-#>      1:  1  0.1624127 0.11793103 2,3,5,9,1,3,...
-#>      2:  1 -0.8749771 0.01200319 6,2,4,8,7,6,...
-#>      3:  1 -1.2709261 0.99871440 2,3,5,9,1,3,...
-#>      4:  1  0.6252182 0.08392742 4,1,2,5,4,2,...
-#>      5:  1 -0.4269078 0.46730652 5,5,4,2,5,2,...
-#>     ---                                         
-#>  99996:  3 -1.3785841 0.65154073 1,1,1,1,1,1,...
-#>  99997:  3  1.7506497 0.35086904 1,3,1,3,1,3,...
-#>  99998:  3  1.7920949 0.57767072 2,4,2,2,3,4,...
-#>  99999:  3  1.3958509 0.20316446 5,5,4,2,5,2,...
-#> 100000:  3  0.4617428 0.64128894 2,8,2,4,6,6,...
+dt_unnest(nested, col = data)
+#>         grp          x           y               nested1
+#>      1:   1 -1.1813164 0.004599736       2,2,1,2,1,1,...
+#>      2:   1 -1.0384420 0.853208540       2,8,4,6,7,7,...
+#>      3:   1 -0.6247028 0.072652533       4,2,2,1,1,1,...
+#>      4:   1 -1.3651514 0.569079215       1,1,1,3,6,2,...
+#>      5:   1  0.1403744 0.864617284 10, 1, 1, 1, 8, 1,...
+#>     ---                                                 
+#>  99996:   5 -0.3437795 0.995197776       2,1,2,2,2,1,...
+#>  99997:   5  1.6157744 0.241735719 10, 1, 1, 1, 8, 1,...
+#>  99998:   5 -0.1321246 0.885283934       2,3,3,2,2,4,...
+#>  99999:   5 -1.7019715 0.524621296       5,4,3,3,3,2,...
+#> 100000:   5  0.3821493 0.032851280       2,8,4,6,7,7,...
 #>                                               nested2    id
-#>      1: thing2,thing2,thing2,thing2,thing2,thing2,...    10
-#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...    18
-#>      3: thing2,thing2,thing2,thing2,thing2,thing2,...    20
-#>      4: thing1,thing1,thing1,thing1,thing1,thing1,...    25
-#>      5: thing1,thing1,thing1,thing1,thing1,thing1,...    27
+#>      1: thing2,thing2,thing2,thing2,thing2,thing2,...     2
+#>      2: thing2,thing2,thing2,thing2,thing2,thing2,...     8
+#>      3: thing1,thing1,thing1,thing1,thing1,thing1,...    15
+#>      4: thing1,thing1,thing1,thing1,thing1,thing1,...    17
+#>      5: thing2,thing2,thing2,thing2,thing2,thing2,...    20
 #>     ---                                                    
-#>  99996: thing1,thing1,thing1,thing1,thing1,thing1,... 99991
-#>  99997: thing1,thing1,thing1,thing1,thing1,thing1,... 99993
+#>  99996: thing1,thing1,thing1,thing1,thing1,thing1,... 99983
+#>  99997: thing2,thing2,thing2,thing2,thing2,thing2,... 99990
 #>  99998: thing2,thing2,thing2,thing2,thing2,thing2,... 99994
-#>  99999: thing1,thing1,thing1,thing1,thing1,thing1,... 99997
-#> 100000: thing1,thing1,thing1,thing1,thing1,thing1,... 99999
+#>  99999: thing2,thing2,thing2,thing2,thing2,thing2,... 99996
+#> 100000: thing2,thing2,thing2,thing2,thing2,thing2,... 99998
 ```
 
 When our list columns don’t have data tables (as output from
-`dt_nest()`) we can use the `dt_unnest_vec()` function, that will unnest
+`dt_nest()`) we can use the `dt_hoist()` function, that will unnest
 vectors.
 
 ``` r
 dt_hoist(dt, 
-         nested1, nested2, 
+         nested1, nested2,
          by = id)
 #>              id nested1 nested2
 #>       1:      1       1  thing1
@@ -172,12 +176,29 @@ dt_hoist(dt,
 #>       4:      1       1  thing1
 #>       5:      1       1  thing1
 #>      ---                       
-#>  999996: 100000       3  thing2
+#>  999996: 100000       1  thing2
 #>  999997: 100000       5  thing2
-#>  999998: 100000       8  thing2
-#>  999999: 100000       7  thing2
-#> 1000000: 100000       6  thing2
+#>  999998: 100000       7  thing2
+#>  999999: 100000       6  thing2
+#> 1000000: 100000       7  thing2
 ```
+
+Speed comparisons (similar to those shown in the preprint) are
+highlighted below. Notably, the timings are without the `nested1` and
+`nested2` columns.
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" />
+
+    #> # A tibble: 2 x 3
+    #>   expression   median mem_alloc
+    #>   <chr>      <bch:tm> <bch:byt>
+    #> 1 dt_nest      3.21ms    2.88MB
+    #> 2 group_nest   5.01ms    2.54MB
+    #> # A tibble: 2 x 3
+    #>   expression   median mem_alloc
+    #>   <chr>      <bch:tm> <bch:byt>
+    #> 1 dt_unnest    5.15ms    6.21MB
+    #> 2 unnest      12.68ms    8.47MB
 
 ### If Else
 
@@ -221,14 +242,14 @@ identical(x_cat, x_cat_fif)
 Notably, `dt_case_when()` is very fast and memory efficient, given it is
 built on `data.table::fifelse()`.
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when       121ms   148.8MB
-    #> 2 dt_case_when     35ms    34.3MB
-    #> 3 fifelse        31.4ms    34.3MB
+    #> 1 case_when     125.7ms   148.8MB
+    #> 2 dt_case_when   35.1ms    34.3MB
+    #> 3 fifelse        34.5ms    34.3MB
 
 ## Fill
 
@@ -249,63 +270,63 @@ dt_with_nas <- data.table(
 # Original
 dt_with_nas
 #>      x  y  z  a id
-#>  1:  1 NA  3 NA  2
-#>  2:  2 NA  4  2  1
-#>  3:  3  1  5  7  3
-#>  4:  4  2  6  4  3
-#>  5:  5  3  7  3  3
-#>  6:  6  4  8  5  2
-#>  7:  7  5  9  9  1
-#>  8:  8  6 10 NA  1
+#>  1:  1 NA  3 NA  3
+#>  2:  2 NA  4  9  3
+#>  3:  3  1  5 NA  1
+#>  4:  4  2  6  8  3
+#>  5:  5  3  7 NA  2
+#>  6:  6  4  8 NA  2
+#>  7:  7  5  9  7  3
+#>  8:  8  6 10 NA  2
 #>  9:  9  7 NA NA  2
-#> 10: 10  8 NA NA  3
+#> 10: 10  8 NA  4  2
 
 # All defaults
 dt_fill(dt_with_nas, y, z, a)
 #>      y  z  a
 #>  1: NA  3 NA
-#>  2: NA  4  2
-#>  3:  1  5  7
-#>  4:  2  6  4
-#>  5:  3  7  3
-#>  6:  4  8  5
-#>  7:  5  9  9
-#>  8:  6 10  9
-#>  9:  7 10  9
-#> 10:  8 10  9
+#>  2: NA  4  9
+#>  3:  1  5  9
+#>  4:  2  6  8
+#>  5:  3  7  8
+#>  6:  4  8  8
+#>  7:  5  9  7
+#>  8:  6 10  7
+#>  9:  7 10  7
+#> 10:  8 10  4
 
 # by id variable called `grp`
 dt_fill(dt_with_nas, 
         y, z, a, 
         id = list(id))
 #>     id  y  z  a
-#>  1:  2 NA  3 NA
-#>  2:  2  4  8  5
-#>  3:  2  7  8  5
-#>  4:  1 NA  4  2
-#>  5:  1  5  9  9
-#>  6:  1  6 10  9
-#>  7:  3  1  5  7
-#>  8:  3  2  6  4
-#>  9:  3  3  7  3
-#> 10:  3  8  7  3
+#>  1:  3 NA  3 NA
+#>  2:  3 NA  4  9
+#>  3:  3  2  6  8
+#>  4:  3  5  9  7
+#>  5:  1  1  5 NA
+#>  6:  2  3  7 NA
+#>  7:  2  4  8 NA
+#>  8:  2  6 10 NA
+#>  9:  2  7 10 NA
+#> 10:  2  8 10  4
 
 # both down and then up filling by group
 dt_fill(dt_with_nas, 
         y, z, a, 
         id = list(id), 
         .direction = "downup")
-#>     id y  z a
-#>  1:  2 4  3 5
-#>  2:  2 4  8 5
-#>  3:  2 7  8 5
-#>  4:  1 5  4 2
-#>  5:  1 5  9 9
-#>  6:  1 6 10 9
-#>  7:  3 1  5 7
-#>  8:  3 2  6 4
-#>  9:  3 3  7 3
-#> 10:  3 8  7 3
+#>     id y  z  a
+#>  1:  3 2  3  9
+#>  2:  3 2  4  9
+#>  3:  3 2  6  8
+#>  4:  3 5  9  7
+#>  5:  1 1  5 NA
+#>  6:  2 3  7  4
+#>  7:  2 4  8  4
+#>  8:  2 6 10  4
+#>  9:  2 7 10  4
+#> 10:  2 8 10  4
 ```
 
 In its current form, `dt_fill()` is faster than `tidyr::fill()` and uses
@@ -331,13 +352,13 @@ marks3 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="70%" />
 
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.5ms    30.9MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.9ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.8ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.5ms    29.1MB
 
 ## Separate
 
@@ -374,14 +395,14 @@ Testing with a 4 MB data set with one variable that has columns of “A.B”
 repeatedly, shows that `dt_separate()` is fast but less memory efficient
 than `tidyr::separate()`.
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               351ms    11.6MB
+    #> 1 separate               354ms    11.6MB
     #> 2 dt_separate            123ms    30.6MB
-    #> 3 dt_separate-mutable    116ms    26.7MB
+    #> 3 dt_separate-mutable    109ms    26.7MB
 
 ## Count and Uncount
 
@@ -400,9 +421,11 @@ the `dt` data table from the nesting examples.
 counted <- dt_count(dt, grp)
 counted
 #>    grp     N
-#> 1:   1 33330
-#> 2:   2 33217
-#> 3:   3 33453
+#> 1:   1 19638
+#> 2:   2 19987
+#> 3:   3 20033
+#> 4:   4 20269
+#> 5:   5 20073
 ```
 
 ``` r
@@ -415,11 +438,11 @@ print(uncounted)
 #>      4:   1
 #>      5:   1
 #>     ---    
-#>  99996:   3
-#>  99997:   3
-#>  99998:   3
-#>  99999:   3
-#> 100000:   3
+#>  99996:   5
+#>  99997:   5
+#>  99998:   5
+#>  99999:   5
+#> 100000:   5
 ```
 
 These are also quick (not that the `tidyverse` functions were at all
@@ -440,7 +463,7 @@ marks5 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-21-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-22-1.png" width="70%" />
 
 *Other functions are currently in progress.*
 

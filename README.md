@@ -185,20 +185,21 @@ dt_hoist(dt,
 
 Speed comparisons (similar to those shown in the preprint) are
 highlighted below. Notably, the timings are without the `nested1` and
-`nested2` columns.
+`nested2` columns of the original `dt` object from above. Also, all
+`dplyr` and `tidyr` functions use a `tbl` version of the `dt` table.
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" />
 
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.21ms    2.88MB
-    #> 2 group_nest   5.01ms    2.54MB
+    #> 1 dt_nest      3.35ms    2.88MB
+    #> 2 group_nest   5.02ms    2.54MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    5.15ms    6.21MB
-    #> 2 unnest      12.68ms    8.47MB
+    #> 1 dt_unnest    5.08ms    6.21MB
+    #> 2 unnest      12.94ms    8.47MB
 
 ### If Else
 
@@ -247,9 +248,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     125.7ms   148.8MB
-    #> 2 dt_case_when   35.1ms    34.3MB
-    #> 3 fifelse        34.5ms    34.3MB
+    #> 1 case_when     124.9ms   148.8MB
+    #> 2 dt_case_when   34.7ms    34.3MB
+    #> 3 fifelse        34.7ms    34.3MB
 
 ## Fill
 
@@ -357,8 +358,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.8ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.5ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.9ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.2ms    29.1MB
 
 ## Separate
 
@@ -400,9 +401,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               354ms    11.6MB
-    #> 2 dt_separate            123ms    30.6MB
-    #> 3 dt_separate-mutable    109ms    26.7MB
+    #> 1 separate               359ms    11.6MB
+    #> 2 dt_separate            122ms    30.6MB
+    #> 3 dt_separate-mutable    111ms    26.7MB
 
 ## Count and Uncount
 

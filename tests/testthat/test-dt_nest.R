@@ -25,25 +25,25 @@ test_that("dt_nest() works", {
 #   expect_equal(names(nested), names(starwars))
 # })
 
-test_that("group_nest() works on grouped data frames", {
-  grouped <- dplyr::group_by(starwars, species, homeworld)
+# test_that("group_nest() works on grouped data frames", {
+#   grouped <- dplyr::group_by(starwars, species, homeworld)
+#
+#   res <- dt_nest(grouped)
+#   dplyr_res <- dplyr::group_nest(grouped)
+#
+#   expect_is(dplyr::pull(res), "list")
+#
+#   expect_equal(nrow(res), nrow(dplyr_res))
+#   expect_equal(ncol(res), ncol(dplyr_res))
+#   expect_equal(names(data.table::rbindlist(res$data)),
+#                setdiff(names(starwars), c("species", "homeworld")))
+#
+# })
 
-  res <- dt_nest(grouped)
-  dplyr_res <- dplyr::group_nest(grouped)
-
-  expect_is(dplyr::pull(res), "list")
-
-  expect_equal(nrow(res), nrow(dplyr_res))
-  expect_equal(ncol(res), ncol(dplyr_res))
-  expect_equal(names(data.table::rbindlist(res$data)),
-               setdiff(names(starwars), c("species", "homeworld")))
-
-})
-
-test_that("group_nest.grouped_df() warns about ...", {
-  expect_warning(dt_nest(dplyr::group_by(mtcars, cyl), cyl))
-  expect_silent(dt_nest(dplyr::group_by(mtcars, cyl)))
-})
+# test_that("group_nest.grouped_df() warns about ...", {
+#   expect_warning(dt_nest(dplyr::group_by(mtcars, cyl), cyl))
+#   expect_silent(dt_nest(dplyr::group_by(mtcars, cyl)))
+# })
 
 test_that("group_nest() works if no grouping column", {
   res <- dt_nest(iris)

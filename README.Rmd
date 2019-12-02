@@ -124,7 +124,7 @@ dt_hoist(dt,
          by = id)
 ```
 
-Speed comparisons (similar to those shown in the preprint) are highlighted below. Notably, the timings are without the `nested1` and `nested2` columns.
+Speed comparisons (similar to those shown in the preprint) are highlighted below. Notably, the timings are without the `nested1` and `nested2` columns of the original `dt` object from above. Also, all `dplyr` and `tidyr` functions use a `tbl` version of the `dt` table.
 
 ```{r, echo = FALSE, fig.width=8, fig.height=4, dpi=300, warning=FALSE}
 tbl <- as_tibble(dt) %>% select(x, y, id, grp)

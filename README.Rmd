@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.1.8` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.2.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 
 <!-- badges: start -->
@@ -34,7 +34,7 @@ The current functions include:
 
 - `dt_nest()` for nesting data tables
 - `dt_unnest()` for unnesting data tables
-- `dt_hoist()` for unnesting vectors in a list-column in a data table (still experimental)
+- `dt_hoist()` for unnesting vectors in a list-column in a data table
 
 **If Else** (similar to `dplyr::case_when()`):
 
@@ -116,12 +116,10 @@ We can also unnest this with `dt_unnest()`:
 dt_unnest(nested, col = data)
 ```
 
-When our list columns don't have data tables (as output from `dt_nest()`) we can use the `dt_hoist()` function, that will unnest vectors.
+When our list columns don't have data tables (as output from `dt_nest()`) we can use the `dt_hoist()` function, that will unnest vectors. It keeps all the other variables that are not list-columns as well.
 
 ```{r}
-dt_hoist(dt, 
-         nested1, nested2,
-         by = id)
+dt_hoist(dt, nested1, nested2)
 ```
 
 Speed comparisons (similar to those shown in the preprint) are highlighted below. Notably, the timings are without the `nested1` and `nested2` columns of the original `dt` object from above. Also, all `dplyr` and `tidyr` functions use a `tbl` version of the `dt` table.
@@ -146,7 +144,7 @@ unnesting <- bench::mark(
 nest_unnest <- bind_rows(nesting, unnesting)
 
 library(ggplot2)
-dt_hoist(nest_unnest, time, by = expression) %>% 
+dt_hoist(nest_unnest, time) %>% 
   .[, type := dt_case_when(stringr::str_detect(expression, "unnest") ~ "Unnesting",
                            TRUE ~ "Nesting")] %>% 
   .[, time := as.numeric(time)] %>% 

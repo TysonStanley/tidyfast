@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.1.8` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.2.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -33,7 +33,6 @@ The current functions include:
   - `dt_nest()` for nesting data tables
   - `dt_unnest()` for unnesting data tables
   - `dt_hoist()` for unnesting vectors in a list-column in a data table
-    (still experimental)
 
 **If Else** (similar to `dplyr::case_when()`):
 
@@ -163,24 +162,23 @@ dt_unnest(nested, col = data)
 
 When our list columns don’t have data tables (as output from
 `dt_nest()`) we can use the `dt_hoist()` function, that will unnest
-vectors.
+vectors. It keeps all the other variables that are not list-columns as
+well.
 
 ``` r
-dt_hoist(dt, 
-         nested1, nested2,
-         by = id)
-#>              id nested1 nested2
-#>       1:      1       1  thing1
-#>       2:      1       1  thing1
-#>       3:      1       1  thing1
-#>       4:      1       1  thing1
-#>       5:      1       1  thing1
-#>      ---                       
-#>  999996: 100000       1  thing2
-#>  999997: 100000       5  thing2
-#>  999998: 100000       7  thing2
-#>  999999: 100000       6  thing2
-#> 1000000: 100000       7  thing2
+dt_hoist(dt, nested1, nested2)
+#>                  x         y grp     id nested1 nested2
+#>       1: 0.1720703 0.3376675   2      1       1  thing1
+#>       2: 0.1720703 0.3376675   2      1       1  thing1
+#>       3: 0.1720703 0.3376675   2      1       1  thing1
+#>       4: 0.1720703 0.3376675   2      1       1  thing1
+#>       5: 0.1720703 0.3376675   2      1       1  thing1
+#>      ---                                               
+#>  999996: 0.6268181 0.7851774   1 100000       1  thing2
+#>  999997: 0.6268181 0.7851774   1 100000       5  thing2
+#>  999998: 0.6268181 0.7851774   1 100000       7  thing2
+#>  999999: 0.6268181 0.7851774   1 100000       6  thing2
+#> 1000000: 0.6268181 0.7851774   1 100000       7  thing2
 ```
 
 Speed comparisons (similar to those shown in the preprint) are
@@ -193,13 +191,13 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.35ms    2.88MB
-    #> 2 group_nest   5.02ms    2.54MB
+    #> 1 dt_nest      3.24ms    2.88MB
+    #> 2 group_nest   4.95ms    2.54MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    5.08ms    6.21MB
-    #> 2 unnest      12.94ms    8.47MB
+    #> 1 dt_unnest    5.02ms    6.21MB
+    #> 2 unnest      12.81ms    8.47MB
 
 ### If Else
 
@@ -248,9 +246,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     124.9ms   148.8MB
-    #> 2 dt_case_when   34.7ms    34.3MB
-    #> 3 fifelse        34.7ms    34.3MB
+    #> 1 case_when     127.1ms   148.8MB
+    #> 2 dt_case_when   34.2ms    34.3MB
+    #> 3 fifelse        32.8ms    34.3MB
 
 ## Fill
 
@@ -358,8 +356,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   64.9ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.2ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.4ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.5ms    29.1MB
 
 ## Separate
 
@@ -401,9 +399,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               359ms    11.6MB
-    #> 2 dt_separate            122ms    30.6MB
-    #> 3 dt_separate-mutable    111ms    26.7MB
+    #> 1 separate               360ms    11.6MB
+    #> 2 dt_separate            118ms    30.6MB
+    #> 3 dt_separate-mutable    107ms    26.7MB
 
 ## Count and Uncount
 

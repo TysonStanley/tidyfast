@@ -4,28 +4,35 @@
 \alias{dt_pivot_longer}
 \title{Pivot data from wide to long}
 \usage{
-dt_pivot_longer(data, cols = NULL, names_to = "name", values_to = "value", ...)
+dt_pivot_longer(dt_, cols = NULL, names_to = "name",
+  values_to = "value", values_drop_na = FALSE, ...)
 }
 \arguments{
-\item{data}{The data.table}
+\item{dt_}{The data table to pivot longer}
 
-\item{cols}{Column selection. If empty uses all columns. Can use -colname to unselect column(s)}
+\item{cols}{Column selection. If empty, uses all columns. Can use -colname to unselect column(s)}
 
 \item{names_to}{Name of the new "names" column. Must be a string.}
 
 \item{values_to}{Name of the new "values" column. Must be a string.}
 
-\item{...}{Additional values to pass to `melt()`}
+\item{values_drop_na}{If TRUE, rows will be dropped that contain NAs.}
+
+\item{...}{Additional arguments to pass to `melt.data.table()`}
 }
 \description{
-`pivot_longer()` "lengthens" data, increasing the number of rows and
+`dt_pivot_longer()` "lengthens" data, increasing the number of rows and
 decreasing the number of columns. The inverse transformation is
-`pivot_wider()`
+`dt_pivot_wider()`. Based on the `tidyr` equivalents.
 }
 \examples{
-library(data.table)
 
+library(data.table)
 example_dt <- data.table(x = c(1,2,3), y = c(4,5,6), z = c("a", "b", "c"))
 
-dt_pivot_longer(example_dt, cols = c(x, y), names_to = "stuff", values_to = "things")
+dt_pivot_longer(example_dt,
+                cols = c(x, y),
+                names_to = "stuff",
+                values_to = "things")
+
 }

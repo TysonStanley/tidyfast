@@ -83,6 +83,8 @@ dt_hoist.default <- function(dt_, ..., by = NULL){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
+  if (is.null(substitute(by)))
+    by <-
   by <- substitute(by)
   cols <- substitute(unlist(list(...), recursive = FALSE))
 
@@ -96,18 +98,31 @@ dt_hoist.default <- function(dt_, ..., by = NULL){
   new_names <- paste(cols)[-1]
   old_names <- paste0("V", seq_along(new_names))
 
-  if (!.is_null(by))
-    old_names <- c(old_names, "by")
-
   setnames(dt_,
            old = old_names,
-           new = c(new_names, paste(by)),
+           new = new_names,
            skip_absent = TRUE)
   dt_
 }
 
-.is_null <- function(id){
-  length(paste(id)) == 0
+
+dt_hoist.default <- function(dt_, ..., by = NULL){
+  if (isFALSE(is.data.table(dt_)))
+    dt_ <- as.data.table(dt_)
+
+  dots <- alist(...)
+  cols <- vector("list", length(dots))
+  for (i in dots){
+    cols[[i]] <- call("rbindlist", dots[[i]])
+  }
+
+  return(cols)
+  cols <- substitute(unlist(list(...), recursive = FALSE))
+
+  dt_ <- dt_[, eval(cols), by = eval(by)]
+  dt_ <- .naming(dt_, substitute(list(...)), by)
+  dt_
 }
+
 
 

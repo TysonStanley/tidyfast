@@ -77,7 +77,7 @@ test_that("dt_hoist combines augmented vectors", {
 
 test_that("hoist preserves names", {
   df <- data.table::data.table(x = list(1L, 2:3), y = list("a", c("b", "c")), group = 1:2)
-  out <- dt_hoist(df, x, y, by = group)
+  out <- dt_hoist(df, x, y, by = list(group))
   expect_named(out, c("group", "x", "y"))
 })
 

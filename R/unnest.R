@@ -102,25 +102,3 @@ dt_hoist.default <- function(dt_, ..., by = NULL){
            skip_absent = TRUE)
   dt_
 }
-
-
-dt_hoist.default <- function(dt_, ..., by = NULL){
-  if (isFALSE(is.data.table(dt_)))
-    dt_ <- as.data.table(dt_)
-
-  dots <- alist(...)
-  cols <- vector("list", length(dots))
-  for (i in dots){
-    cols[[i]] <- call("rbindlist", dots[[i]])
-  }
-
-  return(cols)
-  cols <- substitute(unlist(list(...), recursive = FALSE))
-
-  dt_ <- dt_[, eval(cols), by = eval(by)]
-  dt_ <- .naming(dt_, substitute(list(...)), by)
-  dt_
-}
-
-
-

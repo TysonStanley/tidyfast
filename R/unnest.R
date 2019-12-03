@@ -83,8 +83,6 @@ dt_hoist.default <- function(dt_, ..., by = NULL){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
-  if (is.null(substitute(by)))
-    by <-
   by <- substitute(by)
   cols <- substitute(unlist(list(...), recursive = FALSE))
 

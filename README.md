@@ -9,15 +9,17 @@
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis build
 status](https://travis-ci.org/TysonStanley/tidyfast.svg?branch=master)](https://travis-ci.org/TysonStanley/tidyfast)
+[![Codecov test
+coverage](https://codecov.io/gh/TysonStanley/tidyfast/branch/master/graph/badge.svg)](https://codecov.io/gh/TysonStanley/tidyfast?branch=master)
 <!-- badges: end -->
 
 The goal of `tidyfast` is to provide fast and efficient alternatives to
-some `tidyr` and `dplyr` functions using `data.table` under the hood.
-Each have the prefix of `dt_` to allow for autocomplete in IDEs such as
-RStudio. These should compliment some of the current functionality in
-`dtplyr` (but notably does not use the `lazy_dt()` framework of
-`dtplyr`). This package imports `data.table` and `Rcpp` (no other
-dependencies).
+some `tidyr` (and a few `dplyr`) functions using `data.table` under the
+hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs
+such as RStudio. These should compliment some of the current
+functionality in `dtplyr` (but notably does not use the `lazy_dt()`
+framework of `dtplyr`). This package imports `data.table` and `Rcpp` (no
+other dependencies).
 
 These are, in essence, translations from a more `tidyverse` grammar to
 `data.table`. Most functions herein are in places where, in my opinion,
@@ -60,17 +62,29 @@ The current functions include:
     `data.table::tstrsplit()`. This is not well tested yet and lacks
     some functionality of `tidyr::separate()`.
 
-**Pivoting** (similar to `dplyr::pivot_longer()` and
-`dplyr::pivot_wider()`)
+**Pivoting** (similar to `tidyr::pivot_longer()` and
+`tidyr::pivot_wider()`)
 
-  - In development still…
+  - `dt_pivot_longer()` for fast pivoting using `data.table::melt()`
+  - `dt_pivot_wider()` for fast pivoting using `data.table::dcast()`
 
 **Adjust `data.table` print options**
 
   - `dt_print_options()` for adjusting the options for
     `print.data.table()`
 
-*Package is still in active development.*
+## General API
+
+`tidyfast` attempts to convert syntax from `tidyr` with its accompanying
+grammar to `data.table` calls. As such, we have tried to maintain that
+syntax as closely as possible without hurting speed and efficiency. Some
+more advanced use cases in `tidyr` may not translate yet. We try to be
+transparent about the shortcomings in syntax and behavior where known.
+
+Each function that takes data (labeled as `dt_` in the package docs) as
+its first argument automatically coerces it to a data table with
+`as.data.table()` if it isn’t already a data table. These will return a
+data table.
 
 ## Installation
 
@@ -100,6 +114,8 @@ library(tidyfast)
 library(data.table)
 library(dplyr)       # to compare with case_when()
 library(tidyr)       # to compare with fill() and separate()
+library(ggplot2)     # figures
+library(ggbeeswarm)  # figures
 
 dt <- data.table(
    x = rnorm(1e5),
@@ -167,6 +183,7 @@ well.
 
 ``` r
 dt_hoist(dt, nested1, nested2)
+#> The following columns were dropped because they are list-columns (but not being hoisted): nested1, nested2
 #>                  x         y grp     id nested1 nested2
 #>       1: 0.1720703 0.3376675   2      1       1  thing1
 #>       2: 0.1720703 0.3376675   2      1       1  thing1
@@ -184,20 +201,23 @@ dt_hoist(dt, nested1, nested2)
 Speed comparisons (similar to those shown in the preprint) are
 highlighted below. Notably, the timings are without the `nested1` and
 `nested2` columns of the original `dt` object from above. Also, all
-`dplyr` and `tidyr` functions use a `tbl` version of the `dt` table.
+`dplyr` and `tidyr` functions use a `tbl` version of the `dt`
+    table.
+
+    #> The following columns were dropped because they are list-columns (but not being hoisted): result, memory, time, gc
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" />
 
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.24ms    2.88MB
-    #> 2 group_nest   4.95ms    2.54MB
+    #> 1 dt_nest      3.73ms    2.88MB
+    #> 2 group_nest   5.83ms    2.54MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    5.02ms    6.21MB
-    #> 2 unnest      12.81ms    8.47MB
+    #> 1 dt_unnest    5.47ms    6.22MB
+    #> 2 unnest      13.56ms    8.47MB
 
 ### If Else
 
@@ -246,9 +266,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     127.1ms   148.8MB
-    #> 2 dt_case_when   34.2ms    34.3MB
-    #> 3 fifelse        32.8ms    34.3MB
+    #> 1 case_when     137.8ms   148.8MB
+    #> 2 dt_case_when   35.6ms    34.3MB
+    #> 3 fifelse        38.9ms    34.3MB
 
 ## Fill
 
@@ -356,8 +376,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.4ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.5ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   73.7ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   27.5ms    29.1MB
 
 ## Separate
 
@@ -399,9 +419,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               360ms    11.6MB
-    #> 2 dt_separate            118ms    30.6MB
-    #> 3 dt_separate-mutable    107ms    26.7MB
+    #> 1 separate               455ms    11.6MB
+    #> 2 dt_separate            122ms    30.6MB
+    #> 3 dt_separate-mutable    123ms    26.7MB
 
 ## Count and Uncount
 
@@ -464,13 +484,126 @@ marks5 <-
 
 <img src="man/figures/README-unnamed-chunk-22-1.png" width="70%" />
 
-*Other functions are currently in progress.*
+## Pivoting
 
-## Note
+Finally, thanks to \[@mtfairbanks\](<https://github.com/mtfairbanks>),
+we now have pivoting translations to `data.table::melt()` and
+`data.table::dcast()`. Consider the following example (similar to the
+example in `tidyr::pivot_longer()` and `tidyr::pivot_wider()`):
+
+``` r
+billboard <- tidyr::billboard
+
+# note the warning - melt is telling us what 
+#   it did with the various data types---logical (where there were just NAs
+#   and numeric
+longer <- billboard %>%
+ dt_pivot_longer(
+   cols = c(-artist, -track, -date.entered),
+   names_to = "week",
+   names_prefix = "wk",
+   values_to = "rank"
+ )
+#> Warning in melt.data.table(data = dt_, id.vars = id_vars, measure.vars =
+#> cols, : 'measure.vars' [wk1, wk2, wk3, wk4, ...] are not all of the same
+#> type. By order of hierarchy, the molten data value column will be of type
+#> 'double'. All measure variables not of type 'double' will be coerced too.
+#> Check DETAILS in ?melt.data.table for more on coercion.
+head(longer)
+#>          artist                   track date.entered week rank
+#> 1:        2 Pac Baby Don't Cry (Keep...   2000-02-26  wk1   87
+#> 2:      2Ge+her The Hardest Part Of ...   2000-09-02  wk1   91
+#> 3: 3 Doors Down              Kryptonite   2000-04-08  wk1   81
+#> 4: 3 Doors Down                   Loser   2000-10-21  wk1   76
+#> 5:     504 Boyz           Wobble Wobble   2000-04-15  wk1   57
+#> 6:         98^0 Give Me Just One Nig...   2000-08-19  wk1   51
+
+wider <- longer %>% 
+  dt_pivot_wider(
+    names_from = week,
+    values_from = rank
+  )
+#> Aggregate function missing, defaulting to 'length'
+head(wider)
+#>          artist wk1 wk10 wk11 wk12 wk13 wk14 wk15 wk16 wk17 wk18 wk19 wk2
+#> 1:        2 Pac   1    1    1    1    1    1    1    1    1    1    1   1
+#> 2:      2Ge+her   1    1    1    1    1    1    1    1    1    1    1   1
+#> 3: 3 Doors Down   2    2    2    2    2    2    2    2    2    2    2   2
+#> 4:     504 Boyz   1    1    1    1    1    1    1    1    1    1    1   1
+#> 5:         98^0   1    1    1    1    1    1    1    1    1    1    1   1
+#> 6:      A*Teens   1    1    1    1    1    1    1    1    1    1    1   1
+#>    wk20 wk21 wk22 wk23 wk24 wk25 wk26 wk27 wk28 wk29 wk3 wk30 wk31 wk32
+#> 1:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#> 2:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#> 3:    2    2    2    2    2    2    2    2    2    2   2    2    2    2
+#> 4:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#> 5:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#> 6:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#>    wk33 wk34 wk35 wk36 wk37 wk38 wk39 wk4 wk40 wk41 wk42 wk43 wk44 wk45
+#> 1:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#> 2:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#> 3:    2    2    2    2    2    2    2   2    2    2    2    2    2    2
+#> 4:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#> 5:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#> 6:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#>    wk46 wk47 wk48 wk49 wk5 wk50 wk51 wk52 wk53 wk54 wk55 wk56 wk57 wk58
+#> 1:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#> 2:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#> 3:    2    2    2    2   2    2    2    2    2    2    2    2    2    2
+#> 4:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#> 5:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#> 6:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#>    wk59 wk6 wk60 wk61 wk62 wk63 wk64 wk65 wk66 wk67 wk68 wk69 wk7 wk70
+#> 1:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#> 2:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#> 3:    2   2    2    2    2    2    2    2    2    2    2    2   2    2
+#> 4:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#> 5:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#> 6:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#>    wk71 wk72 wk73 wk74 wk75 wk76 wk8 wk9
+#> 1:    1    1    1    1    1    1   1   1
+#> 2:    1    1    1    1    1    1   1   1
+#> 3:    2    2    2    2    2    2   2   2
+#> 4:    1    1    1    1    1    1   1   1
+#> 5:    1    1    1    1    1    1   1   1
+#> 6:    1    1    1    1    1    1   1   1
+```
+
+Notably, there are some current limitations to these: 1) `tidyselect`
+techniques do not work across the board (e.g. cannot use `start_with()`
+and friends) and 2) the functions are new and likely prone to edge-case
+bugs.
+
+But let’s compare some basic speed and efficiency. Note that the figures
+are in log-base-10 scale. Because of the `data.table` functions, these
+are extremely fast and
+efficient.
+
+<img src="man/figures/README-unnamed-chunk-24-1.png" width="70%" /><img src="man/figures/README-unnamed-chunk-24-2.png" width="70%" />
+
+    #> # A tibble: 4 x 3
+    #>   expression        median mem_alloc
+    #>   <chr>           <bch:tm> <bch:byt>
+    #> 1 dt_pivot_longer   1.02ms  993.47KB
+    #> 2 pivot_longer       6.7ms    2.63MB
+    #> 3 dt_pivot_wider   20.62ms     2.5MB
+    #> 4 pivot_wider     368.56ms    2.43MB
+
+## Notes
 
 Please note that the `tidyfast` project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms.
 
-Also, `ggplot2`, `stringr`, and `ggbeeswarm` were used herein for
-creating plots.
+We want to thank our wonderful contributors:
+
+  - [mtfairbanks](https://github.com/mtfairbanks) for PR \#6 providing
+    initial the pivoting functions. Note the
+    [`gdt`](https://github.com/mtfairbanks/gdt) package that compliments
+    some of `tidyfast`s functionality.
+
+**Complementary Packages:**
+
+  - [`dtplyr`](https://dtplyr.tidyverse.org)
+  - [`maditr`](https://github.com/gdemin/maditr)
+  - [`gdt`](https://github.com/mtfairbanks/gdt)

@@ -43,26 +43,28 @@ dt_pivot_longer <- function(dt_,
     cols <- characterize(substitute(cols))
   }
 
-  if (cols[1] == "-") {
+  names <- colnames(dt_)
 
+  if (cols[1] == "-") {
     # If cols is a single "unselected" column
     # Ex: cols = -z
     drop_cols <- cols[2]
-    cols <- colnames(dt_)[!colnames(dt_) %in% drop_cols]
+    cols <- names[!names %in% drop_cols]
 
   } else if (all(grepl("-", cols))) {
-
     # If cols is a vector of columns to drop
     # Ex: cols = c(-y, -z)
     drop_cols <- gsub("-", "", cols)
-    cols <- colnames(dt_)[!colnames(dt_) %in% drop_cols]
+    cols <- names[!names %in% drop_cols]
+    if (length(cols) == 0)
+      warning("No columns remaining after removing", paste(drop_cols, collapse = ", "))
 
   } else if (any(grepl("-", cols)) && any(!grepl("-", cols))) {
     # Ex: cols = c(x, -z)
     stop("cols must only contain columns to drop OR columns to add, not both")
   }
 
-  id_vars <- colnames(dt_)[!colnames(dt_) %in% cols]
+  id_vars <- names[!names %in% cols]
 
   melt(data = dt_,
        id.vars = id_vars,

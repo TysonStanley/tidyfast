@@ -65,3 +65,79 @@ test_that("dt_unnest works", {
 })
 
 
+test_that("dt_count works", {
+  dt <- data.table(
+    x = rnorm(99),
+    y = runif(99),
+    grp = rep(c(1,2, NA), times = 33),
+    grp2 = rep(1:9, times = 11))
+
+  expect_named(dt_count(dt, grp), c("grp", "N"))
+  expect_named(dt_count(dt, grp, grp2), c("grp", "grp2", "N"))
+  expect_equal(nrow(dt_count(dt, grp, grp2, na.rm = TRUE)), 6)
+  expect_named(dt_count(dt, grp, grp2, wt=x), c("grp", "grp2", "N"))
+})
+
+test_that("dt_uncount works", {
+  dt <- data.table(
+    grp = rep(1:3, times = 33),
+    grp2 = rep(1:9, times = 11),
+    id = 1:99)
+
+  counted <- dt_count(dt, grp)
+  counted2 <- dt_count(dt, grp, grp2)
+
+  expect_named(dt_uncount(counted, N)[], c("grp"))
+  expect_equal(as.data.frame(dt_uncount(counted2, N)[order(grp, grp2)]),
+               as.data.frame(dt[order(grp, grp2), .(grp, grp2)]))
+
+  expect_named(dt_uncount(counted, N, .remove = FALSE)[], c("grp", "N"))
+  expect_named(dt_uncount(counted, N, .id = "id")[], c("grp", ".id"))
+
+})
+
+test_that("dt_separate works", {
+  dt <- data.table(x = c("A.B", "A", "B", "B.A"),
+                   y = 1:4)
+
+  expect_equal(capture.output(dt_separate(dt, x, c("c1", "c2"))[]),
+               c("   y c1   c2",
+                 "1: 1  A    B",
+                 "2: 2  A <NA>",
+                 "3: 3  B <NA>",
+                 "4: 4  B    A"))
+
+  # can keep the original column with `remove = FALSE`
+  expect_equal(capture.output(dt_separate(dt, x, c("c1", "c2"), remove = FALSE)[]),
+               c("     x y c1   c2",
+                 "1: A.B 1  A    B",
+                 "2:   A 2  A <NA>",
+                 "3:   B 3  B <NA>",
+                 "4: B.A 4  B    A"))
+
+  # need to assign when `immutable = TRUE`
+  expect_equal(capture.output(dt_separate(dt, x, c("c1", "c2"), immutable = TRUE)),
+               c("   y c1   c2",
+                 "1: 1  A    B",
+                 "2: 2  A <NA>",
+                 "3: 3  B <NA>",
+                 "4: 4  B    A"))
+
+})
+
+
+
+test_that("dt_print_options works", {
+  dt <- data.table(x = 1)
+  dt_print_options()
+
+  expect_equal(capture.output(dt),
+               c("       x",
+                 "   <num>",
+                 "1:     1"))
+
+})
+
+
+
+

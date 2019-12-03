@@ -52,7 +52,6 @@ dt_unnest.default <- function(dt_, col, ...){
 #'
 #' @param dt_ the data table to unnest
 #' @param ... the columns to unnest (must all be the sample length when unnested); use bare names of the variables
-#' @param by the variable that indicates what to unnest by. Default is \code{NULL}.
 #'
 #' @aliases dt_unnest_vec
 #'
@@ -74,24 +73,28 @@ dt_unnest.default <- function(dt_, col, ...){
 #' @import data.table
 #'
 #' @export
-dt_hoist <- function(dt_, ..., by = NULL){
+dt_hoist <- function(dt_, ...){
   UseMethod("dt_hoist", dt_)
 }
 
 #' @export
-dt_hoist.default <- function(dt_, ..., by = NULL){
+dt_hoist.default <- function(dt_, ...){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
-  by <- substitute(by)
+  pasted_dots <- paste(substitute(list(...)))[-1L]
+  classes <- sapply(dt_, class)
+  keep <- names(classes)[classes != "list"]
+  keep <- keep[!keep %in% pasted_dots]
+  keep <- paste(keep, collapse = ",")
   cols <- substitute(unlist(list(...), recursive = FALSE))
 
-  dt_ <- dt_[, eval(cols), by = eval(by)]
-  dt_ <- .naming(dt_, substitute(list(...)), by)
+  dt_ <- dt_[, eval(cols), by = keep]
+  dt_ <- .naming(dt_, substitute(list(...)))
   dt_
 }
 
-.naming <- function(dt_, cols, by){
+.naming <- function(dt_, cols){
 
   new_names <- paste(cols)[-1]
   old_names <- paste0("V", seq_along(new_names))

@@ -66,18 +66,18 @@ test_that("dt_nest() only uses observed factor levels", {
 test_that("hoist combines atomic vectors", {
   dt <- data.table::data.table(x = list(1L, 2:3, 4:10),
                                id = 1:3)
-  expect_equal(dt_hoist(dt, x, by = id)$x, 1:10)
+  expect_equal(dt_hoist(dt, x)$x, 1:10)
 })
 
 test_that("dt_hoist combines augmented vectors", {
   df <- data.table::data.table(x = as.list(as.factor(letters[1:3])),
                                id = 1:3)
-  expect_equal(dt_hoist(df, x, by = id)$x, factor(letters[1:3]))
+  expect_equal(dt_hoist(df, x)$x, factor(letters[1:3]))
 })
 
 test_that("hoist preserves names", {
   df <- data.table::data.table(x = list(1L, 2:3), y = list("a", c("b", "c")), group = 1:2)
-  out <- dt_hoist(df, x, y, by = list(group))
+  out <- dt_hoist(df, x, y)
   expect_named(out, c("group", "x", "y"))
 })
 
@@ -95,10 +95,11 @@ test_that("can unnest mixture of name and unnamed lists of same length", {
   df <- data.table::data.table(
     x = c("a"),
     y = list(y = 1:2),
-    z = list(1:2)
+    z = list(1:2),
+    id = 1
   )
   expect_identical(dt_hoist(df, x, y, z),
-                   data.table::data.table(x = c("a","a"), y = c(1:2), z = c(1:2)))
+                   data.table::data.table(id = c(1,1), x = c("a","a"), y = c(1:2), z = c(1:2)))
 })
 
 # needs to be implemented in dt_hoist()

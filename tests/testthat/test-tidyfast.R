@@ -44,21 +44,21 @@ test_that("dt_unnest works", {
      )
 
   nest_dt <- dt_nest(dt, grp)
-  unnest_dt <- dt_unnest(nest_dt, col = data, by = grp)
+  unnest_dt <- dt_unnest(nest_dt, col = data)
   unnest_vec <- dt_hoist(dt, nested1, nested2)
 
-  expect_equal(dim(dt_unnest(nest_dt, col = data, by = grp)), c(100000,6))
+  expect_equal(dim(dt_unnest(nest_dt, col = data)), c(100000,6))
   expect_equal(nrow(dt_hoist(dt,
                              nested1, nested2)),
                1000000)
 
   d <- as.data.frame(dt)
   nest_d <- as.data.frame(nest_dt)
-  unnest_dt <- dt_unnest(nest_d, col = data, by = grp)
+  unnest_dt <- dt_unnest(nest_d, col = data)
   unnest_vec <- dt_hoist(d,
              nested1, nested2)
 
-  expect_equal(dim(dt_unnest(nest_d, col = data, by = grp)), c(100000,6))
+  expect_equal(dim(dt_unnest(nest_d, col = data)), c(100000,6))
   expect_equal(nrow(dt_hoist(dt,
                              nested1, nested2)),
                1000000)

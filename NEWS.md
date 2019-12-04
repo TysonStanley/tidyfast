@@ -1,4 +1,4 @@
-# tidyfast 0.1.8
+# tidyfast 0.2.0
 
 * Initial release of `tidyfast`!
 

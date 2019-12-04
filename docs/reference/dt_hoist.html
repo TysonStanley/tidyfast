@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
     <p>Quickly unnest vectors nested in list columns. Still experimental (has some potentially unexpected behavior in some situations)!</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dt_hoist</span>(<span class='no'>dt_</span>, <span class='no'>...</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>dt_hoist</span>(<span class='no'>dt_</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -124,10 +124,6 @@
     <tr>
       <th>...</th>
       <td><p>the columns to unnest (must all be the sample length when unnested); use bare names of the variables</p></td>
-    </tr>
-    <tr>
-      <th>by</th>
-      <td><p>the variable that indicates what to unnest by.</p></td>
     </tr>
     </table>
 
@@ -145,18 +141,18 @@
 
 <span class='fu'>dt_hoist</span>(<span class='no'>dt</span>,
          <span class='no'>nested1</span>, <span class='no'>nested2</span>,
-         <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>id</span>)</div><div class='output co'>#&gt;              id nested1 nested2
-#&gt;       1:      1       1  thing1
-#&gt;       2:      1       1  thing1
-#&gt;       3:      1       1  thing1
-#&gt;       4:      1       1  thing1
-#&gt;       5:      1       1  thing1
-#&gt;      ---                       
-#&gt;  999996: 100000       7  thing2
-#&gt;  999997: 100000       5  thing2
-#&gt;  999998: 100000       4  thing2
-#&gt;  999999: 100000       4  thing2
-#&gt; 1000000: 100000       1  thing2</div><div class='input'>
+         <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>id</span>)</div><div class='output co'>#&gt; <span class='message'>The following columns were dropped because they are list-columns (but not being hoisted): nested1, nested2</span></div><div class='output co'>#&gt;                   x         y V1     V2     by
+#&gt;       1: -0.8366140 0.3524109  1 thing1      1
+#&gt;       2: -0.8366140 0.3524109  1 thing1      1
+#&gt;       3: -0.8366140 0.3524109  1 thing1      1
+#&gt;       4: -0.8366140 0.3524109  1 thing1      1
+#&gt;       5: -0.8366140 0.3524109  1 thing1      1
+#&gt;      ---                                      
+#&gt;  999996:  0.3999232 0.4907574  7 thing2 100000
+#&gt;  999997:  0.3999232 0.4907574  5 thing2 100000
+#&gt;  999998:  0.3999232 0.4907574  4 thing2 100000
+#&gt;  999999:  0.3999232 0.4907574  4 thing2 100000
+#&gt; 1000000:  0.3999232 0.4907574  1 thing2 100000</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

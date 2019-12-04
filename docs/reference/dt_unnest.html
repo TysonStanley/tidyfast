@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
     <p>Quickly unnest data tables, particularly those nested by <code><a href='dt_nest.html'>dt_nest()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dt_unnest</span>(<span class='no'>dt_</span>, <span class='no'>col</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>dt_unnest</span>(<span class='no'>dt_</span>, <span class='no'>col</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -126,8 +126,8 @@
       <td><p>the column to unnest</p></td>
     </tr>
     <tr>
-      <th>by</th>
-      <td><p>the ID variable to unnest by. Default is <code>NULL</code>.</p></td>
+      <th>...</th>
+      <td><p>any of the other variables in the nested table that you want to keep in the unnested table. Bare variable names. If none are provided, all variables are kept.</p></td>
     </tr>
     </table>
 
@@ -142,7 +142,7 @@
   )
 
 <span class='no'>nested</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dt_nest.html'>dt_nest</a></span>(<span class='no'>dt</span>, <span class='no'>grp</span>)
-<span class='fu'>dt_unnest</span>(<span class='no'>nested</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>grp</span>)</div><div class='output co'>#&gt;            by          x          y
+<span class='fu'>dt_unnest</span>(<span class='no'>nested</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>data</span>)</div><div class='output co'>#&gt;           grp          x          y
 #&gt;         &lt;int&gt;      &lt;num&gt;      &lt;num&gt;
 #&gt;      1:     1  1.0132525 0.02937715
 #&gt;      2:     1  1.3222125 0.17566096

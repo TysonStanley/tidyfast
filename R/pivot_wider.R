@@ -1,8 +1,9 @@
 #' Pivot data from long to wide
-#
-#' `dt_pivot_wider()` "widens" data, increasing the number of columns and
+#'
+#'
+#' \code{dt_pivot_wider()} "widens" data, increasing the number of columns and
 #' decreasing the number of rows. The inverse transformation is
-#' `dt_pivot_longer()`. Based on the `tidyr` equivalents.
+#' \code{dt_pivot_longer()}. Syntax based on the \code{tidyr} equivalents.
 #'
 #' @param dt_ the data table to widen
 #' @param id_cols A set of columns that uniquely identifies each observation. Defaults to all columns in the data table except for the columns specified in `names_from` and `values_from`. Typically used when you have additional variables that is directly related.

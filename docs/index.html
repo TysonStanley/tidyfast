@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -64,13 +64,13 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="tidyfast-v018-" class="section level1">
+<div id="tidyfast-v020-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#tidyfast-v018-" class="anchor"></a><code>tidyfast v0.1.8</code> <img src="reference/figures/tidyfast_hex.png" align="right" width="30%" height="30%">
+<a href="#tidyfast-v020-" class="anchor"></a><code>tidyfast v0.2.0</code> <img src="reference/figures/tidyfast_hex.png" align="right" width="30%" height="30%">
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of <code>tidyfast</code> is to provide fast and efficient alternatives to some <code>tidyr</code> and <code>dplyr</code> functions using <code>data.table</code> under the hood. Each have the prefix of <code>dt_</code> to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in <code>dtplyr</code> (but notably does not use the <code>lazy_dt()</code> framework of <code>dtplyr</code>). This package imports <code>data.table</code> and <code>Rcpp</code> (no other dependencies).</p>
+<p>The goal of <code>tidyfast</code> is to provide fast and efficient alternatives to some <code>tidyr</code> (and a few <code>dplyr</code>) functions using <code>data.table</code> under the hood. Each have the prefix of <code>dt_</code> to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in <code>dtplyr</code> (but notably does not use the <code>lazy_dt()</code> framework of <code>dtplyr</code>). This package imports <code>data.table</code> and <code>Rcpp</code> (no other dependencies).</p>
 <p>These are, in essence, translations from a more <code>tidyverse</code> grammar to <code>data.table</code>. Most functions herein are in places where, in my opinion, the <code>data.table</code> syntax is not obvious or clear. As such, these functions can translate a simple function call into the fast, efficient, and concise syntax of <code>data.table</code>.</p>
 <p>The current functions include:</p>
 <p><strong>Nesting and unnesting</strong> (similar to <code><a href="https://dplyr.tidyverse.org/reference/group_nest.html">dplyr::group_nest()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/nest.html">tidyr::unnest()</a></code>):</p>
@@ -80,7 +80,7 @@
 <li>
 <code><a href="reference/dt_unnest.html">dt_unnest()</a></code> for unnesting data tables</li>
 <li>
-<code><a href="reference/dt_hoist.html">dt_hoist()</a></code> for unnesting vectors in a list-column in a data table (still experimental)</li>
+<code><a href="reference/dt_hoist.html">dt_hoist()</a></code> for unnesting vectors in a list-column in a data table</li>
 </ul>
 <p><strong>If Else</strong> (similar to <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">dplyr::case_when()</a></code>):</p>
 <ul>
@@ -105,9 +105,14 @@
 <li>
 <code><a href="reference/dt_separate.html">dt_separate()</a></code> for splitting a single column into multiple based on a match within the column (e.g., column with values like “A.B” could be split into two columns by using the period as the separator where column 1 would have “A” and 2 would have “B”). It is built on <code><a href="https://Rdatatable.gitlab.io/data.table/reference/tstrsplit.html">data.table::tstrsplit()</a></code>. This is not well tested yet and lacks some functionality of <code><a href="https://tidyr.tidyverse.org/reference/separate.html">tidyr::separate()</a></code>.</li>
 </ul>
-<p><strong>Pivoting</strong> (similar to <code>dplyr::pivot_longer()</code> and <code>dplyr::pivot_wider()</code>)</p>
+<p><strong>Pivoting</strong> (similar to <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">tidyr::pivot_longer()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">tidyr::pivot_wider()</a></code>)</p>
 <ul>
-<li>In development still…</li>
+<li>
+<code><a href="reference/dt_pivot_longer.html">dt_pivot_longer()</a></code> for fast pivoting using <code><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html">data.table::melt()</a></code>
+</li>
+<li>
+<code><a href="reference/dt_pivot_wider.html">dt_pivot_wider()</a></code> for fast pivoting using <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html">data.table::dcast()</a></code>
+</li>
 </ul>
 <p><strong>Adjust <code>data.table</code> print options</strong></p>
 <ul>
@@ -115,7 +120,12 @@
 <code><a href="reference/dt_print_options.html">dt_print_options()</a></code> for adjusting the options for <code><a href="https://Rdatatable.gitlab.io/data.table/reference/print.data.table.html">print.data.table()</a></code>
 </li>
 </ul>
-<p><em>Package is still in active development.</em></p>
+<div id="general-api" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general-api" class="anchor"></a>General API</h2>
+<p><code>tidyfast</code> attempts to convert syntax from <code>tidyr</code> with its accompanying grammar to <code>data.table</code> function calls. As such, we have tried to maintain the <code>tidyr</code> syntax as closely as possible without hurting speed and efficiency. Some more advanced use cases in <code>tidyr</code> may not translate yet. We try to be transparent about the shortcomings in syntax and behavior where known.</p>
+<p>Each function that takes data (labeled as <code>dt_</code> in the package docs) as its first argument automatically coerces it to a data table with <code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table()</a></code> if it isn’t already a data table. These will return a data table.</p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -126,23 +136,27 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<p>The nesting and unnesting functions were shown in a <a href="https://psyarxiv.com/u8ekc/">previous preprint</a> while the other functions are new. Herein, I show some simple applications.</p>
+<p>The initial versions of the nesting and unnesting functions were shown in a <a href="https://psyarxiv.com/u8ekc/">preprint</a>. Herein is shown some simple applications and the functions’ speed/efficiency.</p>
 <div id="nesting-and-unnesting" class="section level3">
 <h3 class="hasAnchor">
 <a href="#nesting-and-unnesting" class="anchor"></a>Nesting and Unnesting</h3>
 <p>The following data table will be used for the nesting/unnesting examples.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyfast)</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(data.table)</a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)       <span class="co"># to compare with case_when()</span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)       <span class="co"># to compare with fill() and separate()</span></a>
-<a class="sourceLine" id="cb2-5" title="5"></a>
-<a class="sourceLine" id="cb2-6" title="6">dt &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(</a>
-<a class="sourceLine" id="cb2-7" title="7">   <span class="dt">x =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">1e5</span>),</a>
-<a class="sourceLine" id="cb2-8" title="8">   <span class="dt">y =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">1e5</span>),</a>
-<a class="sourceLine" id="cb2-9" title="9">   <span class="dt">grp =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(1L<span class="op">:</span>3L, <span class="fl">1e5</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb2-10" title="10">   <span class="dt">nested1 =</span> <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, sample, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb2-11" title="11">   <span class="dt">nested2 =</span> <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"thing1"</span>, <span class="st">"thing2"</span>), sample, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb2-12" title="12">   <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="fl">1e5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">84322</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyfast)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(data.table)</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)       <span class="co"># to compare with case_when()</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)       <span class="co"># to compare with fill() and separate()</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)     <span class="co"># figures</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggbeeswarm)  <span class="co"># figures</span></a>
+<a class="sourceLine" id="cb2-9" title="9"></a>
+<a class="sourceLine" id="cb2-10" title="10">dt &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(</a>
+<a class="sourceLine" id="cb2-11" title="11">   <span class="dt">x =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">1e5</span>),</a>
+<a class="sourceLine" id="cb2-12" title="12">   <span class="dt">y =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">1e5</span>),</a>
+<a class="sourceLine" id="cb2-13" title="13">   <span class="dt">grp =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(1L<span class="op">:</span>5L, <span class="fl">1e5</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb2-14" title="14">   <span class="dt">nested1 =</span> <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, sample, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb2-15" title="15">   <span class="dt">nested2 =</span> <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"thing1"</span>, <span class="st">"thing2"</span>), sample, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb2-16" title="16">   <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="fl">1e5</span>)</a></code></pre></div>
 <p>To make all the comparisons herein more equal, we will set the number of threads that <code>data.table</code> will use to 1.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/openmp-utils.html">setDTthreads</a></span>(<span class="dv">1</span>)</a></code></pre></div>
 <p>We can nest this data using <code><a href="reference/dt_nest.html">dt_nest()</a></code>:</p>
@@ -151,259 +165,373 @@
 <a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt;    grp         data</span></a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; 1:   1 &lt;data.table&gt;</span></a>
 <a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; 2:   2 &lt;data.table&gt;</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; 3:   3 &lt;data.table&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; 3:   3 &lt;data.table&gt;</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; 4:   4 &lt;data.table&gt;</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt; 5:   5 &lt;data.table&gt;</span></a></code></pre></div>
 <p>We can also unnest this with <code><a href="reference/dt_unnest.html">dt_unnest()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/dt_unnest.html">dt_unnest</a></span>(nested, <span class="dt">col =</span> data, <span class="dt">by =</span> grp)</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt;         by          x          y         nested1</span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt;      1:  1  0.1624127 0.11793103 2,3,5,9,1,3,...</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt;      2:  1 -0.8749771 0.01200319 6,2,4,8,7,6,...</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt;      3:  1 -1.2709261 0.99871440 2,3,5,9,1,3,...</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt;      4:  1  0.6252182 0.08392742 4,1,2,5,4,2,...</span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt;      5:  1 -0.4269078 0.46730652 5,5,4,2,5,2,...</span></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt;     ---                                         </span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt;  99996:  3 -1.3785841 0.65154073 1,1,1,1,1,1,...</span></a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt;  99997:  3  1.7506497 0.35086904 1,3,1,3,1,3,...</span></a>
-<a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt;  99998:  3  1.7920949 0.57767072 2,4,2,2,3,4,...</span></a>
-<a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt;  99999:  3  1.3958509 0.20316446 5,5,4,2,5,2,...</span></a>
-<a class="sourceLine" id="cb5-13" title="13"><span class="co">#&gt; 100000:  3  0.4617428 0.64128894 2,8,2,4,6,6,...</span></a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/dt_unnest.html">dt_unnest</a></span>(nested, <span class="dt">col =</span> data)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt;         grp          x           y               nested1</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt;      1:   1 -1.1813164 0.004599736       2,2,1,2,1,1,...</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt;      2:   1 -1.0384420 0.853208540       2,8,4,6,7,7,...</span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt;      3:   1 -0.6247028 0.072652533       4,2,2,1,1,1,...</span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt;      4:   1 -1.3651514 0.569079215       1,1,1,3,6,2,...</span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt;      5:   1  0.1403744 0.864617284 10, 1, 1, 1, 8, 1,...</span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt;     ---                                                 </span></a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt;  99996:   5 -0.3437795 0.995197776       2,1,2,2,2,1,...</span></a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt;  99997:   5  1.6157744 0.241735719 10, 1, 1, 1, 8, 1,...</span></a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt;  99998:   5 -0.1321246 0.885283934       2,3,3,2,2,4,...</span></a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt;  99999:   5 -1.7019715 0.524621296       5,4,3,3,3,2,...</span></a>
+<a class="sourceLine" id="cb5-13" title="13"><span class="co">#&gt; 100000:   5  0.3821493 0.032851280       2,8,4,6,7,7,...</span></a>
 <a class="sourceLine" id="cb5-14" title="14"><span class="co">#&gt;                                               nested2    id</span></a>
-<a class="sourceLine" id="cb5-15" title="15"><span class="co">#&gt;      1: thing2,thing2,thing2,thing2,thing2,thing2,...    10</span></a>
-<a class="sourceLine" id="cb5-16" title="16"><span class="co">#&gt;      2: thing2,thing2,thing2,thing2,thing2,thing2,...    18</span></a>
-<a class="sourceLine" id="cb5-17" title="17"><span class="co">#&gt;      3: thing2,thing2,thing2,thing2,thing2,thing2,...    20</span></a>
-<a class="sourceLine" id="cb5-18" title="18"><span class="co">#&gt;      4: thing1,thing1,thing1,thing1,thing1,thing1,...    25</span></a>
-<a class="sourceLine" id="cb5-19" title="19"><span class="co">#&gt;      5: thing1,thing1,thing1,thing1,thing1,thing1,...    27</span></a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="co">#&gt;      1: thing2,thing2,thing2,thing2,thing2,thing2,...     2</span></a>
+<a class="sourceLine" id="cb5-16" title="16"><span class="co">#&gt;      2: thing2,thing2,thing2,thing2,thing2,thing2,...     8</span></a>
+<a class="sourceLine" id="cb5-17" title="17"><span class="co">#&gt;      3: thing1,thing1,thing1,thing1,thing1,thing1,...    15</span></a>
+<a class="sourceLine" id="cb5-18" title="18"><span class="co">#&gt;      4: thing1,thing1,thing1,thing1,thing1,thing1,...    17</span></a>
+<a class="sourceLine" id="cb5-19" title="19"><span class="co">#&gt;      5: thing2,thing2,thing2,thing2,thing2,thing2,...    20</span></a>
 <a class="sourceLine" id="cb5-20" title="20"><span class="co">#&gt;     ---                                                    </span></a>
-<a class="sourceLine" id="cb5-21" title="21"><span class="co">#&gt;  99996: thing1,thing1,thing1,thing1,thing1,thing1,... 99991</span></a>
-<a class="sourceLine" id="cb5-22" title="22"><span class="co">#&gt;  99997: thing1,thing1,thing1,thing1,thing1,thing1,... 99993</span></a>
+<a class="sourceLine" id="cb5-21" title="21"><span class="co">#&gt;  99996: thing1,thing1,thing1,thing1,thing1,thing1,... 99983</span></a>
+<a class="sourceLine" id="cb5-22" title="22"><span class="co">#&gt;  99997: thing2,thing2,thing2,thing2,thing2,thing2,... 99990</span></a>
 <a class="sourceLine" id="cb5-23" title="23"><span class="co">#&gt;  99998: thing2,thing2,thing2,thing2,thing2,thing2,... 99994</span></a>
-<a class="sourceLine" id="cb5-24" title="24"><span class="co">#&gt;  99999: thing1,thing1,thing1,thing1,thing1,thing1,... 99997</span></a>
-<a class="sourceLine" id="cb5-25" title="25"><span class="co">#&gt; 100000: thing1,thing1,thing1,thing1,thing1,thing1,... 99999</span></a></code></pre></div>
-<p>When our list columns don’t have data tables (as output from <code><a href="reference/dt_nest.html">dt_nest()</a></code>) we can use the <code><a href="https://rdrr.io/pkg/tidyfast/man/dt_hoist.html">dt_unnest_vec()</a></code> function, that will unnest vectors.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="reference/dt_hoist.html">dt_hoist</a></span>(dt, </a>
-<a class="sourceLine" id="cb6-2" title="2">         nested1, nested2, </a>
-<a class="sourceLine" id="cb6-3" title="3">         <span class="dt">by =</span> id)</a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;              id nested1 nested2</span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;       1:      1       1  thing1</span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;       2:      1       1  thing1</span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;       3:      1       1  thing1</span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;       4:      1       1  thing1</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;       5:      1       1  thing1</span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;      ---                       </span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;  999996: 100000       3  thing2</span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  999997: 100000       5  thing2</span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  999998: 100000       8  thing2</span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;  999999: 100000       7  thing2</span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; 1000000: 100000       6  thing2</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-24" title="24"><span class="co">#&gt;  99999: thing2,thing2,thing2,thing2,thing2,thing2,... 99996</span></a>
+<a class="sourceLine" id="cb5-25" title="25"><span class="co">#&gt; 100000: thing2,thing2,thing2,thing2,thing2,thing2,... 99998</span></a></code></pre></div>
+<p>When our list columns don’t have data tables (as output from <code><a href="reference/dt_nest.html">dt_nest()</a></code>) we can use the <code><a href="reference/dt_hoist.html">dt_hoist()</a></code> function, that will unnest vectors. It keeps all the other variables that are not list-columns as well.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="reference/dt_hoist.html">dt_hoist</a></span>(dt, nested1, nested2)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt; The following columns were dropped because they are list-columns (but not being hoisted): nested1, nested2</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;                  x         y grp     id nested1 nested2</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;       1: 0.1720703 0.3376675   2      1       1  thing1</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;       2: 0.1720703 0.3376675   2      1       1  thing1</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;       3: 0.1720703 0.3376675   2      1       1  thing1</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;       4: 0.1720703 0.3376675   2      1       1  thing1</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;       5: 0.1720703 0.3376675   2      1       1  thing1</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;      ---                                               </span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  999996: 0.6268181 0.7851774   1 100000       1  thing2</span></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;  999997: 0.6268181 0.7851774   1 100000       5  thing2</span></a>
+<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  999998: 0.6268181 0.7851774   1 100000       7  thing2</span></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  999999: 0.6268181 0.7851774   1 100000       6  thing2</span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt; 1000000: 0.6268181 0.7851774   1 100000       7  thing2</span></a></code></pre></div>
+<p>Speed comparisons (similar to those shown in the preprint) are highlighted below. Notably, the timings are without the <code>nested1</code> and <code>nested2</code> columns of the original <code>dt</code> object from above. Also, all <code>dplyr</code> and <code>tidyr</code> functions use a <code>tbl</code> version of the <code>dt</code> table.</p>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="70%"></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt;   expression   median mem_alloc</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt;   &lt;chr&gt;      &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; 1 dt_nest      3.38ms    2.88MB</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; 2 group_nest   5.03ms    2.54MB</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt;   expression   median mem_alloc</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt;   &lt;chr&gt;      &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; 1 dt_unnest    4.83ms    5.49MB</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; 2 unnest       12.7ms    8.47MB</span></a></code></pre></div>
 </div>
 <div id="if-else" class="section level3">
 <h3 class="hasAnchor">
 <a href="#if-else" class="anchor"></a>If Else</h3>
 <p>Also, the new <code><a href="reference/dt_case_when.html">dt_case_when()</a></code> function is built on the very fast <code>data.table::fiflese()</code> but has syntax like unto <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">dplyr::case_when()</a></code>. That is, it looks like:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="reference/dt_case_when.html">dt_case_when</a></span>(condition1 <span class="op">~</span><span class="st"> </span>label1,</a>
-<a class="sourceLine" id="cb7-2" title="2">             condition2 <span class="op">~</span><span class="st"> </span>label2,</a>
-<a class="sourceLine" id="cb7-3" title="3">             ...)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="reference/dt_case_when.html">dt_case_when</a></span>(condition1 <span class="op">~</span><span class="st"> </span>label1,</a>
+<a class="sourceLine" id="cb8-2" title="2">             condition2 <span class="op">~</span><span class="st"> </span>label2,</a>
+<a class="sourceLine" id="cb8-3" title="3">             ...)</a></code></pre></div>
 <p>To show that each method, <code><a href="reference/dt_case_when.html">dt_case_when()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/case_when.html">dplyr::case_when()</a></code>, and <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">data.table::fifelse()</a></code> produce the same result, consider the following example.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">1e6</span>)</a>
-<a class="sourceLine" id="cb8-2" title="2"></a>
-<a class="sourceLine" id="cb8-3" title="3">medianx &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(x)</a>
-<a class="sourceLine" id="cb8-4" title="4">x_cat &lt;-</a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="st">  </span><span class="kw"><a href="reference/dt_case_when.html">dt_case_when</a></span>(x <span class="op">&lt;</span><span class="st"> </span>medianx <span class="op">~</span><span class="st"> "low"</span>,</a>
-<a class="sourceLine" id="cb8-6" title="6">               x <span class="op">&gt;=</span><span class="st"> </span>medianx <span class="op">~</span><span class="st"> "high"</span>,</a>
-<a class="sourceLine" id="cb8-7" title="7">               <span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(x) <span class="op">~</span><span class="st"> "unknown"</span>)</a>
-<a class="sourceLine" id="cb8-8" title="8">x_cat_dplyr &lt;-</a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(x <span class="op">&lt;</span><span class="st"> </span>medianx <span class="op">~</span><span class="st"> "low"</span>,</a>
-<a class="sourceLine" id="cb8-10" title="10">            x <span class="op">&gt;=</span><span class="st"> </span>medianx <span class="op">~</span><span class="st"> "high"</span>,</a>
-<a class="sourceLine" id="cb8-11" title="11">            <span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(x) <span class="op">~</span><span class="st"> "unknown"</span>)</a>
-<a class="sourceLine" id="cb8-12" title="12">x_cat_fif &lt;-</a>
-<a class="sourceLine" id="cb8-13" title="13"><span class="st">  </span><span class="kw"><a href="reference/fifelse.html">fifelse</a></span>(x <span class="op">&lt;</span><span class="st"> </span>medianx, <span class="st">"low"</span>,</a>
-<a class="sourceLine" id="cb8-14" title="14">  <span class="kw"><a href="reference/fifelse.html">fifelse</a></span>(x <span class="op">&gt;=</span><span class="st"> </span>medianx, <span class="st">"high"</span>,</a>
-<a class="sourceLine" id="cb8-15" title="15">  <span class="kw"><a href="reference/fifelse.html">fifelse</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(x), <span class="st">"unknown"</span>, <span class="ot">NA_character_</span>)))</a>
-<a class="sourceLine" id="cb8-16" title="16"></a>
-<a class="sourceLine" id="cb8-17" title="17"><span class="kw"><a href="https://rdrr.io/r/base/identical.html">identical</a></span>(x_cat, x_cat_dplyr)</a>
-<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb8-19" title="19"><span class="kw"><a href="https://rdrr.io/r/base/identical.html">identical</a></span>(x_cat, x_cat_fif)</a>
-<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">1e6</span>)</a>
+<a class="sourceLine" id="cb9-2" title="2"></a>
+<a class="sourceLine" id="cb9-3" title="3">medianx &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(x)</a>
+<a class="sourceLine" id="cb9-4" title="4">x_cat &lt;-</a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="st">  </span><span class="kw"><a href="reference/dt_case_when.html">dt_case_when</a></span>(x <span class="op">&lt;</span><span class="st"> </span>medianx <span class="op">~</span><span class="st"> "low"</span>,</a>
+<a class="sourceLine" id="cb9-6" title="6">               x <span class="op">&gt;=</span><span class="st"> </span>medianx <span class="op">~</span><span class="st"> "high"</span>,</a>
+<a class="sourceLine" id="cb9-7" title="7">               <span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(x) <span class="op">~</span><span class="st"> "unknown"</span>)</a>
+<a class="sourceLine" id="cb9-8" title="8">x_cat_dplyr &lt;-</a>
+<a class="sourceLine" id="cb9-9" title="9"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(x <span class="op">&lt;</span><span class="st"> </span>medianx <span class="op">~</span><span class="st"> "low"</span>,</a>
+<a class="sourceLine" id="cb9-10" title="10">            x <span class="op">&gt;=</span><span class="st"> </span>medianx <span class="op">~</span><span class="st"> "high"</span>,</a>
+<a class="sourceLine" id="cb9-11" title="11">            <span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(x) <span class="op">~</span><span class="st"> "unknown"</span>)</a>
+<a class="sourceLine" id="cb9-12" title="12">x_cat_fif &lt;-</a>
+<a class="sourceLine" id="cb9-13" title="13"><span class="st">  </span><span class="kw"><a href="reference/fifelse.html">fifelse</a></span>(x <span class="op">&lt;</span><span class="st"> </span>medianx, <span class="st">"low"</span>,</a>
+<a class="sourceLine" id="cb9-14" title="14">  <span class="kw"><a href="reference/fifelse.html">fifelse</a></span>(x <span class="op">&gt;=</span><span class="st"> </span>medianx, <span class="st">"high"</span>,</a>
+<a class="sourceLine" id="cb9-15" title="15">  <span class="kw"><a href="reference/fifelse.html">fifelse</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(x), <span class="st">"unknown"</span>, <span class="ot">NA_character_</span>)))</a>
+<a class="sourceLine" id="cb9-16" title="16"></a>
+<a class="sourceLine" id="cb9-17" title="17"><span class="kw"><a href="https://rdrr.io/r/base/identical.html">identical</a></span>(x_cat, x_cat_dplyr)</a>
+<a class="sourceLine" id="cb9-18" title="18"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb9-19" title="19"><span class="kw"><a href="https://rdrr.io/r/base/identical.html">identical</a></span>(x_cat, x_cat_fif)</a>
+<a class="sourceLine" id="cb9-20" title="20"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 <p>Notably, <code><a href="reference/dt_case_when.html">dt_case_when()</a></code> is very fast and memory efficient, given it is built on <code><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">data.table::fifelse()</a></code>.</p>
-<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="70%"></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co">#&gt; # A tibble: 3 x 3</span></a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="co">#&gt;   expression     median mem_alloc</span></a>
-<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt;   &lt;chr&gt;        &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt; 1 case_when       121ms   148.8MB</span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt; 2 dt_case_when     35ms    34.3MB</span></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt; 3 fifelse        31.4ms    34.3MB</span></a></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="70%"></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co">#&gt; # A tibble: 3 x 3</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="co">#&gt;   expression     median mem_alloc</span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="co">#&gt;   &lt;chr&gt;        &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co">#&gt; 1 case_when     131.3ms   148.8MB</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="co">#&gt; 2 dt_case_when     36ms    34.3MB</span></a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt; 3 fifelse        35.9ms    34.3MB</span></a></code></pre></div>
 </div>
 </div>
 <div id="fill" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fill" class="anchor"></a>Fill</h2>
 <p>A new function is <code><a href="reference/dt_fill.html">dt_fill()</a></code>, which fulfills the role of <code><a href="https://tidyr.tidyverse.org/reference/fill.html">tidyr::fill()</a></code> to fill in <code>NA</code> values with values around it (either the value above, below, or trying both). This currently relies on the efficient <code>C++</code> code from <code>tidyr</code> (<code>fillUp()</code> and <code>fillDown()</code>).</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">x =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span></a>
-<a class="sourceLine" id="cb10-2" title="2">dt_with_nas &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(</a>
-<a class="sourceLine" id="cb10-3" title="3">  <span class="dt">x =</span> x,</a>
-<a class="sourceLine" id="cb10-4" title="4">  <span class="dt">y =</span> <span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html">shift</a></span>(x, 2L),</a>
-<a class="sourceLine" id="cb10-5" title="5">  <span class="dt">z =</span> <span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html">shift</a></span>(x, <span class="op">-</span>2L),</a>
-<a class="sourceLine" id="cb10-6" title="6">  <span class="dt">a =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="ot">NA</span>, <span class="dv">10</span>), x), <span class="dv">10</span>),</a>
-<a class="sourceLine" id="cb10-7" title="7">  <span class="dt">id =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb10-8" title="8"></a>
-<a class="sourceLine" id="cb10-9" title="9"><span class="co"># Original</span></a>
-<a class="sourceLine" id="cb10-10" title="10">dt_with_nas</a>
-<a class="sourceLine" id="cb10-11" title="11"><span class="co">#&gt;      x  y  z  a id</span></a>
-<a class="sourceLine" id="cb10-12" title="12"><span class="co">#&gt;  1:  1 NA  3 NA  2</span></a>
-<a class="sourceLine" id="cb10-13" title="13"><span class="co">#&gt;  2:  2 NA  4  2  1</span></a>
-<a class="sourceLine" id="cb10-14" title="14"><span class="co">#&gt;  3:  3  1  5  7  3</span></a>
-<a class="sourceLine" id="cb10-15" title="15"><span class="co">#&gt;  4:  4  2  6  4  3</span></a>
-<a class="sourceLine" id="cb10-16" title="16"><span class="co">#&gt;  5:  5  3  7  3  3</span></a>
-<a class="sourceLine" id="cb10-17" title="17"><span class="co">#&gt;  6:  6  4  8  5  2</span></a>
-<a class="sourceLine" id="cb10-18" title="18"><span class="co">#&gt;  7:  7  5  9  9  1</span></a>
-<a class="sourceLine" id="cb10-19" title="19"><span class="co">#&gt;  8:  8  6 10 NA  1</span></a>
-<a class="sourceLine" id="cb10-20" title="20"><span class="co">#&gt;  9:  9  7 NA NA  2</span></a>
-<a class="sourceLine" id="cb10-21" title="21"><span class="co">#&gt; 10: 10  8 NA NA  3</span></a>
-<a class="sourceLine" id="cb10-22" title="22"></a>
-<a class="sourceLine" id="cb10-23" title="23"><span class="co"># All defaults</span></a>
-<a class="sourceLine" id="cb10-24" title="24"><span class="kw"><a href="reference/dt_fill.html">dt_fill</a></span>(dt_with_nas, y, z, a)</a>
-<a class="sourceLine" id="cb10-25" title="25"><span class="co">#&gt;      y  z  a</span></a>
-<a class="sourceLine" id="cb10-26" title="26"><span class="co">#&gt;  1: NA  3 NA</span></a>
-<a class="sourceLine" id="cb10-27" title="27"><span class="co">#&gt;  2: NA  4  2</span></a>
-<a class="sourceLine" id="cb10-28" title="28"><span class="co">#&gt;  3:  1  5  7</span></a>
-<a class="sourceLine" id="cb10-29" title="29"><span class="co">#&gt;  4:  2  6  4</span></a>
-<a class="sourceLine" id="cb10-30" title="30"><span class="co">#&gt;  5:  3  7  3</span></a>
-<a class="sourceLine" id="cb10-31" title="31"><span class="co">#&gt;  6:  4  8  5</span></a>
-<a class="sourceLine" id="cb10-32" title="32"><span class="co">#&gt;  7:  5  9  9</span></a>
-<a class="sourceLine" id="cb10-33" title="33"><span class="co">#&gt;  8:  6 10  9</span></a>
-<a class="sourceLine" id="cb10-34" title="34"><span class="co">#&gt;  9:  7 10  9</span></a>
-<a class="sourceLine" id="cb10-35" title="35"><span class="co">#&gt; 10:  8 10  9</span></a>
-<a class="sourceLine" id="cb10-36" title="36"></a>
-<a class="sourceLine" id="cb10-37" title="37"><span class="co"># by id variable called `grp`</span></a>
-<a class="sourceLine" id="cb10-38" title="38"><span class="kw"><a href="reference/dt_fill.html">dt_fill</a></span>(dt_with_nas, </a>
-<a class="sourceLine" id="cb10-39" title="39">        y, z, a, </a>
-<a class="sourceLine" id="cb10-40" title="40">        <span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(id))</a>
-<a class="sourceLine" id="cb10-41" title="41"><span class="co">#&gt;     id  y  z  a</span></a>
-<a class="sourceLine" id="cb10-42" title="42"><span class="co">#&gt;  1:  2 NA  3 NA</span></a>
-<a class="sourceLine" id="cb10-43" title="43"><span class="co">#&gt;  2:  2  4  8  5</span></a>
-<a class="sourceLine" id="cb10-44" title="44"><span class="co">#&gt;  3:  2  7  8  5</span></a>
-<a class="sourceLine" id="cb10-45" title="45"><span class="co">#&gt;  4:  1 NA  4  2</span></a>
-<a class="sourceLine" id="cb10-46" title="46"><span class="co">#&gt;  5:  1  5  9  9</span></a>
-<a class="sourceLine" id="cb10-47" title="47"><span class="co">#&gt;  6:  1  6 10  9</span></a>
-<a class="sourceLine" id="cb10-48" title="48"><span class="co">#&gt;  7:  3  1  5  7</span></a>
-<a class="sourceLine" id="cb10-49" title="49"><span class="co">#&gt;  8:  3  2  6  4</span></a>
-<a class="sourceLine" id="cb10-50" title="50"><span class="co">#&gt;  9:  3  3  7  3</span></a>
-<a class="sourceLine" id="cb10-51" title="51"><span class="co">#&gt; 10:  3  8  7  3</span></a>
-<a class="sourceLine" id="cb10-52" title="52"></a>
-<a class="sourceLine" id="cb10-53" title="53"><span class="co"># both down and then up filling by group</span></a>
-<a class="sourceLine" id="cb10-54" title="54"><span class="kw"><a href="reference/dt_fill.html">dt_fill</a></span>(dt_with_nas, </a>
-<a class="sourceLine" id="cb10-55" title="55">        y, z, a, </a>
-<a class="sourceLine" id="cb10-56" title="56">        <span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(id), </a>
-<a class="sourceLine" id="cb10-57" title="57">        <span class="dt">.direction =</span> <span class="st">"downup"</span>)</a>
-<a class="sourceLine" id="cb10-58" title="58"><span class="co">#&gt;     id y  z a</span></a>
-<a class="sourceLine" id="cb10-59" title="59"><span class="co">#&gt;  1:  2 4  3 5</span></a>
-<a class="sourceLine" id="cb10-60" title="60"><span class="co">#&gt;  2:  2 4  8 5</span></a>
-<a class="sourceLine" id="cb10-61" title="61"><span class="co">#&gt;  3:  2 7  8 5</span></a>
-<a class="sourceLine" id="cb10-62" title="62"><span class="co">#&gt;  4:  1 5  4 2</span></a>
-<a class="sourceLine" id="cb10-63" title="63"><span class="co">#&gt;  5:  1 5  9 9</span></a>
-<a class="sourceLine" id="cb10-64" title="64"><span class="co">#&gt;  6:  1 6 10 9</span></a>
-<a class="sourceLine" id="cb10-65" title="65"><span class="co">#&gt;  7:  3 1  5 7</span></a>
-<a class="sourceLine" id="cb10-66" title="66"><span class="co">#&gt;  8:  3 2  6 4</span></a>
-<a class="sourceLine" id="cb10-67" title="67"><span class="co">#&gt;  9:  3 3  7 3</span></a>
-<a class="sourceLine" id="cb10-68" title="68"><span class="co">#&gt; 10:  3 8  7 3</span></a></code></pre></div>
-<p>In its current form, <code><a href="reference/dt_fill.html">dt_fill()</a></code> is faster than <code><a href="https://tidyr.tidyverse.org/reference/fill.html">tidyr::fill()</a></code> and uses slightly less memory. Below are the results of filling in the <code>NA</code>s within each <code>id</code> on a 19 MB data set.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">x =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="fl">1e6</span></a>
-<a class="sourceLine" id="cb11-2" title="2">dt3 &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(</a>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">x =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb11-2" title="2">dt_with_nas &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(</a>
 <a class="sourceLine" id="cb11-3" title="3">  <span class="dt">x =</span> x,</a>
-<a class="sourceLine" id="cb11-4" title="4">  <span class="dt">y =</span> <span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html">shift</a></span>(x, 10L),</a>
-<a class="sourceLine" id="cb11-5" title="5">  <span class="dt">z =</span> <span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html">shift</a></span>(x, <span class="op">-</span>10L),</a>
+<a class="sourceLine" id="cb11-4" title="4">  <span class="dt">y =</span> <span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html">shift</a></span>(x, 2L),</a>
+<a class="sourceLine" id="cb11-5" title="5">  <span class="dt">z =</span> <span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html">shift</a></span>(x, <span class="op">-</span>2L),</a>
 <a class="sourceLine" id="cb11-6" title="6">  <span class="dt">a =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="ot">NA</span>, <span class="dv">10</span>), x), <span class="dv">10</span>),</a>
 <a class="sourceLine" id="cb11-7" title="7">  <span class="dt">id =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb11-8" title="8">df3 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(dt3)</a>
-<a class="sourceLine" id="cb11-9" title="9"></a>
-<a class="sourceLine" id="cb11-10" title="10">marks3 &lt;-</a>
-<a class="sourceLine" id="cb11-11" title="11"><span class="st">  </span>bench<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(</a>
-<a class="sourceLine" id="cb11-12" title="12">    tidyr<span class="op">::</span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/fill.html">fill</a></span>(dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(df3, id), x, y),</a>
-<a class="sourceLine" id="cb11-13" title="13">    tidyfast<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tidyfast/man/dt_fill.html">dt_fill</a></span>(dt3, x, y, <span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(id)),</a>
-<a class="sourceLine" id="cb11-14" title="14">    <span class="dt">check =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb11-15" title="15">    <span class="dt">iterations =</span> <span class="dv">50</span></a>
-<a class="sourceLine" id="cb11-16" title="16">  )</a></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="70%"></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
-<a class="sourceLine" id="cb12-2" title="2"><span class="co">#&gt;   expression                                    median mem_alloc</span></a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt;   &lt;bch:expr&gt;                                  &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.5ms    30.9MB</span></a>
-<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.9ms    29.1MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-8" title="8"></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="co"># Original</span></a>
+<a class="sourceLine" id="cb11-10" title="10">dt_with_nas</a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt;      x  y  z  a id</span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt;  1:  1 NA  3 NA  3</span></a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt;  2:  2 NA  4  9  3</span></a>
+<a class="sourceLine" id="cb11-14" title="14"><span class="co">#&gt;  3:  3  1  5 NA  1</span></a>
+<a class="sourceLine" id="cb11-15" title="15"><span class="co">#&gt;  4:  4  2  6  8  3</span></a>
+<a class="sourceLine" id="cb11-16" title="16"><span class="co">#&gt;  5:  5  3  7 NA  2</span></a>
+<a class="sourceLine" id="cb11-17" title="17"><span class="co">#&gt;  6:  6  4  8 NA  2</span></a>
+<a class="sourceLine" id="cb11-18" title="18"><span class="co">#&gt;  7:  7  5  9  7  3</span></a>
+<a class="sourceLine" id="cb11-19" title="19"><span class="co">#&gt;  8:  8  6 10 NA  2</span></a>
+<a class="sourceLine" id="cb11-20" title="20"><span class="co">#&gt;  9:  9  7 NA NA  2</span></a>
+<a class="sourceLine" id="cb11-21" title="21"><span class="co">#&gt; 10: 10  8 NA  4  2</span></a>
+<a class="sourceLine" id="cb11-22" title="22"></a>
+<a class="sourceLine" id="cb11-23" title="23"><span class="co"># All defaults</span></a>
+<a class="sourceLine" id="cb11-24" title="24"><span class="kw"><a href="reference/dt_fill.html">dt_fill</a></span>(dt_with_nas, y, z, a)</a>
+<a class="sourceLine" id="cb11-25" title="25"><span class="co">#&gt;      y  z  a</span></a>
+<a class="sourceLine" id="cb11-26" title="26"><span class="co">#&gt;  1: NA  3 NA</span></a>
+<a class="sourceLine" id="cb11-27" title="27"><span class="co">#&gt;  2: NA  4  9</span></a>
+<a class="sourceLine" id="cb11-28" title="28"><span class="co">#&gt;  3:  1  5  9</span></a>
+<a class="sourceLine" id="cb11-29" title="29"><span class="co">#&gt;  4:  2  6  8</span></a>
+<a class="sourceLine" id="cb11-30" title="30"><span class="co">#&gt;  5:  3  7  8</span></a>
+<a class="sourceLine" id="cb11-31" title="31"><span class="co">#&gt;  6:  4  8  8</span></a>
+<a class="sourceLine" id="cb11-32" title="32"><span class="co">#&gt;  7:  5  9  7</span></a>
+<a class="sourceLine" id="cb11-33" title="33"><span class="co">#&gt;  8:  6 10  7</span></a>
+<a class="sourceLine" id="cb11-34" title="34"><span class="co">#&gt;  9:  7 10  7</span></a>
+<a class="sourceLine" id="cb11-35" title="35"><span class="co">#&gt; 10:  8 10  4</span></a>
+<a class="sourceLine" id="cb11-36" title="36"></a>
+<a class="sourceLine" id="cb11-37" title="37"><span class="co"># by id variable called `grp`</span></a>
+<a class="sourceLine" id="cb11-38" title="38"><span class="kw"><a href="reference/dt_fill.html">dt_fill</a></span>(dt_with_nas, </a>
+<a class="sourceLine" id="cb11-39" title="39">        y, z, a, </a>
+<a class="sourceLine" id="cb11-40" title="40">        <span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(id))</a>
+<a class="sourceLine" id="cb11-41" title="41"><span class="co">#&gt;     id  y  z  a</span></a>
+<a class="sourceLine" id="cb11-42" title="42"><span class="co">#&gt;  1:  3 NA  3 NA</span></a>
+<a class="sourceLine" id="cb11-43" title="43"><span class="co">#&gt;  2:  3 NA  4  9</span></a>
+<a class="sourceLine" id="cb11-44" title="44"><span class="co">#&gt;  3:  3  2  6  8</span></a>
+<a class="sourceLine" id="cb11-45" title="45"><span class="co">#&gt;  4:  3  5  9  7</span></a>
+<a class="sourceLine" id="cb11-46" title="46"><span class="co">#&gt;  5:  1  1  5 NA</span></a>
+<a class="sourceLine" id="cb11-47" title="47"><span class="co">#&gt;  6:  2  3  7 NA</span></a>
+<a class="sourceLine" id="cb11-48" title="48"><span class="co">#&gt;  7:  2  4  8 NA</span></a>
+<a class="sourceLine" id="cb11-49" title="49"><span class="co">#&gt;  8:  2  6 10 NA</span></a>
+<a class="sourceLine" id="cb11-50" title="50"><span class="co">#&gt;  9:  2  7 10 NA</span></a>
+<a class="sourceLine" id="cb11-51" title="51"><span class="co">#&gt; 10:  2  8 10  4</span></a>
+<a class="sourceLine" id="cb11-52" title="52"></a>
+<a class="sourceLine" id="cb11-53" title="53"><span class="co"># both down and then up filling by group</span></a>
+<a class="sourceLine" id="cb11-54" title="54"><span class="kw"><a href="reference/dt_fill.html">dt_fill</a></span>(dt_with_nas, </a>
+<a class="sourceLine" id="cb11-55" title="55">        y, z, a, </a>
+<a class="sourceLine" id="cb11-56" title="56">        <span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(id), </a>
+<a class="sourceLine" id="cb11-57" title="57">        <span class="dt">.direction =</span> <span class="st">"downup"</span>)</a>
+<a class="sourceLine" id="cb11-58" title="58"><span class="co">#&gt;     id y  z  a</span></a>
+<a class="sourceLine" id="cb11-59" title="59"><span class="co">#&gt;  1:  3 2  3  9</span></a>
+<a class="sourceLine" id="cb11-60" title="60"><span class="co">#&gt;  2:  3 2  4  9</span></a>
+<a class="sourceLine" id="cb11-61" title="61"><span class="co">#&gt;  3:  3 2  6  8</span></a>
+<a class="sourceLine" id="cb11-62" title="62"><span class="co">#&gt;  4:  3 5  9  7</span></a>
+<a class="sourceLine" id="cb11-63" title="63"><span class="co">#&gt;  5:  1 1  5 NA</span></a>
+<a class="sourceLine" id="cb11-64" title="64"><span class="co">#&gt;  6:  2 3  7  4</span></a>
+<a class="sourceLine" id="cb11-65" title="65"><span class="co">#&gt;  7:  2 4  8  4</span></a>
+<a class="sourceLine" id="cb11-66" title="66"><span class="co">#&gt;  8:  2 6 10  4</span></a>
+<a class="sourceLine" id="cb11-67" title="67"><span class="co">#&gt;  9:  2 7 10  4</span></a>
+<a class="sourceLine" id="cb11-68" title="68"><span class="co">#&gt; 10:  2 8 10  4</span></a></code></pre></div>
+<p>In its current form, <code><a href="reference/dt_fill.html">dt_fill()</a></code> is faster than <code><a href="https://tidyr.tidyverse.org/reference/fill.html">tidyr::fill()</a></code> and uses slightly less memory. Below are the results of filling in the <code>NA</code>s within each <code>id</code> on a 19 MB data set.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">x =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="fl">1e6</span></a>
+<a class="sourceLine" id="cb12-2" title="2">dt3 &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(</a>
+<a class="sourceLine" id="cb12-3" title="3">  <span class="dt">x =</span> x,</a>
+<a class="sourceLine" id="cb12-4" title="4">  <span class="dt">y =</span> <span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html">shift</a></span>(x, 10L),</a>
+<a class="sourceLine" id="cb12-5" title="5">  <span class="dt">z =</span> <span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html">shift</a></span>(x, <span class="op">-</span>10L),</a>
+<a class="sourceLine" id="cb12-6" title="6">  <span class="dt">a =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="ot">NA</span>, <span class="dv">10</span>), x), <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb12-7" title="7">  <span class="dt">id =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb12-8" title="8">df3 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(dt3)</a>
+<a class="sourceLine" id="cb12-9" title="9"></a>
+<a class="sourceLine" id="cb12-10" title="10">marks3 &lt;-</a>
+<a class="sourceLine" id="cb12-11" title="11"><span class="st">  </span>bench<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(</a>
+<a class="sourceLine" id="cb12-12" title="12">    tidyr<span class="op">::</span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/fill.html">fill</a></span>(dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(df3, id), x, y),</a>
+<a class="sourceLine" id="cb12-13" title="13">    tidyfast<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tidyfast/man/dt_fill.html">dt_fill</a></span>(dt3, x, y, <span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(id)),</a>
+<a class="sourceLine" id="cb12-14" title="14">    <span class="dt">check =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb12-15" title="15">    <span class="dt">iterations =</span> <span class="dv">50</span></a>
+<a class="sourceLine" id="cb12-16" title="16">  )</a></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="70%"></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="co">#&gt;   expression                                    median mem_alloc</span></a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="co">#&gt;   &lt;bch:expr&gt;                                  &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co">#&gt; 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.4ms    30.7MB</span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="co">#&gt; 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.7ms    29.1MB</span></a></code></pre></div>
 </div>
 <div id="separate" class="section level2">
 <h2 class="hasAnchor">
 <a href="#separate" class="anchor"></a>Separate</h2>
 <p>The <code><a href="reference/dt_separate.html">dt_separate()</a></code> function is still under heavy development. Its behavior is similar to <code><a href="https://tidyr.tidyverse.org/reference/separate.html">tidyr::separate()</a></code> but is lacking some functionality currently. For example, <code>into</code> needs to be supplied the maximum number of possible columns to separate.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="reference/dt_separate.html">dt_separate</a></span>(<span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="dt">col =</span> <span class="st">"A.B.C"</span>), col, <span class="dt">into =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</a>
-<a class="sourceLine" id="cb13-2" title="2"><span class="co">#&gt; Error in `[.data.table`(dt, , eval(split_it)) : </span></a>
-<a class="sourceLine" id="cb13-3" title="3"><span class="co">#&gt;   Supplied 2 columns to be assigned 3 items. Please see NEWS for v1.12.2.</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="reference/dt_separate.html">dt_separate</a></span>(<span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="dt">col =</span> <span class="st">"A.B.C"</span>), col, <span class="dt">into =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="co">#&gt; Error in `[.data.table`(dt, , eval(split_it)) : </span></a>
+<a class="sourceLine" id="cb14-3" title="3"><span class="co">#&gt;   Supplied 2 columns to be assigned 3 items. Please see NEWS for v1.12.2.</span></a></code></pre></div>
 <p>For current functionality, consider the following example.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">dt_to_split &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(</a>
-<a class="sourceLine" id="cb14-2" title="2">  <span class="dt">x =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(letters, LETTERS, <span class="dt">sep =</span> <span class="st">"."</span>)</a>
-<a class="sourceLine" id="cb14-3" title="3">)</a>
-<a class="sourceLine" id="cb14-4" title="4"></a>
-<a class="sourceLine" id="cb14-5" title="5"><span class="kw"><a href="reference/dt_separate.html">dt_separate</a></span>(dt_to_split, x, <span class="dt">into =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"lower"</span>, <span class="st">"upper"</span>))</a></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co">#&gt;    lower upper</span></a>
-<a class="sourceLine" id="cb15-2" title="2"><span class="co">#&gt; 1:     a     A</span></a>
-<a class="sourceLine" id="cb15-3" title="3"><span class="co">#&gt; 2:     b     B</span></a>
-<a class="sourceLine" id="cb15-4" title="4"><span class="co">#&gt; 3:     c     C</span></a>
-<a class="sourceLine" id="cb15-5" title="5"><span class="co">#&gt; 4:     d     D</span></a>
-<a class="sourceLine" id="cb15-6" title="6"><span class="co">#&gt; 5:     e     E</span></a>
-<a class="sourceLine" id="cb15-7" title="7"><span class="co">#&gt; 6:     f     F</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">dt_to_split &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(</a>
+<a class="sourceLine" id="cb15-2" title="2">  <span class="dt">x =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(letters, LETTERS, <span class="dt">sep =</span> <span class="st">"."</span>)</a>
+<a class="sourceLine" id="cb15-3" title="3">)</a>
+<a class="sourceLine" id="cb15-4" title="4"></a>
+<a class="sourceLine" id="cb15-5" title="5"><span class="kw"><a href="reference/dt_separate.html">dt_separate</a></span>(dt_to_split, x, <span class="dt">into =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"lower"</span>, <span class="st">"upper"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co">#&gt;    lower upper</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="co">#&gt; 1:     a     A</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="co">#&gt; 2:     b     B</span></a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="co">#&gt; 3:     c     C</span></a>
+<a class="sourceLine" id="cb16-5" title="5"><span class="co">#&gt; 4:     d     D</span></a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="co">#&gt; 5:     e     E</span></a>
+<a class="sourceLine" id="cb16-7" title="7"><span class="co">#&gt; 6:     f     F</span></a></code></pre></div>
 <p>Testing with a 4 MB data set with one variable that has columns of “A.B” repeatedly, shows that <code><a href="reference/dt_separate.html">dt_separate()</a></code> is fast but less memory efficient than <code><a href="https://tidyr.tidyverse.org/reference/separate.html">tidyr::separate()</a></code>.</p>
-<p><img src="reference/figures/README-unnamed-chunk-17-1.png" width="70%"></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co">#&gt; # A tibble: 3 x 3</span></a>
-<a class="sourceLine" id="cb16-2" title="2"><span class="co">#&gt;   expression            median mem_alloc</span></a>
-<a class="sourceLine" id="cb16-3" title="3"><span class="co">#&gt;   &lt;chr&gt;               &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb16-4" title="4"><span class="co">#&gt; 1 separate               351ms    11.6MB</span></a>
-<a class="sourceLine" id="cb16-5" title="5"><span class="co">#&gt; 2 dt_separate            123ms    30.6MB</span></a>
-<a class="sourceLine" id="cb16-6" title="6"><span class="co">#&gt; 3 dt_separate-mutable    116ms    26.7MB</span></a></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-18-1.png" width="70%"></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="co">#&gt; # A tibble: 3 x 3</span></a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="co">#&gt;   expression            median mem_alloc</span></a>
+<a class="sourceLine" id="cb17-3" title="3"><span class="co">#&gt;   &lt;chr&gt;               &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
+<a class="sourceLine" id="cb17-4" title="4"><span class="co">#&gt; 1 separate               366ms    11.6MB</span></a>
+<a class="sourceLine" id="cb17-5" title="5"><span class="co">#&gt; 2 dt_separate            126ms    30.6MB</span></a>
+<a class="sourceLine" id="cb17-6" title="6"><span class="co">#&gt; 3 dt_separate-mutable    109ms    26.7MB</span></a></code></pre></div>
 </div>
 <div id="count-and-uncount" class="section level2">
 <h2 class="hasAnchor">
 <a href="#count-and-uncount" class="anchor"></a>Count and Uncount</h2>
 <p>The <code><a href="reference/dt_count.html">dt_count()</a></code> function does essentially what <code><a href="https://dplyr.tidyverse.org/reference/tally.html">dplyr::count()</a></code> does. Notably, this, unlike the majority of other <code>dt_</code> functions, wraps a very simple statement in <code>data.table</code>. That is, <code>data.table</code> makes getting counts very simple and concise. Nonetheless, <code><a href="reference/dt_count.html">dt_count()</a></code> fits the general API of <code>tidyfast</code>. To some degree, <code><a href="reference/dt_uncount.html">dt_uncount()</a></code> is also a fairly simple wrapper, although the approach may not be as straightforward as that for <code><a href="reference/dt_count.html">dt_count()</a></code>.</p>
 <p>The following examples show how count and uncount can work. We’ll use the <code>dt</code> data table from the nesting examples.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">counted &lt;-<span class="st"> </span><span class="kw"><a href="reference/dt_count.html">dt_count</a></span>(dt, grp)</a>
-<a class="sourceLine" id="cb17-2" title="2">counted</a>
-<a class="sourceLine" id="cb17-3" title="3"><span class="co">#&gt;    grp     N</span></a>
-<a class="sourceLine" id="cb17-4" title="4"><span class="co">#&gt; 1:   1 33330</span></a>
-<a class="sourceLine" id="cb17-5" title="5"><span class="co">#&gt; 2:   2 33217</span></a>
-<a class="sourceLine" id="cb17-6" title="6"><span class="co">#&gt; 3:   3 33453</span></a></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">uncounted &lt;-<span class="st"> </span><span class="kw"><a href="reference/dt_uncount.html">dt_uncount</a></span>(counted, N)</a>
-<a class="sourceLine" id="cb18-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(uncounted)</a>
-<a class="sourceLine" id="cb18-3" title="3"><span class="co">#&gt;         grp</span></a>
-<a class="sourceLine" id="cb18-4" title="4"><span class="co">#&gt;      1:   1</span></a>
-<a class="sourceLine" id="cb18-5" title="5"><span class="co">#&gt;      2:   1</span></a>
-<a class="sourceLine" id="cb18-6" title="6"><span class="co">#&gt;      3:   1</span></a>
-<a class="sourceLine" id="cb18-7" title="7"><span class="co">#&gt;      4:   1</span></a>
-<a class="sourceLine" id="cb18-8" title="8"><span class="co">#&gt;      5:   1</span></a>
-<a class="sourceLine" id="cb18-9" title="9"><span class="co">#&gt;     ---    </span></a>
-<a class="sourceLine" id="cb18-10" title="10"><span class="co">#&gt;  99996:   3</span></a>
-<a class="sourceLine" id="cb18-11" title="11"><span class="co">#&gt;  99997:   3</span></a>
-<a class="sourceLine" id="cb18-12" title="12"><span class="co">#&gt;  99998:   3</span></a>
-<a class="sourceLine" id="cb18-13" title="13"><span class="co">#&gt;  99999:   3</span></a>
-<a class="sourceLine" id="cb18-14" title="14"><span class="co">#&gt; 100000:   3</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">counted &lt;-<span class="st"> </span><span class="kw"><a href="reference/dt_count.html">dt_count</a></span>(dt, grp)</a>
+<a class="sourceLine" id="cb18-2" title="2">counted</a>
+<a class="sourceLine" id="cb18-3" title="3"><span class="co">#&gt;    grp     N</span></a>
+<a class="sourceLine" id="cb18-4" title="4"><span class="co">#&gt; 1:   1 19638</span></a>
+<a class="sourceLine" id="cb18-5" title="5"><span class="co">#&gt; 2:   2 19987</span></a>
+<a class="sourceLine" id="cb18-6" title="6"><span class="co">#&gt; 3:   3 20033</span></a>
+<a class="sourceLine" id="cb18-7" title="7"><span class="co">#&gt; 4:   4 20269</span></a>
+<a class="sourceLine" id="cb18-8" title="8"><span class="co">#&gt; 5:   5 20073</span></a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">uncounted &lt;-<span class="st"> </span><span class="kw"><a href="reference/dt_uncount.html">dt_uncount</a></span>(counted, N)</a>
+<a class="sourceLine" id="cb19-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(uncounted)</a>
+<a class="sourceLine" id="cb19-3" title="3"><span class="co">#&gt;         grp</span></a>
+<a class="sourceLine" id="cb19-4" title="4"><span class="co">#&gt;      1:   1</span></a>
+<a class="sourceLine" id="cb19-5" title="5"><span class="co">#&gt;      2:   1</span></a>
+<a class="sourceLine" id="cb19-6" title="6"><span class="co">#&gt;      3:   1</span></a>
+<a class="sourceLine" id="cb19-7" title="7"><span class="co">#&gt;      4:   1</span></a>
+<a class="sourceLine" id="cb19-8" title="8"><span class="co">#&gt;      5:   1</span></a>
+<a class="sourceLine" id="cb19-9" title="9"><span class="co">#&gt;     ---    </span></a>
+<a class="sourceLine" id="cb19-10" title="10"><span class="co">#&gt;  99996:   5</span></a>
+<a class="sourceLine" id="cb19-11" title="11"><span class="co">#&gt;  99997:   5</span></a>
+<a class="sourceLine" id="cb19-12" title="12"><span class="co">#&gt;  99998:   5</span></a>
+<a class="sourceLine" id="cb19-13" title="13"><span class="co">#&gt;  99999:   5</span></a>
+<a class="sourceLine" id="cb19-14" title="14"><span class="co">#&gt; 100000:   5</span></a></code></pre></div>
 <p>These are also quick (not that the <code>tidyverse</code> functions were at all slow here).</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">dt5 &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/copy.html">copy</a></span>(dt)</a>
-<a class="sourceLine" id="cb19-2" title="2">df5 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(dt5)</a>
-<a class="sourceLine" id="cb19-3" title="3"></a>
-<a class="sourceLine" id="cb19-4" title="4">marks5 &lt;-</a>
-<a class="sourceLine" id="cb19-5" title="5"><span class="st">  </span>bench<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(</a>
-<a class="sourceLine" id="cb19-6" title="6">    counted_tbl &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tally.html">count</a></span>(df5, grp),</a>
-<a class="sourceLine" id="cb19-7" title="7">    counted_dt &lt;-<span class="st"> </span>tidyfast<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tidyfast/man/dt_count.html">dt_count</a></span>(dt5, grp),</a>
-<a class="sourceLine" id="cb19-8" title="8">    tidyr<span class="op">::</span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/uncount.html">uncount</a></span>(counted_tbl, n),</a>
-<a class="sourceLine" id="cb19-9" title="9">    tidyfast<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tidyfast/man/dt_uncount.html">dt_uncount</a></span>(counted_dt, N),</a>
-<a class="sourceLine" id="cb19-10" title="10">    <span class="dt">check =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb19-11" title="11">    <span class="dt">iterations =</span> <span class="dv">25</span></a>
-<a class="sourceLine" id="cb19-12" title="12">  )</a></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-21-1.png" width="70%"></p>
-<p><em>Other functions are currently in progress.</em></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">dt5 &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/copy.html">copy</a></span>(dt)</a>
+<a class="sourceLine" id="cb20-2" title="2">df5 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(dt5)</a>
+<a class="sourceLine" id="cb20-3" title="3"></a>
+<a class="sourceLine" id="cb20-4" title="4">marks5 &lt;-</a>
+<a class="sourceLine" id="cb20-5" title="5"><span class="st">  </span>bench<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(</a>
+<a class="sourceLine" id="cb20-6" title="6">    counted_tbl &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tally.html">count</a></span>(df5, grp),</a>
+<a class="sourceLine" id="cb20-7" title="7">    counted_dt &lt;-<span class="st"> </span>tidyfast<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tidyfast/man/dt_count.html">dt_count</a></span>(dt5, grp),</a>
+<a class="sourceLine" id="cb20-8" title="8">    tidyr<span class="op">::</span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/uncount.html">uncount</a></span>(counted_tbl, n),</a>
+<a class="sourceLine" id="cb20-9" title="9">    tidyfast<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tidyfast/man/dt_uncount.html">dt_uncount</a></span>(counted_dt, N),</a>
+<a class="sourceLine" id="cb20-10" title="10">    <span class="dt">check =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb20-11" title="11">    <span class="dt">iterations =</span> <span class="dv">25</span></a>
+<a class="sourceLine" id="cb20-12" title="12">  )</a></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-22-1.png" width="70%"></p>
 </div>
-<div id="note" class="section level2">
+<div id="pivoting" class="section level2">
 <h2 class="hasAnchor">
-<a href="#note" class="anchor"></a>Note</h2>
+<a href="#pivoting" class="anchor"></a>Pivoting</h2>
+<p>Finally, thanks to [@mtfairbanks](<a href="https://github.com/mtfairbanks" class="uri">https://github.com/mtfairbanks</a>), we now have pivoting translations to <code><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html">data.table::melt()</a></code> and <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html">data.table::dcast()</a></code>. Consider the following example (similar to the example in <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">tidyr::pivot_longer()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">tidyr::pivot_wider()</a></code>):</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">billboard &lt;-<span class="st"> </span>tidyr<span class="op">::</span>billboard</a>
+<a class="sourceLine" id="cb21-2" title="2"></a>
+<a class="sourceLine" id="cb21-3" title="3"><span class="co"># note the warning - melt is telling us what </span></a>
+<a class="sourceLine" id="cb21-4" title="4"><span class="co">#   it did with the various data types---logical (where there were just NAs</span></a>
+<a class="sourceLine" id="cb21-5" title="5"><span class="co">#   and numeric</span></a>
+<a class="sourceLine" id="cb21-6" title="6">longer &lt;-<span class="st"> </span>billboard <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-7" title="7"><span class="st"> </span><span class="kw"><a href="reference/dt_pivot_longer.html">dt_pivot_longer</a></span>(</a>
+<a class="sourceLine" id="cb21-8" title="8">   <span class="dt">cols =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span>artist, <span class="op">-</span>track, <span class="op">-</span>date.entered),</a>
+<a class="sourceLine" id="cb21-9" title="9">   <span class="dt">names_to =</span> <span class="st">"week"</span>,</a>
+<a class="sourceLine" id="cb21-10" title="10">   <span class="dt">names_prefix =</span> <span class="st">"wk"</span>,</a>
+<a class="sourceLine" id="cb21-11" title="11">   <span class="dt">values_to =</span> <span class="st">"rank"</span></a>
+<a class="sourceLine" id="cb21-12" title="12"> )</a>
+<a class="sourceLine" id="cb21-13" title="13"><span class="co">#&gt; Warning in melt.data.table(data = dt_, id.vars = id_vars, measure.vars =</span></a>
+<a class="sourceLine" id="cb21-14" title="14"><span class="co">#&gt; cols, : 'measure.vars' [wk1, wk2, wk3, wk4, ...] are not all of the same</span></a>
+<a class="sourceLine" id="cb21-15" title="15"><span class="co">#&gt; type. By order of hierarchy, the molten data value column will be of type</span></a>
+<a class="sourceLine" id="cb21-16" title="16"><span class="co">#&gt; 'double'. All measure variables not of type 'double' will be coerced too.</span></a>
+<a class="sourceLine" id="cb21-17" title="17"><span class="co">#&gt; Check DETAILS in ?melt.data.table for more on coercion.</span></a>
+<a class="sourceLine" id="cb21-18" title="18"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(longer)</a>
+<a class="sourceLine" id="cb21-19" title="19"><span class="co">#&gt;          artist                   track date.entered week rank</span></a>
+<a class="sourceLine" id="cb21-20" title="20"><span class="co">#&gt; 1:        2 Pac Baby Don't Cry (Keep...   2000-02-26  wk1   87</span></a>
+<a class="sourceLine" id="cb21-21" title="21"><span class="co">#&gt; 2:      2Ge+her The Hardest Part Of ...   2000-09-02  wk1   91</span></a>
+<a class="sourceLine" id="cb21-22" title="22"><span class="co">#&gt; 3: 3 Doors Down              Kryptonite   2000-04-08  wk1   81</span></a>
+<a class="sourceLine" id="cb21-23" title="23"><span class="co">#&gt; 4: 3 Doors Down                   Loser   2000-10-21  wk1   76</span></a>
+<a class="sourceLine" id="cb21-24" title="24"><span class="co">#&gt; 5:     504 Boyz           Wobble Wobble   2000-04-15  wk1   57</span></a>
+<a class="sourceLine" id="cb21-25" title="25"><span class="co">#&gt; 6:         98^0 Give Me Just One Nig...   2000-08-19  wk1   51</span></a>
+<a class="sourceLine" id="cb21-26" title="26"></a>
+<a class="sourceLine" id="cb21-27" title="27">wider &lt;-<span class="st"> </span>longer <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb21-28" title="28"><span class="st">  </span><span class="kw"><a href="reference/dt_pivot_wider.html">dt_pivot_wider</a></span>(</a>
+<a class="sourceLine" id="cb21-29" title="29">    <span class="dt">names_from =</span> week,</a>
+<a class="sourceLine" id="cb21-30" title="30">    <span class="dt">values_from =</span> rank</a>
+<a class="sourceLine" id="cb21-31" title="31">  )</a>
+<a class="sourceLine" id="cb21-32" title="32"><span class="co">#&gt; Aggregate function missing, defaulting to 'length'</span></a>
+<a class="sourceLine" id="cb21-33" title="33"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(wider)</a>
+<a class="sourceLine" id="cb21-34" title="34"><span class="co">#&gt;          artist wk1 wk10 wk11 wk12 wk13 wk14 wk15 wk16 wk17 wk18 wk19 wk2</span></a>
+<a class="sourceLine" id="cb21-35" title="35"><span class="co">#&gt; 1:        2 Pac   1    1    1    1    1    1    1    1    1    1    1   1</span></a>
+<a class="sourceLine" id="cb21-36" title="36"><span class="co">#&gt; 2:      2Ge+her   1    1    1    1    1    1    1    1    1    1    1   1</span></a>
+<a class="sourceLine" id="cb21-37" title="37"><span class="co">#&gt; 3: 3 Doors Down   2    2    2    2    2    2    2    2    2    2    2   2</span></a>
+<a class="sourceLine" id="cb21-38" title="38"><span class="co">#&gt; 4:     504 Boyz   1    1    1    1    1    1    1    1    1    1    1   1</span></a>
+<a class="sourceLine" id="cb21-39" title="39"><span class="co">#&gt; 5:         98^0   1    1    1    1    1    1    1    1    1    1    1   1</span></a>
+<a class="sourceLine" id="cb21-40" title="40"><span class="co">#&gt; 6:      A*Teens   1    1    1    1    1    1    1    1    1    1    1   1</span></a>
+<a class="sourceLine" id="cb21-41" title="41"><span class="co">#&gt;    wk20 wk21 wk22 wk23 wk24 wk25 wk26 wk27 wk28 wk29 wk3 wk30 wk31 wk32</span></a>
+<a class="sourceLine" id="cb21-42" title="42"><span class="co">#&gt; 1:    1    1    1    1    1    1    1    1    1    1   1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-43" title="43"><span class="co">#&gt; 2:    1    1    1    1    1    1    1    1    1    1   1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-44" title="44"><span class="co">#&gt; 3:    2    2    2    2    2    2    2    2    2    2   2    2    2    2</span></a>
+<a class="sourceLine" id="cb21-45" title="45"><span class="co">#&gt; 4:    1    1    1    1    1    1    1    1    1    1   1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-46" title="46"><span class="co">#&gt; 5:    1    1    1    1    1    1    1    1    1    1   1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-47" title="47"><span class="co">#&gt; 6:    1    1    1    1    1    1    1    1    1    1   1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-48" title="48"><span class="co">#&gt;    wk33 wk34 wk35 wk36 wk37 wk38 wk39 wk4 wk40 wk41 wk42 wk43 wk44 wk45</span></a>
+<a class="sourceLine" id="cb21-49" title="49"><span class="co">#&gt; 1:    1    1    1    1    1    1    1   1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-50" title="50"><span class="co">#&gt; 2:    1    1    1    1    1    1    1   1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-51" title="51"><span class="co">#&gt; 3:    2    2    2    2    2    2    2   2    2    2    2    2    2    2</span></a>
+<a class="sourceLine" id="cb21-52" title="52"><span class="co">#&gt; 4:    1    1    1    1    1    1    1   1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-53" title="53"><span class="co">#&gt; 5:    1    1    1    1    1    1    1   1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-54" title="54"><span class="co">#&gt; 6:    1    1    1    1    1    1    1   1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-55" title="55"><span class="co">#&gt;    wk46 wk47 wk48 wk49 wk5 wk50 wk51 wk52 wk53 wk54 wk55 wk56 wk57 wk58</span></a>
+<a class="sourceLine" id="cb21-56" title="56"><span class="co">#&gt; 1:    1    1    1    1   1    1    1    1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-57" title="57"><span class="co">#&gt; 2:    1    1    1    1   1    1    1    1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-58" title="58"><span class="co">#&gt; 3:    2    2    2    2   2    2    2    2    2    2    2    2    2    2</span></a>
+<a class="sourceLine" id="cb21-59" title="59"><span class="co">#&gt; 4:    1    1    1    1   1    1    1    1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-60" title="60"><span class="co">#&gt; 5:    1    1    1    1   1    1    1    1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-61" title="61"><span class="co">#&gt; 6:    1    1    1    1   1    1    1    1    1    1    1    1    1    1</span></a>
+<a class="sourceLine" id="cb21-62" title="62"><span class="co">#&gt;    wk59 wk6 wk60 wk61 wk62 wk63 wk64 wk65 wk66 wk67 wk68 wk69 wk7 wk70</span></a>
+<a class="sourceLine" id="cb21-63" title="63"><span class="co">#&gt; 1:    1   1    1    1    1    1    1    1    1    1    1    1   1    1</span></a>
+<a class="sourceLine" id="cb21-64" title="64"><span class="co">#&gt; 2:    1   1    1    1    1    1    1    1    1    1    1    1   1    1</span></a>
+<a class="sourceLine" id="cb21-65" title="65"><span class="co">#&gt; 3:    2   2    2    2    2    2    2    2    2    2    2    2   2    2</span></a>
+<a class="sourceLine" id="cb21-66" title="66"><span class="co">#&gt; 4:    1   1    1    1    1    1    1    1    1    1    1    1   1    1</span></a>
+<a class="sourceLine" id="cb21-67" title="67"><span class="co">#&gt; 5:    1   1    1    1    1    1    1    1    1    1    1    1   1    1</span></a>
+<a class="sourceLine" id="cb21-68" title="68"><span class="co">#&gt; 6:    1   1    1    1    1    1    1    1    1    1    1    1   1    1</span></a>
+<a class="sourceLine" id="cb21-69" title="69"><span class="co">#&gt;    wk71 wk72 wk73 wk74 wk75 wk76 wk8 wk9</span></a>
+<a class="sourceLine" id="cb21-70" title="70"><span class="co">#&gt; 1:    1    1    1    1    1    1   1   1</span></a>
+<a class="sourceLine" id="cb21-71" title="71"><span class="co">#&gt; 2:    1    1    1    1    1    1   1   1</span></a>
+<a class="sourceLine" id="cb21-72" title="72"><span class="co">#&gt; 3:    2    2    2    2    2    2   2   2</span></a>
+<a class="sourceLine" id="cb21-73" title="73"><span class="co">#&gt; 4:    1    1    1    1    1    1   1   1</span></a>
+<a class="sourceLine" id="cb21-74" title="74"><span class="co">#&gt; 5:    1    1    1    1    1    1   1   1</span></a>
+<a class="sourceLine" id="cb21-75" title="75"><span class="co">#&gt; 6:    1    1    1    1    1    1   1   1</span></a></code></pre></div>
+<p>Notably, there are some current limitations to these: 1) <code>tidyselect</code> techniques do not work across the board (e.g. cannot use <code>start_with()</code> and friends) and 2) the functions are new and likely prone to edge-case bugs.</p>
+<p>But let’s compare some basic speed and efficiency. Note that the figures are in log-base-10 scale. Because of the <code>data.table</code> functions, these are extremely fast and efficient.</p>
+<p><img src="reference/figures/README-unnamed-chunk-24-1.png" width="70%"><img src="reference/figures/README-unnamed-chunk-24-2.png" width="70%"></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="co">#&gt; # A tibble: 4 x 3</span></a>
+<a class="sourceLine" id="cb22-2" title="2"><span class="co">#&gt;   expression        median mem_alloc</span></a>
+<a class="sourceLine" id="cb22-3" title="3"><span class="co">#&gt;   &lt;chr&gt;           &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
+<a class="sourceLine" id="cb22-4" title="4"><span class="co">#&gt; 1 dt_pivot_longer      1ms  993.47KB</span></a>
+<a class="sourceLine" id="cb22-5" title="5"><span class="co">#&gt; 2 pivot_longer      6.48ms    2.63MB</span></a>
+<a class="sourceLine" id="cb22-6" title="6"><span class="co">#&gt; 3 dt_pivot_wider   20.38ms     2.5MB</span></a>
+<a class="sourceLine" id="cb22-7" title="7"><span class="co">#&gt; 4 pivot_wider     358.57ms    2.43MB</span></a></code></pre></div>
+</div>
+<div id="notes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#notes" class="anchor"></a>Notes</h2>
 <p>Please note that the <code>tidyfast</code> project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
-<p>Also, <code>ggplot2</code>, <code>stringr</code>, and <code>ggbeeswarm</code> were used herein for creating plots.</p>
+<p>We want to thank our wonderful contributors:</p>
+<ul>
+<li>
+<a href="https://github.com/mtfairbanks">mtfairbanks</a> for PR #6 providing initial the pivoting functions. Note the <a href="https://github.com/mtfairbanks/gdt"><code>gdt</code></a> package that compliments some of <code>tidyfast</code>s functionality.</li>
+</ul>
+<p><strong>Complementary Packages:</strong></p>
+<ul>
+<li><a href="https://dtplyr.tidyverse.org"><code>dtplyr</code></a></li>
+<li><a href="https://github.com/gdemin/maditr"><code>maditr</code></a></li>
+<li><a href="https://github.com/mtfairbanks/gdt"><code>gdt</code></a></li>
+</ul>
 </div>
 </div>
   </div>
@@ -433,6 +561,7 @@
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
 <li><a href="https://travis-ci.org/TysonStanley/tidyfast"><img src="https://travis-ci.org/TysonStanley/tidyfast.svg?branch=master" alt="Travis build status"></a></li>
+<li><a href="https://codecov.io/gh/TysonStanley/tidyfast?branch=master"><img src="https://codecov.io/gh/TysonStanley/tidyfast/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 </div>

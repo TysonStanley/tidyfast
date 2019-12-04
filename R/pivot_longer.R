@@ -1,8 +1,9 @@
 #' Pivot data from wide to long
 #'
-#' `dt_pivot_longer()` "lengthens" data, increasing the number of rows and
-#' decreasing the number of columns. The inverse transformation is
-#' `dt_pivot_wider()`. Based on the `tidyr` equivalents.
+#'
+#' \code{dt_pivot_wider()} "widens" data, increasing the number of columns and
+#' decreasing the number of rows. The inverse transformation is
+#' \code{dt_pivot_longer()}. Syntax based on the \code{tidyr} equivalents.
 #'
 #' @param dt_ The data table to pivot longer
 #' @param cols Column selection. If empty, uses all columns. Can use -colname to unselect column(s)

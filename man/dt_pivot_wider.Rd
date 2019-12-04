@@ -2,10 +2,7 @@
 % Please edit documentation in R/pivot_wider.R
 \name{dt_pivot_wider}
 \alias{dt_pivot_wider}
-\title{Pivot data from long to wide
-`dt_pivot_wider()` "widens" data, increasing the number of columns and
-decreasing the number of rows. The inverse transformation is
-`dt_pivot_longer()`. Based on the `tidyr` equivalents.}
+\title{Pivot data from long to wide}
 \usage{
 dt_pivot_wider(dt_, id_cols = NULL, names_from, names_sep = "_",
   values_from, drop = FALSE)
@@ -24,10 +21,9 @@ dt_pivot_wider(dt_, id_cols = NULL, names_from, names_sep = "_",
 \item{drop}{will cast by including all missing combinations. c(FALSE, TRUE) will only include all missing combinations of formula LHS; c(TRUE, FALSE) will only include all missing combinations of formula RHS.}
 }
 \description{
-Pivot data from long to wide
-`dt_pivot_wider()` "widens" data, increasing the number of columns and
+\code{dt_pivot_wider()} "widens" data, increasing the number of columns and
 decreasing the number of rows. The inverse transformation is
-`dt_pivot_longer()`. Based on the `tidyr` equivalents.
+\code{dt_pivot_longer()}. Syntax based on the \code{tidyr} equivalents.
 }
 \examples{
 

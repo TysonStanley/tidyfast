@@ -59,10 +59,6 @@ dt_pivot_wider <- function(dt_,
     dcast_form <- as.formula(paste("...",
                                    paste(names_from, collapse = " + "),
                                    sep = " ~ "))
-  } else if (length(id_cols == 1)) {
-    dcast_form <- as.formula(paste(id_cols,
-                                   paste(names_from, collapse = " + "),
-                                   sep = " ~ "))
   } else {
     dcast_form <- as.formula(paste(paste(id_cols, collapse = " + "),
                                    paste(names_from, collapse=" + "),

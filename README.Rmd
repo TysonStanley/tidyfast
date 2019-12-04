@@ -25,6 +25,7 @@ set.seed(843)
 [![Codecov test coverage](https://codecov.io/gh/TysonStanley/tidyfast/branch/master/graph/badge.svg)](https://codecov.io/gh/TysonStanley/tidyfast?branch=master)
 <!-- badges: end -->
 
+
 The goal of `tidyfast` is to provide fast and efficient alternatives to some `tidyr` (and a few `dplyr`) functions using `data.table` under the hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in `dtplyr` (but notably does not use the `lazy_dt()` framework of `dtplyr`). This package imports `data.table` and `Rcpp` (no other dependencies).
 
 These are, in essence, translations from a more `tidyverse` grammar to `data.table`. Most functions herein are in places where, in my opinion, the `data.table` syntax is not obvious or clear. As such, these functions can translate a simple function call into the fast, efficient, and concise syntax of `data.table`.

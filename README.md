@@ -212,13 +212,13 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.49ms    2.88MB
-    #> 2 group_nest   5.21ms    2.54MB
+    #> 1 dt_nest      3.27ms    2.88MB
+    #> 2 group_nest      5ms    2.54MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest     5.3ms    6.22MB
-    #> 2 unnest       13.1ms    8.47MB
+    #> 1 dt_unnest    5.32ms    6.25MB
+    #> 2 unnest      12.72ms    8.47MB
 
 ### If Else
 
@@ -267,9 +267,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     135.1ms   148.8MB
-    #> 2 dt_case_when   35.4ms    34.3MB
-    #> 3 fifelse        37.4ms    34.3MB
+    #> 1 case_when     133.2ms   148.8MB
+    #> 2 dt_case_when   34.4ms    34.3MB
+    #> 3 fifelse        34.5ms    34.3MB
 
 ## Fill
 
@@ -377,8 +377,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.4ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   21.8ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.6ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.7ms    29.1MB
 
 ## Separate
 
@@ -420,9 +420,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               369ms    11.6MB
-    #> 2 dt_separate            122ms    30.6MB
-    #> 3 dt_separate-mutable    111ms    26.7MB
+    #> 1 separate               370ms    11.6MB
+    #> 2 dt_separate            123ms    30.6MB
+    #> 3 dt_separate-mutable    112ms    26.7MB
 
 ## Count and Uncount
 
@@ -585,10 +585,10 @@ efficient.
     #> # A tibble: 4 x 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer 993.66µs  993.47KB
-    #> 2 pivot_longer      7.12ms    2.63MB
-    #> 3 dt_pivot_wider   21.14ms     2.5MB
-    #> 4 pivot_wider     384.89ms    2.43MB
+    #> 1 dt_pivot_longer   1.04ms  993.47KB
+    #> 2 pivot_longer      6.78ms    2.63MB
+    #> 3 dt_pivot_wider      21ms     2.5MB
+    #> 4 pivot_wider     386.32ms    2.43MB
 
 ## Notes
 

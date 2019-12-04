@@ -45,7 +45,7 @@ dt_unnest.default <- function(dt_, col, ...){
   others_dt <- others_dt[, ..keep]
   others_dt <- lapply(others_dt, rep, times = rows)
 
-  dt_[, list(do.call("cbind", others_dt), rbindlist(eval(col)))]
+  dt_[, list(as.data.table(others_dt), rbindlist(eval(col)))]
 }
 
 

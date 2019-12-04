@@ -88,7 +88,7 @@ test_that("unnest row binds data frames", {
       data.table(x = 1:5),
       data.table(x = 6:10)
   ))
-  expect_equal(dt_unnest(df, data, by = id)$x, 1:10)
+  expect_equal(dt_unnest(df, data)$x, 1:10)
 })
 
 test_that("can unnest mixture of name and unnamed lists of same length", {

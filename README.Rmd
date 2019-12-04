@@ -18,7 +18,6 @@ set.seed(843)
 
 # `tidyfast v0.2.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
-
 <!-- badges: start -->
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis build status](https://travis-ci.org/TysonStanley/tidyfast.svg?branch=master)](https://travis-ci.org/TysonStanley/tidyfast)
@@ -135,7 +134,7 @@ dt_hoist(dt, nested1, nested2)
 
 Speed comparisons (similar to those shown in the preprint) are highlighted below. Notably, the timings are without the `nested1` and `nested2` columns of the original `dt` object from above. Also, all `dplyr` and `tidyr` functions use a `tbl` version of the `dt` table.
 
-```{r, echo = FALSE, fig.width=8, fig.height=4, dpi=300, warning=FALSE}
+```{r, echo = FALSE, fig.width=8, fig.height=4, dpi=300, warning=FALSE, message=FALSE}
 tbl <- as_tibble(dt) %>% select(x, y, id, grp)
 dt2 <- dt[, .(x,y,id,grp)]
 nesting <- bench::mark(
@@ -527,6 +526,7 @@ pivot_timings %>%
 pivot_timings %>% 
   select(expression, median, mem_alloc)
 ```
+
 
 
 

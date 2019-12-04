@@ -30,7 +30,17 @@ dt_pivot_longer <- function(dt_,
                             names_to = "name",
                             values_to = "value",
                             values_drop_na = FALSE,
-                            ...) {
+                            ...){
+  UseMethod("dt_pivot_longer", dt_)
+}
+
+#' @export
+dt_pivot_longer.default <- function(dt_,
+                                    cols = NULL,
+                                    names_to = "name",
+                                    values_to = "value",
+                                    values_drop_na = FALSE,
+                                    ...) {
 
   is.data.frame(dt_) || is.data.table(dt_) || stop("data must be a data.frame or data.table")
 

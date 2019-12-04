@@ -29,6 +29,16 @@ dt_pivot_wider <- function(dt_,
                            names_from,
                            names_sep = "_",
                            values_from,
+                           drop = FALSE){
+  UseMethod("dt_pivot_wider", dt_)
+}
+
+#' @export
+dt_pivot_wider <- function(dt_,
+                           id_cols = NULL,
+                           names_from,
+                           names_sep = "_",
+                           values_from,
                            drop = FALSE) {
 
   is.data.frame(dt_) || is.data.table(dt_) || stop("data must be a data.frame or data.table")

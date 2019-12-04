@@ -40,6 +40,9 @@ dt_unnest.default <- function(dt_, col, ...){
     others <- others[others %in% paste(keep)[-1]]
 
   others_dt <- dt_[, ..others]
+  classes   <- sapply(others_dt, typeof)
+  keep      <- names(classes)[classes != "list"]
+  others_dt <- others_dt[, ..keep]
   others_dt <- lapply(others_dt, rep, times = rows)
 
   dt_[, list(do.call("cbind", others_dt), rbindlist(eval(col)))]

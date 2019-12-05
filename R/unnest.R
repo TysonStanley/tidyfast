@@ -88,15 +88,17 @@ dt_hoist.default <- function(dt_, ...){
   pasted_dots <- paste(substitute(list(...)))[-1L]
   classes <- sapply(dt_, class)
   typeofs <- sapply(dt_, typeof)
-  keep <- names(classes)[classes != "list" & typeofs != "list"]
-  not_kept <- names(classes)[classes == "list" | typeofs == "list"]
+  v.names <- names(classes)
+  keep <- v.names[classes != "list" & typeofs != "list"]
+  drop <- v.names[classes == "list" | typeofs == "list"]
+  drop <- drop[!drop %in% pasted_dots]
   keep <- keep[!keep %in% pasted_dots]
   keep <- paste(keep, collapse = ",")
   cols <- substitute(unlist(list(...), recursive = FALSE))
 
   message("The following columns were dropped because ",
           "they are list-columns (but not being hoisted): ",
-          paste(not_kept, collapse = ", "))
+          paste(drop, collapse = ", "))
 
   dt_ <- dt_[, eval(cols), by = keep]
   dt_ <- .naming(dt_, substitute(list(...)))

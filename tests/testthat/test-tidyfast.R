@@ -11,6 +11,8 @@ test_that("dt_case_when works", {
 
   expect_equal(names(table(cased)), c("high", "low"))
   expect_error(dt_case_when(x < median(x), 1))
+  expect_error(dt_case_when(x < median(x), 1,
+                            x >= median(x), 2))
 
 })
 

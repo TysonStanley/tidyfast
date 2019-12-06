@@ -18,6 +18,7 @@ set.seed(843)
 
 # `tidyfast v0.2.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
+
 <!-- badges: start -->
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis build status](https://travis-ci.org/TysonStanley/tidyfast.svg?branch=master)](https://travis-ci.org/TysonStanley/tidyfast)
@@ -37,6 +38,11 @@ The current functions include:
 - `dt_unnest()` for unnesting data tables
 - `dt_hoist()` for unnesting vectors in a list-column in a data table
 
+**Pivoting** (similar to `tidyr::pivot_longer()` and `tidyr::pivot_wider()`)
+
+- `dt_pivot_longer()` for fast pivoting using `data.table::melt()`
+- `dt_pivot_wider()` for fast pivoting using `data.table::dcast()`
+
 **If Else** (similar to `dplyr::case_when()`):
 
 - `dt_case_when()` for `dplyr::case_when()` syntax with the speed of `data.table::fifelse()`
@@ -53,11 +59,6 @@ The current functions include:
 **Separate** (similar to `tidyr::separate()`)
 
 - `dt_separate()` for splitting a single column into multiple based on a match within the column (e.g., column with values like "A.B" could be split into two columns by using the period as the separator where column 1 would have "A" and 2 would have "B"). It is built on `data.table::tstrsplit()`. This is not well tested yet and lacks some functionality of `tidyr::separate()`.
-
-**Pivoting** (similar to `tidyr::pivot_longer()` and `tidyr::pivot_wider()`)
-
-- `dt_pivot_longer()` for fast pivoting using `data.table::melt()`
-- `dt_pivot_wider()` for fast pivoting using `data.table::dcast()`
 
 **Adjust `data.table` print options**
 
@@ -173,6 +174,98 @@ dt_hoist(nest_unnest, time) %>%
 select(nesting, expression, median, mem_alloc)
 select(unnesting, expression, median, mem_alloc)
 ```
+
+
+## Pivoting
+
+Finally, thanks to [@mtfairbanks](https://github.com/mtfairbanks), we now have pivoting translations to `data.table::melt()` and `data.table::dcast()`. Consider the following example (similar to the example in `tidyr::pivot_longer()` and `tidyr::pivot_wider()`):
+
+```{r}
+billboard <- tidyr::billboard
+
+# note the warning - melt is telling us what 
+#   it did with the various data types---logical (where there were just NAs
+#   and numeric
+longer <- billboard %>%
+ dt_pivot_longer(
+   cols = c(-artist, -track, -date.entered),
+   names_to = "week",
+   names_prefix = "wk",
+   values_to = "rank"
+ )
+head(longer)
+
+wider <- longer %>% 
+  dt_pivot_wider(
+    names_from = week,
+    values_from = rank
+  )
+head(wider)
+```
+
+Notably, there are some current limitations to these: 1) `tidyselect` techniques do not work across the board (e.g. cannot use `start_with()` and friends) and 2) the functions are new and likely prone to edge-case bugs.
+
+But let's compare some basic speed and efficiency. Note that the figures are in log-base-10 scale. Because of the `data.table` functions, these are extremely fast and efficient.
+
+```{r, echo = FALSE, fig.width=5, fig.height=4, dpi=300, warning=FALSE, message=FALSE}
+bill_dt <- as.data.table(billboard)
+longer_timings <- bench::mark(
+  dt_pivot_longer = dt_pivot_longer(bill_dt, cols = c(-artist, -track, -date.entered), 
+                                    names_to = "week", names_prefix = "wk", values_to = "rank"),
+  pivot_longer = pivot_longer(billboard, cols = c(-artist, -track, -date.entered), 
+                              names_to = "week", names_prefix = "wk", values_to = "rank"),
+  check = FALSE,
+  iterations = 40)
+
+longer_tbl <- as_tibble(longer)
+wider_timings <- bench::mark(
+  dt_pivot_wider = dt_pivot_wider(longer, names_from = week, values_from = rank),
+  pivot_wider = pivot_wider(longer_tbl, names_from = week, values_from = rank),
+  check = FALSE,
+  iterations = 40)
+
+pivot_timings <- rbind(longer_timings, wider_timings) %>% 
+  mutate(type = c("longer", "longer", "wider", "wider")) %>% 
+  mutate(expression = as.character(expression))
+
+pivot_timings %>%
+  dt_hoist(time) %>% 
+  mutate(time = lubridate::seconds(time)) %>% 
+  filter(type == "longer") %>% 
+  ggplot(aes(x = expression, 
+             y = time,
+             color = expression)) +
+  ggbeeswarm::geom_beeswarm() +
+  labs(x = "",
+       y = "Time (seconds, logged scale)") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_color_viridis_d() +
+  facet_grid(~type, space = "free", scales = "free") +
+  scale_y_log10()
+
+pivot_timings %>%
+  dt_hoist(time) %>% 
+  mutate(time = lubridate::seconds(time)) %>% 
+  filter(type == "wider") %>% 
+  ggplot(aes(x = expression, 
+             y = time,
+             color = expression)) +
+  ggbeeswarm::geom_beeswarm() +
+  labs(x = "",
+       y = "Time (seconds, logged scale)") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none") +
+  scale_color_viridis_d() +
+  facet_grid(~type, space = "free", scales = "free") +
+  scale_y_log10()
+
+pivot_timings %>% 
+  select(expression, median, mem_alloc)
+```
+
 
 
 ### If Else
@@ -436,96 +529,6 @@ marks5$time %>%
   coord_cartesian(ylim = c(0, .007))
 ```
 
-
-## Pivoting
-
-Finally, thanks to [@mtfairbanks](https://github.com/mtfairbanks), we now have pivoting translations to `data.table::melt()` and `data.table::dcast()`. Consider the following example (similar to the example in `tidyr::pivot_longer()` and `tidyr::pivot_wider()`):
-
-```{r}
-billboard <- tidyr::billboard
-
-# note the warning - melt is telling us what 
-#   it did with the various data types---logical (where there were just NAs
-#   and numeric
-longer <- billboard %>%
- dt_pivot_longer(
-   cols = c(-artist, -track, -date.entered),
-   names_to = "week",
-   names_prefix = "wk",
-   values_to = "rank"
- )
-head(longer)
-
-wider <- longer %>% 
-  dt_pivot_wider(
-    names_from = week,
-    values_from = rank
-  )
-head(wider)
-```
-
-Notably, there are some current limitations to these: 1) `tidyselect` techniques do not work across the board (e.g. cannot use `start_with()` and friends) and 2) the functions are new and likely prone to edge-case bugs.
-
-But let's compare some basic speed and efficiency. Note that the figures are in log-base-10 scale. Because of the `data.table` functions, these are extremely fast and efficient.
-
-```{r, echo = FALSE, fig.width=5, fig.height=4, dpi=300, warning=FALSE, message=FALSE}
-bill_dt <- as.data.table(billboard)
-longer_timings <- bench::mark(
-  dt_pivot_longer = dt_pivot_longer(bill_dt, cols = c(-artist, -track, -date.entered), 
-                                    names_to = "week", names_prefix = "wk", values_to = "rank"),
-  pivot_longer = pivot_longer(billboard, cols = c(-artist, -track, -date.entered), 
-                              names_to = "week", names_prefix = "wk", values_to = "rank"),
-  check = FALSE,
-  iterations = 40)
-
-longer_tbl <- as_tibble(longer)
-wider_timings <- bench::mark(
-  dt_pivot_wider = dt_pivot_wider(longer, names_from = week, values_from = rank),
-  pivot_wider = pivot_wider(longer_tbl, names_from = week, values_from = rank),
-  check = FALSE,
-  iterations = 40)
-
-pivot_timings <- rbind(longer_timings, wider_timings) %>% 
-  mutate(type = c("longer", "longer", "wider", "wider")) %>% 
-  mutate(expression = as.character(expression))
-
-pivot_timings %>%
-  dt_hoist(time) %>% 
-  mutate(time = lubridate::seconds(time)) %>% 
-  filter(type == "longer") %>% 
-  ggplot(aes(x = expression, 
-             y = time,
-             color = expression)) +
-  ggbeeswarm::geom_beeswarm() +
-  labs(x = "",
-       y = "Time (seconds, logged scale)") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d() +
-  facet_grid(~type, space = "free", scales = "free") +
-  scale_y_log10()
-
-pivot_timings %>%
-  dt_hoist(time) %>% 
-  mutate(time = lubridate::seconds(time)) %>% 
-  filter(type == "wider") %>% 
-  ggplot(aes(x = expression, 
-             y = time,
-             color = expression)) +
-  ggbeeswarm::geom_beeswarm() +
-  labs(x = "",
-       y = "Time (seconds, logged scale)") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d() +
-  facet_grid(~type, space = "free", scales = "free") +
-  scale_y_log10()
-
-pivot_timings %>% 
-  select(expression, median, mem_alloc)
-```
 
 
 

@@ -36,6 +36,12 @@ The current functions include:
   - `dt_unnest()` for unnesting data tables
   - `dt_hoist()` for unnesting vectors in a list-column in a data table
 
+**Pivoting** (similar to `tidyr::pivot_longer()` and
+`tidyr::pivot_wider()`)
+
+  - `dt_pivot_longer()` for fast pivoting using `data.table::melt()`
+  - `dt_pivot_wider()` for fast pivoting using `data.table::dcast()`
+
 **If Else** (similar to `dplyr::case_when()`):
 
   - `dt_case_when()` for `dplyr::case_when()` syntax with the speed of
@@ -61,12 +67,6 @@ The current functions include:
     column 1 would have “A” and 2 would have “B”). It is built on
     `data.table::tstrsplit()`. This is not well tested yet and lacks
     some functionality of `tidyr::separate()`.
-
-**Pivoting** (similar to `tidyr::pivot_longer()` and
-`tidyr::pivot_wider()`)
-
-  - `dt_pivot_longer()` for fast pivoting using `data.table::melt()`
-  - `dt_pivot_wider()` for fast pivoting using `data.table::dcast()`
 
 **Adjust `data.table` print options**
 
@@ -209,13 +209,118 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.38ms    2.88MB
-    #> 2 group_nest   5.03ms    2.54MB
+    #> 1 dt_nest      3.16ms    2.88MB
+    #> 2 group_nest   4.86ms    2.54MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    4.83ms    5.49MB
-    #> 2 unnest       12.7ms    8.47MB
+    #> 1 dt_unnest    4.97ms    5.49MB
+    #> 2 unnest      12.47ms    8.47MB
+
+## Pivoting
+
+Finally, thanks to \[@mtfairbanks\](<https://github.com/mtfairbanks>),
+we now have pivoting translations to `data.table::melt()` and
+`data.table::dcast()`. Consider the following example (similar to the
+example in `tidyr::pivot_longer()` and `tidyr::pivot_wider()`):
+
+``` r
+billboard <- tidyr::billboard
+
+# note the warning - melt is telling us what 
+#   it did with the various data types---logical (where there were just NAs
+#   and numeric
+longer <- billboard %>%
+ dt_pivot_longer(
+   cols = c(-artist, -track, -date.entered),
+   names_to = "week",
+   names_prefix = "wk",
+   values_to = "rank"
+ )
+#> Warning in melt.data.table(data = dt_, id.vars = id_vars, measure.vars =
+#> cols, : 'measure.vars' [wk1, wk2, wk3, wk4, ...] are not all of the same
+#> type. By order of hierarchy, the molten data value column will be of type
+#> 'double'. All measure variables not of type 'double' will be coerced too.
+#> Check DETAILS in ?melt.data.table for more on coercion.
+head(longer)
+#>          artist                   track date.entered week rank
+#> 1:        2 Pac Baby Don't Cry (Keep...   2000-02-26  wk1   87
+#> 2:      2Ge+her The Hardest Part Of ...   2000-09-02  wk1   91
+#> 3: 3 Doors Down              Kryptonite   2000-04-08  wk1   81
+#> 4: 3 Doors Down                   Loser   2000-10-21  wk1   76
+#> 5:     504 Boyz           Wobble Wobble   2000-04-15  wk1   57
+#> 6:         98^0 Give Me Just One Nig...   2000-08-19  wk1   51
+
+wider <- longer %>% 
+  dt_pivot_wider(
+    names_from = week,
+    values_from = rank
+  )
+#> Aggregate function missing, defaulting to 'length'
+head(wider)
+#>          artist wk1 wk10 wk11 wk12 wk13 wk14 wk15 wk16 wk17 wk18 wk19 wk2
+#> 1:        2 Pac   1    1    1    1    1    1    1    1    1    1    1   1
+#> 2:      2Ge+her   1    1    1    1    1    1    1    1    1    1    1   1
+#> 3: 3 Doors Down   2    2    2    2    2    2    2    2    2    2    2   2
+#> 4:     504 Boyz   1    1    1    1    1    1    1    1    1    1    1   1
+#> 5:         98^0   1    1    1    1    1    1    1    1    1    1    1   1
+#> 6:      A*Teens   1    1    1    1    1    1    1    1    1    1    1   1
+#>    wk20 wk21 wk22 wk23 wk24 wk25 wk26 wk27 wk28 wk29 wk3 wk30 wk31 wk32
+#> 1:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#> 2:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#> 3:    2    2    2    2    2    2    2    2    2    2   2    2    2    2
+#> 4:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#> 5:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#> 6:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
+#>    wk33 wk34 wk35 wk36 wk37 wk38 wk39 wk4 wk40 wk41 wk42 wk43 wk44 wk45
+#> 1:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#> 2:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#> 3:    2    2    2    2    2    2    2   2    2    2    2    2    2    2
+#> 4:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#> 5:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#> 6:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
+#>    wk46 wk47 wk48 wk49 wk5 wk50 wk51 wk52 wk53 wk54 wk55 wk56 wk57 wk58
+#> 1:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#> 2:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#> 3:    2    2    2    2   2    2    2    2    2    2    2    2    2    2
+#> 4:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#> 5:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#> 6:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
+#>    wk59 wk6 wk60 wk61 wk62 wk63 wk64 wk65 wk66 wk67 wk68 wk69 wk7 wk70
+#> 1:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#> 2:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#> 3:    2   2    2    2    2    2    2    2    2    2    2    2   2    2
+#> 4:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#> 5:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#> 6:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
+#>    wk71 wk72 wk73 wk74 wk75 wk76 wk8 wk9
+#> 1:    1    1    1    1    1    1   1   1
+#> 2:    1    1    1    1    1    1   1   1
+#> 3:    2    2    2    2    2    2   2   2
+#> 4:    1    1    1    1    1    1   1   1
+#> 5:    1    1    1    1    1    1   1   1
+#> 6:    1    1    1    1    1    1   1   1
+```
+
+Notably, there are some current limitations to these: 1) `tidyselect`
+techniques do not work across the board (e.g. cannot use `start_with()`
+and friends) and 2) the functions are new and likely prone to edge-case
+bugs.
+
+But let’s compare some basic speed and efficiency. Note that the figures
+are in log-base-10 scale. Because of the `data.table` functions, these
+are extremely fast and
+efficient.
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" /><img src="man/figures/README-unnamed-chunk-9-2.png" width="70%" />
+
+    #> # A tibble: 4 x 3
+    #>   expression        median mem_alloc
+    #>   <chr>           <bch:tm> <bch:byt>
+    #> 1 dt_pivot_longer 908.81µs  993.47KB
+    #> 2 pivot_longer      6.29ms    2.63MB
+    #> 3 dt_pivot_wider   20.16ms     2.5MB
+    #> 4 pivot_wider     360.65ms    2.44MB
 
 ### If Else
 
@@ -259,14 +364,14 @@ identical(x_cat, x_cat_fif)
 Notably, `dt_case_when()` is very fast and memory efficient, given it is
 built on `data.table::fifelse()`.
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     131.3ms   148.8MB
-    #> 2 dt_case_when     36ms    34.3MB
-    #> 3 fifelse        35.9ms    34.3MB
+    #> 1 case_when       132ms   148.8MB
+    #> 2 dt_case_when   34.4ms    34.3MB
+    #> 3 fifelse        34.1ms    34.3MB
 
 ## Fill
 
@@ -369,13 +474,13 @@ marks3 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="70%" />
 
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.4ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.7ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   62.8ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.2ms    29.1MB
 
 ## Separate
 
@@ -412,14 +517,14 @@ Testing with a 4 MB data set with one variable that has columns of “A.B”
 repeatedly, shows that `dt_separate()` is fast but less memory efficient
 than `tidyr::separate()`.
 
-<img src="man/figures/README-unnamed-chunk-18-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-20-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               366ms    11.6MB
-    #> 2 dt_separate            126ms    30.6MB
-    #> 3 dt_separate-mutable    109ms    26.7MB
+    #> 1 separate               339ms    11.6MB
+    #> 2 dt_separate            111ms    30.6MB
+    #> 3 dt_separate-mutable    106ms    26.7MB
 
 ## Count and Uncount
 
@@ -480,112 +585,7 @@ marks5 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-22-1.png" width="70%" />
-
-## Pivoting
-
-Finally, thanks to \[@mtfairbanks\](<https://github.com/mtfairbanks>),
-we now have pivoting translations to `data.table::melt()` and
-`data.table::dcast()`. Consider the following example (similar to the
-example in `tidyr::pivot_longer()` and `tidyr::pivot_wider()`):
-
-``` r
-billboard <- tidyr::billboard
-
-# note the warning - melt is telling us what 
-#   it did with the various data types---logical (where there were just NAs
-#   and numeric
-longer <- billboard %>%
- dt_pivot_longer(
-   cols = c(-artist, -track, -date.entered),
-   names_to = "week",
-   names_prefix = "wk",
-   values_to = "rank"
- )
-#> Warning in melt.data.table(data = dt_, id.vars = id_vars, measure.vars =
-#> cols, : 'measure.vars' [wk1, wk2, wk3, wk4, ...] are not all of the same
-#> type. By order of hierarchy, the molten data value column will be of type
-#> 'double'. All measure variables not of type 'double' will be coerced too.
-#> Check DETAILS in ?melt.data.table for more on coercion.
-head(longer)
-#>          artist                   track date.entered week rank
-#> 1:        2 Pac Baby Don't Cry (Keep...   2000-02-26  wk1   87
-#> 2:      2Ge+her The Hardest Part Of ...   2000-09-02  wk1   91
-#> 3: 3 Doors Down              Kryptonite   2000-04-08  wk1   81
-#> 4: 3 Doors Down                   Loser   2000-10-21  wk1   76
-#> 5:     504 Boyz           Wobble Wobble   2000-04-15  wk1   57
-#> 6:         98^0 Give Me Just One Nig...   2000-08-19  wk1   51
-
-wider <- longer %>% 
-  dt_pivot_wider(
-    names_from = week,
-    values_from = rank
-  )
-#> Aggregate function missing, defaulting to 'length'
-head(wider)
-#>          artist wk1 wk10 wk11 wk12 wk13 wk14 wk15 wk16 wk17 wk18 wk19 wk2
-#> 1:        2 Pac   1    1    1    1    1    1    1    1    1    1    1   1
-#> 2:      2Ge+her   1    1    1    1    1    1    1    1    1    1    1   1
-#> 3: 3 Doors Down   2    2    2    2    2    2    2    2    2    2    2   2
-#> 4:     504 Boyz   1    1    1    1    1    1    1    1    1    1    1   1
-#> 5:         98^0   1    1    1    1    1    1    1    1    1    1    1   1
-#> 6:      A*Teens   1    1    1    1    1    1    1    1    1    1    1   1
-#>    wk20 wk21 wk22 wk23 wk24 wk25 wk26 wk27 wk28 wk29 wk3 wk30 wk31 wk32
-#> 1:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#> 2:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#> 3:    2    2    2    2    2    2    2    2    2    2   2    2    2    2
-#> 4:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#> 5:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#> 6:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#>    wk33 wk34 wk35 wk36 wk37 wk38 wk39 wk4 wk40 wk41 wk42 wk43 wk44 wk45
-#> 1:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#> 2:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#> 3:    2    2    2    2    2    2    2   2    2    2    2    2    2    2
-#> 4:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#> 5:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#> 6:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#>    wk46 wk47 wk48 wk49 wk5 wk50 wk51 wk52 wk53 wk54 wk55 wk56 wk57 wk58
-#> 1:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#> 2:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#> 3:    2    2    2    2   2    2    2    2    2    2    2    2    2    2
-#> 4:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#> 5:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#> 6:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#>    wk59 wk6 wk60 wk61 wk62 wk63 wk64 wk65 wk66 wk67 wk68 wk69 wk7 wk70
-#> 1:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#> 2:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#> 3:    2   2    2    2    2    2    2    2    2    2    2    2   2    2
-#> 4:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#> 5:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#> 6:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#>    wk71 wk72 wk73 wk74 wk75 wk76 wk8 wk9
-#> 1:    1    1    1    1    1    1   1   1
-#> 2:    1    1    1    1    1    1   1   1
-#> 3:    2    2    2    2    2    2   2   2
-#> 4:    1    1    1    1    1    1   1   1
-#> 5:    1    1    1    1    1    1   1   1
-#> 6:    1    1    1    1    1    1   1   1
-```
-
-Notably, there are some current limitations to these: 1) `tidyselect`
-techniques do not work across the board (e.g. cannot use `start_with()`
-and friends) and 2) the functions are new and likely prone to edge-case
-bugs.
-
-But let’s compare some basic speed and efficiency. Note that the figures
-are in log-base-10 scale. Because of the `data.table` functions, these
-are extremely fast and
-efficient.
-
-<img src="man/figures/README-unnamed-chunk-24-1.png" width="70%" /><img src="man/figures/README-unnamed-chunk-24-2.png" width="70%" />
-
-    #> # A tibble: 4 x 3
-    #>   expression        median mem_alloc
-    #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer      1ms  993.47KB
-    #> 2 pivot_longer      6.48ms    2.63MB
-    #> 3 dt_pivot_wider   20.38ms     2.5MB
-    #> 4 pivot_wider     358.57ms    2.43MB
+<img src="man/figures/README-unnamed-chunk-24-1.png" width="70%" />
 
 ## Notes
 

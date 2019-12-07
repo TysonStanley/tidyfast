@@ -6,11 +6,11 @@
 #' \code{dt_pivot_longer()}. Syntax based on the \code{tidyr} equivalents.
 #'
 #' @param dt_ the data table to widen
-#' @param id_cols A set of columns that uniquely identifies each observation. Defaults to all columns in the data table except for the columns specified in `names_from` and `values_from`. Typically used when you have additional variables that is directly related.
-#' @param names_from A pair of arguments describing which column (or columns) to get the name of the output column (`name_from`), and which column (or columns) to get the cell values from (`values_from`).
+#' @param id_cols A set of columns that uniquely identifies each observation. Defaults to all columns in the data table except for the columns specified in \code{names_from} and \code{values_from}. Typically used when you have additional variables that is directly related.
+#' @param names_from A pair of arguments describing which column (or columns) to get the name of the output column (\code{name_from}), and which column (or columns) to get the cell values from (\code{values_from}).
 #' @param names_sep the separator between the names of the columns
-#' @param values_from A pair of arguments describing which column (or columns) to get the name of the output column (`name_from`), and which column (or columns) to get the cell values from (`values_from`).
-#' @param drop will cast by including all missing combinations. c(FALSE, TRUE) will only include all missing combinations of formula LHS; c(TRUE, FALSE) will only include all missing combinations of formula RHS.
+#' @param values_from A pair of arguments describing which column (or columns) to get the name of the output column (\code{name_from}), and which column (or columns) to get the cell values from (\code{values_from}).
+#' @param drop When \code{FALSE}, will cast by including all missing combinations. When \code{TRUE}, it is drop missing combination. \code{c(FALSE, TRUE)} will only include all missing combinations of formula LHS; \code{c(TRUE, FALSE)} will only include all missing combinations of formula RHS.
 #'
 #' @examples
 #'
@@ -30,7 +30,7 @@ dt_pivot_wider <- function(dt_,
                            names_from,
                            names_sep = "_",
                            values_from,
-                           drop = FALSE){
+                           drop = TRUE){
   UseMethod("dt_pivot_wider", dt_)
 }
 
@@ -40,7 +40,7 @@ dt_pivot_wider <- function(dt_,
                            names_from,
                            names_sep = "_",
                            values_from,
-                           drop = FALSE) {
+                           drop = TRUE) {
 
   is.data.frame(dt_) || is.data.table(dt_) || stop("data must be a data.frame or data.table")
 
@@ -66,18 +66,20 @@ dt_pivot_wider <- function(dt_,
   }
 
   if (length(id_cols) == 0) {
-    dcast(dt_,
-          formula = dcast_form,
-          value.var = values_from,
-          fun.aggregate = NULL,
-          sep = names_sep,
-          drop = drop)[, . := NULL][]
+    dcast.data.table(
+      dt_,
+      formula = dcast_form,
+      value.var = values_from,
+      fun.aggregate = NULL,
+      sep = names_sep,
+      drop = drop)[, . := NULL][]
   } else {
-    dcast(dt_,
-          formula = dcast_form,
-          value.var = values_from,
-          fun.aggregate = NULL,
-          sep = names_sep,
-          drop = drop)
+    dcast.data.table(
+      dt_,
+      formula = dcast_form,
+      value.var = values_from,
+      fun.aggregate = NULL,
+      sep = names_sep,
+      drop = drop)
   }
 }

@@ -117,7 +117,7 @@ decreasing the number of rows. The inverse transformation is
     </div>
 
     <pre class="usage"><span class='fu'>dt_pivot_wider</span>(<span class='no'>dt_</span>, <span class='kw'>id_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>names_from</span>, <span class='kw'>names_sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>,
-  <span class='no'>values_from</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='no'>values_from</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -128,11 +128,11 @@ decreasing the number of rows. The inverse transformation is
     </tr>
     <tr>
       <th>id_cols</th>
-      <td><p>A set of columns that uniquely identifies each observation. Defaults to all columns in the data table except for the columns specified in `names_from` and `values_from`. Typically used when you have additional variables that is directly related.</p></td>
+      <td><p>A set of columns that uniquely identifies each observation. Defaults to all columns in the data table except for the columns specified in <code>names_from</code> and <code>values_from</code>. Typically used when you have additional variables that is directly related.</p></td>
     </tr>
     <tr>
       <th>names_from</th>
-      <td><p>A pair of arguments describing which column (or columns) to get the name of the output column (`name_from`), and which column (or columns) to get the cell values from (`values_from`).</p></td>
+      <td><p>A pair of arguments describing which column (or columns) to get the name of the output column (<code>name_from</code>), and which column (or columns) to get the cell values from (<code>values_from</code>).</p></td>
     </tr>
     <tr>
       <th>names_sep</th>
@@ -140,11 +140,11 @@ decreasing the number of rows. The inverse transformation is
     </tr>
     <tr>
       <th>values_from</th>
-      <td><p>A pair of arguments describing which column (or columns) to get the name of the output column (`name_from`), and which column (or columns) to get the cell values from (`values_from`).</p></td>
+      <td><p>A pair of arguments describing which column (or columns) to get the name of the output column (<code>name_from</code>), and which column (or columns) to get the cell values from (<code>values_from</code>).</p></td>
     </tr>
     <tr>
       <th>drop</th>
-      <td><p>will cast by including all missing combinations. c(FALSE, TRUE) will only include all missing combinations of formula LHS; c(TRUE, FALSE) will only include all missing combinations of formula RHS.</p></td>
+      <td><p>When <code>FALSE</code>, will cast by including all missing combinations. When <code>TRUE</code>, it is drop missing combination. <code><a href='https://rdrr.io/r/base/c.html'>c(FALSE, TRUE)</a></code> will only include all missing combinations of formula LHS; <code><a href='https://rdrr.io/r/base/c.html'>c(TRUE, FALSE)</a></code> will only include all missing combinations of formula RHS.</p></td>
     </tr>
     </table>
 

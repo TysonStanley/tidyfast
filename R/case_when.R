@@ -36,13 +36,21 @@ dt_case_when <- function(...){
   n <- length(dots)
   conds <- conditions(dots)
   labels <- assigned_label(dots)
-  class <- class(labels)
+  class <- sapply(labels, typeof)
+  if (length(unique(class)) > 1 && (! "symbol" %in% unique(class)))
+    stop("The labels are of different types: ",
+         paste(unique(class), collapse = ", "), call. = FALSE)
+  class <- class[[1]]
 
   # make the right NA based on assigned labels
   na_type <- na_type_fun(class)
 
   # create fifelse() call
-  calls <- call("fifelse", conds[[n]], labels[[n]], eval(na_type))
+  if (isTRUE(conds[[n]])){
+    calls <- labels[[n]]
+  } else {
+    calls <- call("fifelse", conds[[n]], labels[[n]], eval(na_type))
+  }
   for (i in rev(seq_len(n))[-1]){
     calls <- call("fifelse", conds[[i]], labels[[i]], calls)
   }

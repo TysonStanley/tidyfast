@@ -69,7 +69,7 @@ The current functions include:
 
 `tidyfast` attempts to convert syntax from `tidyr` with its accompanying grammar to `data.table` function calls. As such, we have tried to maintain the `tidyr` syntax as closely as possible without hurting speed and efficiency. Some more advanced use cases in `tidyr` may not translate yet. We try to be transparent about the shortcomings in syntax and behavior where known.
 
-Each function that takes data (labeled as `dt_` in the package docs) as its first argument automatically coerces it to a data table with `as.data.table()` if it isn't already a data table. These will return a data table.
+Each function that takes data (labeled as `dt_` in the package docs) as its first argument automatically coerces it to a data table with `as.data.table()` if it isn't already a data table. Each of these functions will return a data table.
 
 
 ## Installation
@@ -187,20 +187,19 @@ billboard <- tidyr::billboard
 #   it did with the various data types---logical (where there were just NAs
 #   and numeric
 longer <- billboard %>%
- dt_pivot_longer(
-   cols = c(-artist, -track, -date.entered),
-   names_to = "week",
-   names_prefix = "wk",
-   values_to = "rank"
- )
-head(longer)
+  dt_pivot_longer(
+     cols = c(-artist, -track, -date.entered),
+     names_to = "week",
+     values_to = "rank"
+  )
+longer
 
 wider <- longer %>% 
   dt_pivot_wider(
     names_from = week,
     values_from = rank
   )
-head(wider)
+wider[, .(artist, track, wk1, wk2)]
 ```
 
 Notably, there are some current limitations to these: 1) `tidyselect` techniques do not work across the board (e.g. cannot use `start_with()` and friends) and 2) the functions are new and likely prone to edge-case bugs.

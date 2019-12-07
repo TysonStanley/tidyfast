@@ -84,8 +84,8 @@ and behavior where known.
 
 Each function that takes data (labeled as `dt_` in the package docs) as
 its first argument automatically coerces it to a data table with
-`as.data.table()` if it isn’t already a data table. These will return a
-data table.
+`as.data.table()` if it isn’t already a data table. Each of these
+functions will return a data table.
 
 ## Installation
 
@@ -184,7 +184,7 @@ well.
 
 ``` r
 dt_hoist(dt, nested1, nested2)
-#> The following columns were dropped because they are list-columns (but not being hoisted): nested1, nested2
+#> The following columns were dropped because they are list-columns (but not being hoisted):
 #>                  x         y grp     id nested1 nested2
 #>       1: 0.1720703 0.3376675   2      1       1  thing1
 #>       2: 0.1720703 0.3376675   2      1       1  thing1
@@ -210,12 +210,12 @@ highlighted below. Notably, the timings are without the `nested1` and
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
     #> 1 dt_nest      3.16ms    2.88MB
-    #> 2 group_nest   4.86ms    2.54MB
+    #> 2 group_nest   4.79ms    2.54MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    4.97ms    5.49MB
-    #> 2 unnest      12.47ms    8.47MB
+    #> 1 dt_unnest     4.7ms    5.49MB
+    #> 2 unnest       12.6ms    8.47MB
 
 ## Pivoting
 
@@ -231,75 +231,48 @@ billboard <- tidyr::billboard
 #   it did with the various data types---logical (where there were just NAs
 #   and numeric
 longer <- billboard %>%
- dt_pivot_longer(
-   cols = c(-artist, -track, -date.entered),
-   names_to = "week",
-   names_prefix = "wk",
-   values_to = "rank"
- )
+  dt_pivot_longer(
+     cols = c(-artist, -track, -date.entered),
+     names_to = "week",
+     values_to = "rank"
+  )
 #> Warning in melt.data.table(data = dt_, id.vars = id_vars, measure.vars =
 #> cols, : 'measure.vars' [wk1, wk2, wk3, wk4, ...] are not all of the same
 #> type. By order of hierarchy, the molten data value column will be of type
 #> 'double'. All measure variables not of type 'double' will be coerced too.
 #> Check DETAILS in ?melt.data.table for more on coercion.
-head(longer)
-#>          artist                   track date.entered week rank
-#> 1:        2 Pac Baby Don't Cry (Keep...   2000-02-26  wk1   87
-#> 2:      2Ge+her The Hardest Part Of ...   2000-09-02  wk1   91
-#> 3: 3 Doors Down              Kryptonite   2000-04-08  wk1   81
-#> 4: 3 Doors Down                   Loser   2000-10-21  wk1   76
-#> 5:     504 Boyz           Wobble Wobble   2000-04-15  wk1   57
-#> 6:         98^0 Give Me Just One Nig...   2000-08-19  wk1   51
+longer
+#>                  artist                   track date.entered week rank
+#>     1:            2 Pac Baby Don't Cry (Keep...   2000-02-26  wk1   87
+#>     2:          2Ge+her The Hardest Part Of ...   2000-09-02  wk1   91
+#>     3:     3 Doors Down              Kryptonite   2000-04-08  wk1   81
+#>     4:     3 Doors Down                   Loser   2000-10-21  wk1   76
+#>     5:         504 Boyz           Wobble Wobble   2000-04-15  wk1   57
+#>    ---                                                                
+#> 24088:      Yankee Grey    Another Nine Minutes   2000-04-29 wk76   NA
+#> 24089: Yearwood, Trisha         Real Live Woman   2000-04-01 wk76   NA
+#> 24090:  Ying Yang Twins Whistle While You Tw...   2000-03-18 wk76   NA
+#> 24091:    Zombie Nation           Kernkraft 400   2000-09-02 wk76   NA
+#> 24092:  matchbox twenty                    Bent   2000-04-29 wk76   NA
 
 wider <- longer %>% 
   dt_pivot_wider(
     names_from = week,
     values_from = rank
   )
-#> Aggregate function missing, defaulting to 'length'
-head(wider)
-#>          artist wk1 wk10 wk11 wk12 wk13 wk14 wk15 wk16 wk17 wk18 wk19 wk2
-#> 1:        2 Pac   1    1    1    1    1    1    1    1    1    1    1   1
-#> 2:      2Ge+her   1    1    1    1    1    1    1    1    1    1    1   1
-#> 3: 3 Doors Down   2    2    2    2    2    2    2    2    2    2    2   2
-#> 4:     504 Boyz   1    1    1    1    1    1    1    1    1    1    1   1
-#> 5:         98^0   1    1    1    1    1    1    1    1    1    1    1   1
-#> 6:      A*Teens   1    1    1    1    1    1    1    1    1    1    1   1
-#>    wk20 wk21 wk22 wk23 wk24 wk25 wk26 wk27 wk28 wk29 wk3 wk30 wk31 wk32
-#> 1:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#> 2:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#> 3:    2    2    2    2    2    2    2    2    2    2   2    2    2    2
-#> 4:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#> 5:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#> 6:    1    1    1    1    1    1    1    1    1    1   1    1    1    1
-#>    wk33 wk34 wk35 wk36 wk37 wk38 wk39 wk4 wk40 wk41 wk42 wk43 wk44 wk45
-#> 1:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#> 2:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#> 3:    2    2    2    2    2    2    2   2    2    2    2    2    2    2
-#> 4:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#> 5:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#> 6:    1    1    1    1    1    1    1   1    1    1    1    1    1    1
-#>    wk46 wk47 wk48 wk49 wk5 wk50 wk51 wk52 wk53 wk54 wk55 wk56 wk57 wk58
-#> 1:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#> 2:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#> 3:    2    2    2    2   2    2    2    2    2    2    2    2    2    2
-#> 4:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#> 5:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#> 6:    1    1    1    1   1    1    1    1    1    1    1    1    1    1
-#>    wk59 wk6 wk60 wk61 wk62 wk63 wk64 wk65 wk66 wk67 wk68 wk69 wk7 wk70
-#> 1:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#> 2:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#> 3:    2   2    2    2    2    2    2    2    2    2    2    2   2    2
-#> 4:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#> 5:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#> 6:    1   1    1    1    1    1    1    1    1    1    1    1   1    1
-#>    wk71 wk72 wk73 wk74 wk75 wk76 wk8 wk9
-#> 1:    1    1    1    1    1    1   1   1
-#> 2:    1    1    1    1    1    1   1   1
-#> 3:    2    2    2    2    2    2   2   2
-#> 4:    1    1    1    1    1    1   1   1
-#> 5:    1    1    1    1    1    1   1   1
-#> 6:    1    1    1    1    1    1   1   1
+wider[, .(artist, track, wk1, wk2)]
+#>                artist                   track wk1 wk2
+#>   1:            2 Pac Baby Don't Cry (Keep...  87  82
+#>   2:          2Ge+her The Hardest Part Of ...  91  87
+#>   3:     3 Doors Down              Kryptonite  81  70
+#>   4:     3 Doors Down                   Loser  76  76
+#>   5:         504 Boyz           Wobble Wobble  57  34
+#>  ---                                                 
+#> 313:      Yankee Grey    Another Nine Minutes  86  83
+#> 314: Yearwood, Trisha         Real Live Woman  85  83
+#> 315:  Ying Yang Twins Whistle While You Tw...  95  94
+#> 316:    Zombie Nation           Kernkraft 400  99  99
+#> 317:  matchbox twenty                    Bent  60  37
 ```
 
 Notably, there are some current limitations to these: 1) `tidyselect`
@@ -317,10 +290,10 @@ efficient.
     #> # A tibble: 4 x 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer 908.81µs  993.47KB
+    #> 1 dt_pivot_longer   1.01ms  993.47KB
     #> 2 pivot_longer      6.29ms    2.63MB
-    #> 3 dt_pivot_wider   20.16ms     2.5MB
-    #> 4 pivot_wider     360.65ms    2.44MB
+    #> 3 dt_pivot_wider   10.78ms    1.86MB
+    #> 4 pivot_wider     361.81ms    2.43MB
 
 ### If Else
 
@@ -369,9 +342,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when       132ms   148.8MB
-    #> 2 dt_case_when   34.4ms    34.3MB
-    #> 3 fifelse        34.1ms    34.3MB
+    #> 1 case_when     123.8ms   148.8MB
+    #> 2 dt_case_when   32.5ms    34.3MB
+    #> 3 fifelse          34ms    34.3MB
 
 ## Fill
 
@@ -479,8 +452,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   62.8ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.2ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   62.5ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   22.8ms    29.1MB
 
 ## Separate
 
@@ -522,9 +495,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               339ms    11.6MB
-    #> 2 dt_separate            111ms    30.6MB
-    #> 3 dt_separate-mutable    106ms    26.7MB
+    #> 1 separate               358ms    11.6MB
+    #> 2 dt_separate            113ms    30.6MB
+    #> 3 dt_separate-mutable    108ms    26.7MB
 
 ## Count and Uncount
 

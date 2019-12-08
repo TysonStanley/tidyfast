@@ -96,9 +96,10 @@ dt_hoist.default <- function(dt_, ...){
   keep <- paste(keep, collapse = ",")
   cols <- substitute(unlist(list(...), recursive = FALSE))
 
-  message("The following columns were dropped because ",
-          "they are list-columns (but not being hoisted): ",
-          paste(drop, collapse = ", "))
+  if (length(drop) > 1)
+    message("The following columns were dropped because ",
+            "they are list-columns (but not being hoisted): ",
+            paste(drop, collapse = ", "))
 
   dt_ <- dt_[, eval(cols), by = keep]
   dt_ <- .naming(dt_, substitute(list(...)))

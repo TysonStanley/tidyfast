@@ -31,7 +31,7 @@ dt_print_options <- function(class = TRUE,
   options("datatable.print.topn" = topn)
   options("datatable.print.nrows" = nrows)
   options("datatable.print.rownames" = rownames)
-  if (packageVersion("data.table") > "1.12.6")
+  if (packageVersion("data.table") >= "1.12.9")
     options("datatable.print.trunc.cols" = trunc.cols)
 
 }

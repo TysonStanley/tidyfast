@@ -26,8 +26,6 @@ dt <- data.table(
    id = 1:1e5
    )
 
-dt_hoist(dt,
-         nested1, nested2,
-         by = id)
+dt_hoist(dt, nested1, nested2)
 
 }

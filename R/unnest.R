@@ -69,9 +69,7 @@ dt_unnest.default <- function(dt_, col, ...){
 #'    id = 1:1e5
 #'    )
 #'
-#' dt_hoist(dt,
-#'          nested1, nested2,
-#'          by = id)
+#' dt_hoist(dt, nested1, nested2)
 #'
 #' @import data.table
 #'

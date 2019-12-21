@@ -1,12 +1,15 @@
 Package: tidyfast
 Title: Fast Tidying of Data
 Version: 0.2.0
-Authors@R: 
+Authors@R: c(
     person(given = "Tyson",
            family = "Barrett",
            role = c("aut", "cre"),
            email = "t.barrett@aggiemail.usu.edu",
-           comment = c(ORCID = "0000-0002-2137-1391"))
+           comment = c(ORCID = "0000-0002-2137-1391")),
+    person(given = "Mark",
+           family = "Fairbanks",
+           role = "ctb"))
 Description: Some tidying functions built on data.table
     to provide quick and efficient data manipulation with
     minimal overhead.

@@ -35,24 +35,25 @@ dt_pivot_wider <- function(dt_,
 }
 
 #' @export
-dt_pivot_wider <- function(dt_,
-                           id_cols = NULL,
-                           names_from,
-                           names_sep = "_",
-                           values_from,
-                           drop = TRUE) {
+dt_pivot_wider.default <- function(dt_,
+                                   id_cols = NULL,
+                                   names_from,
+                                   names_sep = "_",
+                                   values_from,
+                                   drop = TRUE) {
 
-  is.data.frame(dt_) || is.data.table(dt_) || stop("data must be a data.frame or data.table")
-
+  if (!is.data.frame(dt_)) stop("dt_ must be a data.frame or data.table")
   if (!is.data.table(dt_)) dt_ <- as.data.table(dt_)
 
-  names_from <- characterize(substitute(names_from))
-  values_from <- characterize(substitute(values_from))
+  names_from <- column_selector(dt_, substitute(names_from))
+  values_from <- column_selector(dt_, substitute(values_from))
 
-  if (missing(id_cols)) {
+  id_cols <- substitute(id_cols)
+
+  if (is.null(id_cols)) {
     id_cols <- colnames(dt_)[!colnames(dt_) %in% c(names_from, values_from)]
   } else {
-    id_cols <- characterize(substitute(id_cols))
+    id_cols <- column_selector(dt_, id_cols)
   }
 
   if (length(id_cols) == 0) {

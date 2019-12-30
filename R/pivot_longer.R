@@ -23,6 +23,11 @@
 #'                 names_to = "stuff",
 #'                 values_to = "things")
 #'
+#' dt_pivot_longer(example_dt,
+#'                 cols = -z,
+#'                 names_to = "stuff",
+#'                 values_to = "things")
+#'
 #' @importFrom data.table melt
 #' @importFrom stats setNames
 #'
@@ -48,7 +53,6 @@ dt_pivot_longer.default <- function(dt_,
   if (!is.data.table(dt_)) dt_ <- as.data.table(dt_)
 
   names <- colnames(dt_)
-
   cols <- substitute(cols)
 
   if (is.null(cols)) {
@@ -76,15 +80,12 @@ dt_pivot_longer.default <- function(dt_,
 column_selector <- function(dt_, select_vars) {
 
   data_names <- colnames(dt_)
-
   data_vars <- setNames(as.list(seq_along(dt_)), data_names)
-
   select_index <- unlist(eval(select_vars, data_vars))
 
   if (any(select_index > 0) && any(select_index < 0))
     stop("cols must only contain columns to drop OR columns to add, not both")
 
   select_vars <- data_names[select_index]
-
   select_vars
 }

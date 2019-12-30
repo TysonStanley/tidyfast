@@ -35,4 +35,9 @@ dt_pivot_longer(example_dt,
                 names_to = "stuff",
                 values_to = "things")
 
+dt_pivot_longer(example_dt,
+                cols = -z,
+                names_to = "stuff",
+                values_to = "things")
+
 }

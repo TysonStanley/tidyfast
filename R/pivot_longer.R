@@ -23,7 +23,13 @@
 #'                 names_to = "stuff",
 #'                 values_to = "things")
 #'
+#' dt_pivot_longer(example_dt,
+#'                 cols = -z,
+#'                 names_to = "stuff",
+#'                 values_to = "things")
+#'
 #' @importFrom data.table melt
+#' @importFrom stats setNames
 #'
 #' @export
 dt_pivot_longer <- function(dt_,
@@ -43,37 +49,20 @@ dt_pivot_longer.default <- function(dt_,
                                     values_drop_na = FALSE,
                                     ...) {
 
-  is.data.frame(dt_) || is.data.table(dt_) || stop("data must be a data.frame or data.table")
-
+  if (!is.data.frame(dt_)) stop("dt_ must be a data.frame or data.table")
   if (!is.data.table(dt_)) dt_ <- as.data.table(dt_)
 
-  if (missing(cols)) {
-    # All columns if cols = NULL
-    cols <- colnames(dt_)
-  } else {
-    cols <- characterize(substitute(cols))
-  }
-
   names <- colnames(dt_)
+  cols <- substitute(cols)
 
-  if (cols[1] == "-") {
-    # If cols is a single "unselected" column
-    # Ex: cols = -z
-    drop_cols <- cols[2]
-    cols <- names[!names %in% drop_cols]
-
-  } else if (all(grepl("-", cols))) {
-    # If cols is a vector of columns to drop
-    # Ex: cols = c(-y, -z)
-    drop_cols <- gsub("-", "", cols)
-    cols <- names[!names %in% drop_cols]
-    if (length(cols) == 0)
-      warning("No columns remaining after removing", paste(drop_cols, collapse = ", "))
-
-  } else if (any(grepl("-", cols)) && any(!grepl("-", cols))) {
-    # Ex: cols = c(x, -z)
-    stop("cols must only contain columns to drop OR columns to add, not both")
+  if (is.null(cols)) {
+    # All columns if cols = NULL
+    cols <- names
+  } else {
+    cols <- column_selector(dt_, cols)
   }
+
+  if (length(cols) == 0) warning("No columns remaining after removing")
 
   id_vars <- names[!names %in% cols]
 
@@ -88,14 +77,15 @@ dt_pivot_longer.default <- function(dt_,
        value.factor = FALSE)
 }
 
+column_selector <- function(dt_, select_vars) {
 
-characterize <- function(vec_list_expr) {
-  vle_length <- length(vec_list_expr)
-  if (vle_length == 1) {
-    as.character(vec_list_expr)
-  } else if (as.character(vec_list_expr)[1] == "-"){
-    as.character(vec_list_expr)
-  } else {
-    as.character(vec_list_expr)[-1]
-  }
+  data_names <- colnames(dt_)
+  data_vars <- setNames(as.list(seq_along(dt_)), data_names)
+  select_index <- unlist(eval(select_vars, data_vars))
+
+  if (any(select_index > 0) && any(select_index < 0))
+    stop("cols must only contain columns to drop OR columns to add, not both")
+
+  select_vars <- data_names[select_index]
+  select_vars
 }

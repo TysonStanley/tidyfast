@@ -66,11 +66,6 @@ test_that("testing removal of multiple columns", {
   expect_warning(dt_pivot_longer(df, c(-x,-y,-z)))
 })
 
-test_that("stops if dropping and adding cols", {
-  df <- data.table(x = c(1, 2), y = c(2,2))
-  expect_error(dt_pivot_longer(df, c(x,-y)))
-})
-
 test_that("stops if given vector", {
   df <- data.table(x = c(1, 2), y = c(2,2))
   expect_error(dt_pivot_longer(df$x, c(x,-y)))

@@ -4,8 +4,14 @@
 \alias{dt_pivot_wider}
 \title{Pivot data from long to wide}
 \usage{
-dt_pivot_wider(dt_, id_cols = NULL, names_from, names_sep = "_",
-  values_from, drop = TRUE)
+dt_pivot_wider(
+  dt_,
+  id_cols = NULL,
+  names_from,
+  names_sep = "_",
+  values_from,
+  drop = TRUE
+)
 }
 \arguments{
 \item{dt_}{the data table to widen}

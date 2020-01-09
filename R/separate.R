@@ -1,4 +1,4 @@
-#' Separate with data.table
+#' Separate columns with data.table
 #'
 #' Separates a column of data into others, by splitting based a separator or regular expression
 #'

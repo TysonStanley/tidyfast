@@ -17,6 +17,7 @@ Imports:
     data.table (>= 1.12.4),
     Rcpp
 Suggests:
+    magrittr,
     tidyr,
     dplyr,
     testthat (>= 2.1.0),
@@ -24,6 +25,6 @@ Suggests:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 LinkingTo: 
     Rcpp

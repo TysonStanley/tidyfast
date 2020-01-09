@@ -58,3 +58,15 @@ test_that("can pivot from multiple measure cols using all keys", {
   expect_equal(pv$b_y, 4)
 })
 
+# select helpers ----------------------------------------------------------
+
+test_that("can pivot from multiple measure cols using helpers", {
+  df <- data.table(row = 1, var = c("x", "y"), a = 1:2, b = 3:4)
+  pv <- dt_pivot_wider(df,
+                       names_from = var,
+                       values_from = c(dt_starts_with("a"), dt_ends_with("b")))
+
+  expect_named(pv, c("row", "a_x", "a_y", "b_x", "b_y"))
+  expect_equal(pv$a_x, 1)
+  expect_equal(pv$b_y, 4)
+})

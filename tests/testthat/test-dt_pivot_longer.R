@@ -71,3 +71,22 @@ test_that("stops if given vector", {
   expect_error(dt_pivot_longer(df$x, c(x,-y)))
 })
 
+test_that("works with select helpers", {
+  df <- data.table(x = 1:2, y = 2, z = 1:2)
+  pivot_df <- dt_pivot_longer(df, cols = c(dt_starts_with("y"), dt_contains("z")))[order(name, value)]
+  tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, c(dplyr::starts_with("y"), dplyr::contains("z"))), name, value)
+
+  expect_named(pivot_df, c("x", "name", "value"))
+  expect_equal(pivot_df$x, tidyr_df$x)
+})
+
+test_that("a single helper works outside of c() call", {
+  df <- data.table(x = 1:2, y = 3:4)
+  pivot_df <- dt_pivot_longer(df, cols = dt_everything())[order(name, value)]
+  tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, cols = dplyr::everything()), name, value)
+
+  expect_named(pivot_df, c("name", "value"))
+  expect_equal(pivot_df$name, tidyr_df$name)
+  expect_equal(pivot_df$value, tidyr_df$value)
+})
+

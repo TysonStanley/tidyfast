@@ -8,20 +8,19 @@
 #' * `dt_contains()`: Contains a literal string
 #' * `dt_everything()`: Matches all variables
 #'
-#' @param match
+#' @param match a character string to match to variable names
 #'
 #' @md
-#' @return
-#' @export
-#'
 #' @examples
 #' library(data.table)
-#' library(tidyfast)
 #'
-#' example_dt <- data.table(x = c(1,2,3), y = c(4,5,6), z = c("a", "b", "c"))
+#' # example of using it with `dt_pivot_longer()`
+#' df <- data.table(row = 1, var = c("x", "y"), a = 1:2, b = 3:4)
+#' pv <- dt_pivot_wider(df,
+#'                      names_from = var,
+#'                      values_from = c(dt_starts_with("a"), dt_ends_with("b")))
 #'
-#' example_dt %>%
-#'   dt_select(dt_ends_with("z"), dt_everything())
+#' @export
 dt_starts_with <- function(match) {
   .names <- names(parent.frame())
 
@@ -29,7 +28,7 @@ dt_starts_with <- function(match) {
 }
 
 #' @export
-#' @inherit dt_starts_with
+#' @rdname dt_starts_with
 dt_contains <- function(match) {
   .names <- names(parent.frame())
 
@@ -37,7 +36,7 @@ dt_contains <- function(match) {
 }
 
 #' @export
-#' @inherit dt_starts_with
+#' @rdname dt_starts_with
 dt_ends_with <- function(match) {
   .names <- names(parent.frame())
 
@@ -45,7 +44,7 @@ dt_ends_with <- function(match) {
 }
 
 #' @export
-#' @inherit dt_starts_with
+#' @rdname dt_starts_with
 dt_everything <- function() {
   .names <- names(parent.frame())
 

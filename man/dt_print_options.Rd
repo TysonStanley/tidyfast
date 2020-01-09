@@ -4,8 +4,13 @@
 \alias{dt_print_options}
 \title{Set Print Method}
 \usage{
-dt_print_options(class = TRUE, topn = 5, rownames = TRUE,
-  nrows = 100, trunc.cols = TRUE)
+dt_print_options(
+  class = TRUE,
+  topn = 5,
+  rownames = TRUE,
+  nrows = 100,
+  trunc.cols = TRUE
+)
 }
 \arguments{
 \item{class}{should the variable class be printed? (\code{options("datatable.print.class")})}

@@ -2,15 +2,21 @@
 % Please edit documentation in R/select_helpers.R
 \name{dt_starts_with}
 \alias{dt_starts_with}
+\alias{dt_contains}
+\alias{dt_ends_with}
+\alias{dt_everything}
 \title{Select helpers}
 \usage{
 dt_starts_with(match)
+
+dt_contains(match)
+
+dt_ends_with(match)
+
+dt_everything()
 }
 \arguments{
-\item{match}{}
-}
-\value{
-
+\item{match}{a character string to match to variable names}
 }
 \description{
 These functions allow you to select variables based on their names.
@@ -23,10 +29,11 @@ These functions allow you to select variables based on their names.
 }
 \examples{
 library(data.table)
-library(tidyfast)
 
-example_dt <- data.table(x = c(1,2,3), y = c(4,5,6), z = c("a", "b", "c"))
+# example of using it with `dt_pivot_longer()`
+df <- data.table(row = 1, var = c("x", "y"), a = 1:2, b = 3:4)
+pv <- dt_pivot_wider(df,
+                     names_from = var,
+                     values_from = c(dt_starts_with("a"), dt_ends_with("b")))
 
-example_dt \%>\%
-  dt_select(dt_ends_with("z"), dt_everything())
 }

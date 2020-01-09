@@ -17,6 +17,7 @@ Imports:
     data.table (>= 1.12.4),
     Rcpp
 Suggests:
+    magrittr,
     tidyr,
     dplyr,
     testthat (>= 2.1.0),

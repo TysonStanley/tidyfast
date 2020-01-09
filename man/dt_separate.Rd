@@ -2,10 +2,19 @@
 % Please edit documentation in R/separate.R
 \name{dt_separate}
 \alias{dt_separate}
-\title{Separate with data.table}
+\title{Separate columns with data.table}
 \usage{
-dt_separate(dt_, col, into, sep = ".", remove = TRUE, fill = NA,
-  fixed = TRUE, immutable = TRUE, ...)
+dt_separate(
+  dt_,
+  col,
+  into,
+  sep = ".",
+  remove = TRUE,
+  fill = NA,
+  fixed = TRUE,
+  immutable = TRUE,
+  ...
+)
 }
 \arguments{
 \item{dt_}{the data table (or if not a data.table then it is coerced with as.data.table)}

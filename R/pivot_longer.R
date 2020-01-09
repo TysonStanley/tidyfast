@@ -53,13 +53,12 @@ dt_pivot_longer.default <- function(dt_,
   if (!is.data.table(dt_)) dt_ <- as.data.table(dt_)
 
   names <- colnames(dt_)
-  cols <- substitute(cols)
 
-  if (is.null(cols)) {
+  if (is.null(substitute(cols))) {
     # All columns if cols = NULL
     cols <- names
   } else {
-    cols <- column_selector(dt_, cols)
+    cols <- column_selector(dt_, substitute(c(cols)))
   }
 
   if (length(cols) == 0) warning("No columns remaining after removing")
@@ -77,15 +76,15 @@ dt_pivot_longer.default <- function(dt_,
        value.factor = FALSE)
 }
 
-column_selector <- function(dt_, select_vars) {
+column_selector <- function(.data, select_vars) {
 
-  data_names <- colnames(dt_)
+  data_names <- colnames(.data)
+  data_vars <- setNames(as.list(seq_along(.data)), data_names)
 
-  data_vars <- setNames(as.list(seq_along(dt_)), data_names)
+  select_index <- eval(select_vars, data_vars)
 
-  select_index <- unlist(eval(select_vars, data_vars))
   keep_index <- unique(select_index[select_index > 0])
-  if (length(keep_index) == 0) keep_index <- seq_along(dt_)
+  if (length(keep_index) == 0) keep_index <- seq_along(.data)
   drop_index <- unique(abs(select_index[select_index < 0]))
 
   select_index <- setdiff(keep_index, drop_index)

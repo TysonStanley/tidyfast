@@ -4,8 +4,14 @@
 \alias{dt_pivot_longer}
 \title{Pivot data from wide to long}
 \usage{
-dt_pivot_longer(dt_, cols = NULL, names_to = "name",
-  values_to = "value", values_drop_na = FALSE, ...)
+dt_pivot_longer(
+  dt_,
+  cols = NULL,
+  names_to = "name",
+  values_to = "value",
+  values_drop_na = FALSE,
+  ...
+)
 }
 \arguments{
 \item{dt_}{The data table to pivot longer}

@@ -23,3 +23,13 @@ test_that("can use select helpers", {
 
   expect_named(df, c("x_start", "end_y", "stuff"))
 })
+
+## Variants ----------------
+
+test_that("select_if() works", {
+  df <- data.table(x = c(1,1,1), y = c(2,2,2), z = c("a", "a", "b"))
+  df <- df %>%
+    dt_select_if(is.numeric)
+
+  expect_named(df, c("x", "y"))
+})

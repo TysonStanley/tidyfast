@@ -15,9 +15,9 @@ Description: Some tidying functions built on data.table
     minimal overhead.
 Imports: 
     data.table (>= 1.12.4),
-    Rcpp
+    Rcpp,
+    magrittr
 Suggests:
-    magrittr,
     tidyr,
     dplyr,
     testthat (>= 2.1.0),

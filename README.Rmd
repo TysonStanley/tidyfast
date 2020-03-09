@@ -531,7 +531,7 @@ Please note that the `tidyfast` project is released with a [Contributor Code of 
 
 We want to thank our wonderful contributors:
 
-- [mtfairbanks](https://github.com/markfairbanks) for PR #6 providing initial the pivoting functions. Note the [`gdt`](https://github.com/markfairbanks/tidytable) package that compliments some of `tidyfast`s functionality.
+- [markfairbanks](https://github.com/markfairbanks) for PR #6 providing initial the pivoting functions. Note the [`gdt`](https://github.com/markfairbanks/tidytable) package that compliments some of `tidyfast`s functionality.
 
 
 **Complementary Packages:**

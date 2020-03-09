@@ -213,13 +213,13 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt;   expression   median mem_alloc</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;   &lt;chr&gt;      &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; 1 dt_nest      3.18ms    2.88MB</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; 2 group_nest   5.35ms    2.56MB</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; 1 dt_nest      3.43ms    2.88MB</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; 2 group_nest   6.27ms    2.56MB</span></a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;   expression   median mem_alloc</span></a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;   &lt;chr&gt;      &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; 1 dt_unnest    4.62ms    5.48MB</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; 2 unnest       9.25ms    5.77MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; 1 dt_unnest    4.92ms    5.48MB</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; 2 unnest       9.84ms    5.77MB</span></a></code></pre></div>
 </div>
 </div>
 <div id="pivoting" class="section level2">
@@ -280,10 +280,10 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#&gt; # A tibble: 4 x 3</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt;   expression        median mem_alloc</span></a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt;   &lt;chr&gt;           &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; 1 dt_pivot_longer  993.7µs  996.21KB</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; 2 pivot_longer      7.19ms    2.67MB</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; 3 dt_pivot_wider    9.56ms    1.86MB</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; 4 pivot_wider       18.5ms    1.96MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; 1 dt_pivot_longer   1.58ms  996.21KB</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; 2 pivot_longer      8.35ms    2.67MB</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; 3 dt_pivot_wider   10.47ms    1.86MB</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; 4 pivot_wider      22.29ms    1.96MB</span></a></code></pre></div>
 <div id="if-else" class="section level3">
 <h3 class="hasAnchor">
 <a href="#if-else" class="anchor"></a>If Else</h3>
@@ -317,9 +317,9 @@
 <div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#&gt; # A tibble: 3 x 3</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt;   expression     median mem_alloc</span></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt;   &lt;chr&gt;        &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; 1 case_when     133.1ms   148.8MB</span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; 2 dt_case_when   37.9ms    34.3MB</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; 3 fifelse        33.9ms    34.3MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; 1 case_when     139.8ms   148.8MB</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; 2 dt_case_when   37.1ms    34.3MB</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; 3 fifelse          35ms    34.3MB</span></a></code></pre></div>
 </div>
 </div>
 <div id="fill" class="section level2">
@@ -415,8 +415,8 @@
 <div class="sourceCode" id="cb15"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt;   expression                                    median mem_alloc</span></a>
 <a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt;   &lt;bch:expr&gt;                                  &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.4ms    30.7MB</span></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt; 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.6ms    29.1MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   62.9ms    30.7MB</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt; 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   25.8ms    29.1MB</span></a></code></pre></div>
 </div>
 <div id="separate" class="section level2">
 <h2 class="hasAnchor">
@@ -443,9 +443,9 @@
 <div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co">#&gt; # A tibble: 3 x 3</span></a>
 <a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#&gt;   expression            median mem_alloc</span></a>
 <a class="sourceLine" id="cb19-3" data-line-number="3"><span class="co">#&gt;   &lt;chr&gt;               &lt;bch:tm&gt; &lt;bch:byt&gt;</span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co">#&gt; 1 separate               319ms    11.7MB</span></a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="co">#&gt; 2 dt_separate            112ms    30.6MB</span></a>
-<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="co">#&gt; 3 dt_separate-mutable    103ms    26.7MB</span></a></code></pre></div>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co">#&gt; 1 separate             319.3ms    11.7MB</span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="co">#&gt; 2 dt_separate          105.5ms    30.6MB</span></a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="co">#&gt; 3 dt_separate-mutable   94.8ms    26.7MB</span></a></code></pre></div>
 </div>
 <div id="count-and-uncount" class="section level2">
 <h2 class="hasAnchor">
@@ -492,11 +492,11 @@
 <div id="notes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#notes" class="anchor"></a>Notes</h2>
-<p>Please note that the <code>tidyfast</code> project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>Please note that the <code>tidyfast</code> project is released with a <a href="https://github.com/TysonStanley/tidyfast/blob/master/.github/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 <p>We want to thank our wonderful contributors:</p>
 <ul>
 <li>
-<a href="https://github.com/markfairbanks">mtfairbanks</a> for PR #6 providing initial the pivoting functions. Note the <a href="https://github.com/markfairbanks/tidytable"><code>gdt</code></a> package that compliments some of <code>tidyfast</code>s functionality.</li>
+<a href="https://github.com/markfairbanks">markfairbanks</a> for PR #6 providing initial the pivoting functions. Note the <a href="https://github.com/markfairbanks/tidytable"><code>gdt</code></a> package that compliments some of <code>tidyfast</code>s functionality.</li>
 </ul>
 <p><strong>Complementary Packages:</strong></p>
 <ul>

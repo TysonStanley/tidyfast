@@ -208,13 +208,13 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest       3.5ms    2.88MB
-    #> 2 group_nest   5.78ms    2.56MB
+    #> 1 dt_nest      3.43ms    2.88MB
+    #> 2 group_nest   6.27ms    2.56MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    4.78ms    5.48MB
-    #> 2 unnest       9.51ms    5.77MB
+    #> 1 dt_unnest    4.92ms    5.48MB
+    #> 2 unnest       9.84ms    5.77MB
 
 ## Pivoting
 
@@ -288,10 +288,10 @@ efficient.
     #> # A tibble: 4 x 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer   1.18ms  996.21KB
-    #> 2 pivot_longer      7.46ms    2.67MB
-    #> 3 dt_pivot_wider   10.31ms    1.86MB
-    #> 4 pivot_wider      20.03ms    1.96MB
+    #> 1 dt_pivot_longer   1.58ms  996.21KB
+    #> 2 pivot_longer      8.35ms    2.67MB
+    #> 3 dt_pivot_wider   10.47ms    1.86MB
+    #> 4 pivot_wider      22.29ms    1.96MB
 
 ### If Else
 
@@ -340,9 +340,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when       141ms   148.8MB
-    #> 2 dt_case_when   38.2ms    34.3MB
-    #> 3 fifelse        35.5ms    34.3MB
+    #> 1 case_when     139.8ms   148.8MB
+    #> 2 dt_case_when   37.1ms    34.3MB
+    #> 3 fifelse          35ms    34.3MB
 
 ## Fill
 
@@ -450,8 +450,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   62.2ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.9ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   62.9ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   25.8ms    29.1MB
 
 ## Separate
 
@@ -493,9 +493,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               362ms    11.7MB
-    #> 2 dt_separate            109ms    30.6MB
-    #> 3 dt_separate-mutable    104ms    26.7MB
+    #> 1 separate             319.3ms    11.7MB
+    #> 2 dt_separate          105.5ms    30.6MB
+    #> 3 dt_separate-mutable   94.8ms    26.7MB
 
 ## Count and Uncount
 
@@ -561,8 +561,9 @@ marks5 <-
 ## Notes
 
 Please note that the `tidyfast` project is released with a [Contributor
-Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms.
+Code of
+Conduct](https://github.com/TysonStanley/tidyfast/blob/master/.github/CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
 
 We want to thank our wonderful contributors:
 

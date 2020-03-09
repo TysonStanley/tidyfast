@@ -4,14 +4,7 @@
 \alias{dt_pivot_wider}
 \title{Pivot data from long to wide}
 \usage{
-dt_pivot_wider(
-  dt_,
-  id_cols = NULL,
-  names_from,
-  names_sep = "_",
-  values_from,
-  drop = TRUE
-)
+dt_pivot_wider(dt_, id_cols = NULL, names_from, names_sep = "_", values_from)
 }
 \arguments{
 \item{dt_}{the data table to widen}
@@ -23,8 +16,6 @@ dt_pivot_wider(
 \item{names_sep}{the separator between the names of the columns}
 
 \item{values_from}{A pair of arguments describing which column (or columns) to get the name of the output column (\code{name_from}), and which column (or columns) to get the cell values from (\code{values_from}).}
-
-\item{drop}{When \code{FALSE}, will cast by including all missing combinations. When \code{TRUE}, it is drop missing combination. \code{c(FALSE, TRUE)} will only include all missing combinations of formula LHS; \code{c(TRUE, FALSE)} will only include all missing combinations of formula RHS.}
 }
 \description{
 \code{dt_pivot_wider()} "widens" data, increasing the number of columns and

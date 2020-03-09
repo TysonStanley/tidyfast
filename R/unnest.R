@@ -34,7 +34,7 @@ dt_unnest.default <- function(dt_, col, ...){
   keep   <- substitute(alist(...))
   names  <- colnames(dt_)
   others <- names[-match(paste(col), names)]
-  rows   <- sapply(dt_[[paste(col)]], nrow)
+  rows   <- sapply(dt_[[paste(col)]], NROW)
 
   if (length(keep) > 1)
     others <- others[others %in% paste(keep)[-1]]

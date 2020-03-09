@@ -10,7 +10,6 @@
 #' @param names_from A pair of arguments describing which column (or columns) to get the name of the output column (\code{name_from}), and which column (or columns) to get the cell values from (\code{values_from}).
 #' @param names_sep the separator between the names of the columns
 #' @param values_from A pair of arguments describing which column (or columns) to get the name of the output column (\code{name_from}), and which column (or columns) to get the cell values from (\code{values_from}).
-#' @param drop When \code{FALSE}, will cast by including all missing combinations. When \code{TRUE}, it is drop missing combination. \code{c(FALSE, TRUE)} will only include all missing combinations of formula LHS; \code{c(TRUE, FALSE)} will only include all missing combinations of formula RHS.
 #'
 #' @examples
 #'
@@ -30,8 +29,7 @@ dt_pivot_wider <- function(dt_,
                            id_cols = NULL,
                            names_from,
                            names_sep = "_",
-                           values_from,
-                           drop = TRUE){
+                           values_from){
   UseMethod("dt_pivot_wider", dt_)
 }
 
@@ -40,8 +38,7 @@ dt_pivot_wider.default <- function(dt_,
                                    id_cols = NULL,
                                    names_from,
                                    names_sep = "_",
-                                   values_from,
-                                   drop = TRUE) {
+                                   values_from) {
 
   if (!is.data.frame(dt_)) stop("dt_ must be a data.frame or data.table")
   if (!is.data.table(dt_)) dt_ <- as.data.table(dt_)
@@ -73,7 +70,7 @@ dt_pivot_wider.default <- function(dt_,
       value.var = values_from,
       fun.aggregate = NULL,
       sep = names_sep,
-      drop = drop)[, . := NULL][]
+      drop = TRUE)[, . := NULL][]
   } else {
     dcast.data.table(
       dt_,
@@ -81,6 +78,6 @@ dt_pivot_wider.default <- function(dt_,
       value.var = values_from,
       fun.aggregate = NULL,
       sep = names_sep,
-      drop = drop)
+      drop = TRUE)
   }
 }

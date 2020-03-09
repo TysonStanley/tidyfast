@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.2.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.2.1` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 
 <!-- badges: start -->
@@ -135,7 +135,7 @@ dt_hoist(dt, nested1, nested2)
 
 Speed comparisons (similar to those shown in the preprint) are highlighted below. Notably, the timings are without the `nested1` and `nested2` columns of the original `dt` object from above. Also, all `dplyr` and `tidyr` functions use a `tbl` version of the `dt` table.
 
-```{r, echo = FALSE, fig.width=8, fig.height=4, dpi=300, warning=FALSE, message=FALSE}
+```{r, echo = FALSE, fig.width=4, fig.height=8, dpi=300, warning=FALSE, message=FALSE}
 tbl <- as_tibble(dt) %>% select(x, y, id, grp)
 dt2 <- dt[, .(x,y,id,grp)]
 nesting <- bench::mark(
@@ -154,6 +154,15 @@ unnesting <- bench::mark(
 
 nest_unnest <- bind_rows(nesting, unnesting)
 
+theme_set(
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_line(linetype = "dashed"),
+        panel.grid.major.x = element_blank(),
+        legend.position = "none")
+)
+
+
 library(ggplot2)
 dt_hoist(nest_unnest, time) %>% 
   .[, type := dt_case_when(stringr::str_detect(expression, "unnest") ~ "Unnesting",
@@ -163,12 +172,8 @@ dt_hoist(nest_unnest, time) %>%
   ggbeeswarm::geom_beeswarm(alpha = .6) +
   labs(x = "",
        y = "Time (seconds)") +
-  facet_grid(~type, space = "free", scales = "free") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d() +
-  coord_cartesian(ylim = c(0, .03)) +
+  facet_wrap(type~.,  scales = "free", ncol = 1) +
+  scale_color_viridis_d(option = "plasma", end = .8) +
   NULL
 
 select(nesting, expression, median, mem_alloc)
@@ -178,7 +183,7 @@ select(unnesting, expression, median, mem_alloc)
 
 ## Pivoting
 
-Finally, thanks to [@mtfairbanks](https://github.com/mtfairbanks), we now have pivoting translations to `data.table::melt()` and `data.table::dcast()`. Consider the following example (similar to the example in `tidyr::pivot_longer()` and `tidyr::pivot_wider()`):
+Thanks to [@markfairbanks](https://github.com/markfairbanks), we now have pivoting translations to `data.table::melt()` and `data.table::dcast()`. Consider the following example (similar to the example in `tidyr::pivot_longer()` and `tidyr::pivot_wider()`):
 
 ```{r}
 billboard <- tidyr::billboard
@@ -204,9 +209,9 @@ wider[, .(artist, track, wk1, wk2)]
 
 Notably, there are some current limitations to these: 1) `tidyselect` techniques do not work across the board (e.g. cannot use `start_with()` and friends) and 2) the functions are new and likely prone to edge-case bugs.
 
-But let's compare some basic speed and efficiency. Note that the figures are in log-base-10 scale. Because of the `data.table` functions, these are extremely fast and efficient.
+But let's compare some basic speed and efficiency. Because of the `data.table` functions, these are extremely fast and efficient.
 
-```{r, echo = FALSE, fig.width=5, fig.height=4, dpi=300, warning=FALSE, message=FALSE}
+```{r first_pivot, echo = FALSE, warning=FALSE, message=FALSE}
 bill_dt <- as.data.table(billboard)
 longer_timings <- bench::mark(
   dt_pivot_longer = dt_pivot_longer(bill_dt, cols = c(-artist, -track, -date.entered), 
@@ -215,14 +220,19 @@ longer_timings <- bench::mark(
                               names_to = "week", names_prefix = "wk", values_to = "rank"),
   check = FALSE,
   iterations = 40)
+```
 
+```{r second_pivot, echo = FALSE, fig.width=5, fig.height=4, dpi=300, warning=FALSE, message=FALSE}
 longer_tbl <- as_tibble(longer)
 wider_timings <- bench::mark(
   dt_pivot_wider = dt_pivot_wider(longer, names_from = week, values_from = rank),
   pivot_wider = pivot_wider(longer_tbl, names_from = week, values_from = rank),
   check = FALSE,
   iterations = 40)
+```
 
+
+```{r third_pivot, echo = FALSE, fig.width=5, fig.height=4, dpi=300, warning=FALSE, message=FALSE}
 pivot_timings <- rbind(longer_timings, wider_timings) %>% 
   mutate(type = c("longer", "longer", "wider", "wider")) %>% 
   mutate(expression = as.character(expression))
@@ -236,13 +246,9 @@ pivot_timings %>%
              color = expression)) +
   ggbeeswarm::geom_beeswarm() +
   labs(x = "",
-       y = "Time (seconds, logged scale)") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d() +
-  facet_grid(~type, space = "free", scales = "free") +
-  scale_y_log10()
+       y = "Time (seconds)") +
+  scale_color_viridis_d(option = "plasma", end = .8) +
+  facet_grid(~type, space = "free", scales = "free")
 
 pivot_timings %>%
   dt_hoist(time) %>% 
@@ -253,13 +259,9 @@ pivot_timings %>%
              color = expression)) +
   ggbeeswarm::geom_beeswarm() +
   labs(x = "",
-       y = "Time (seconds, logged scale)") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d() +
-  facet_grid(~type, space = "free", scales = "free") +
-  scale_y_log10()
+       y = "Time (seconds)") +
+  scale_color_viridis_d(option = "plasma", end = .8) +
+  facet_grid(~type, space = "free", scales = "free")
 
 pivot_timings %>% 
   select(expression, median, mem_alloc)
@@ -326,10 +328,7 @@ marks$time %>%
   ggbeeswarm::geom_beeswarm() +
   labs(x = "",
        y = "Time (seconds)") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d()
+    scale_color_viridis_d(option = "plasma", end = .8)
 
 marks %>% 
   select(expression, median, mem_alloc) %>% 
@@ -404,7 +403,7 @@ marks3$time %>%
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(),
         legend.position = "none") +
-  scale_color_viridis_d(begin = .5)
+  scale_color_viridis_d(end = .8)
 
 marks3 %>% 
   select(expression, median, mem_alloc)
@@ -464,10 +463,7 @@ marks4$time %>%
   ggbeeswarm::geom_beeswarm() +
   labs(x = "",
        y = "Time (seconds)") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d()
+  scale_color_viridis_d(end = .8)
 
 marks4 %>% 
   mutate(expression = c("separate", "dt_separate", "dt_separate-mutable")) %>% 
@@ -488,7 +484,7 @@ counted
 
 ```{r}
 uncounted <- dt_uncount(counted, N)
-print(uncounted)
+uncounted[]
 ```
 
 These are also quick (not that the `tidyverse` functions were at all slow here).
@@ -520,10 +516,7 @@ marks5$time %>%
   ggbeeswarm::geom_beeswarm() +
   labs(x = "",
        y = "Time (seconds)") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d() +
+  scale_color_viridis_d(option = "plasma", end = .8) +
   facet_grid(~type, space = "free", scales = "free") +
   coord_cartesian(ylim = c(0, .007))
 ```
@@ -538,11 +531,12 @@ Please note that the `tidyfast` project is released with a [Contributor Code of 
 
 We want to thank our wonderful contributors:
 
-- [mtfairbanks](https://github.com/mtfairbanks) for PR #6 providing initial the pivoting functions. Note the [`gdt`](https://github.com/mtfairbanks/gdt) package that compliments some of `tidyfast`s functionality.
+- [mtfairbanks](https://github.com/markfairbanks) for PR #6 providing initial the pivoting functions. Note the [`gdt`](https://github.com/markfairbanks/tidytable) package that compliments some of `tidyfast`s functionality.
 
 
 **Complementary Packages:**
 
 - [`dtplyr`](https://dtplyr.tidyverse.org)
+- [`tidytable`](https://github.com/markfairbanks/tidytable)
 - [`maditr`](https://github.com/gdemin/maditr)
-- [`gdt`](https://github.com/mtfairbanks/gdt)
+

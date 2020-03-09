@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.2.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.2.1` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -184,7 +184,6 @@ well.
 
 ``` r
 dt_hoist(dt, nested1, nested2)
-#> The following columns were dropped because they are list-columns (but not being hoisted):
 #>                  x         y grp     id nested1 nested2
 #>       1: 0.1720703 0.3376675   2      1       1  thing1
 #>       2: 0.1720703 0.3376675   2      1       1  thing1
@@ -209,18 +208,18 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.16ms    2.88MB
-    #> 2 group_nest   4.79ms    2.54MB
+    #> 1 dt_nest      3.18ms    2.88MB
+    #> 2 group_nest   5.35ms    2.56MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest     4.7ms    5.49MB
-    #> 2 unnest       12.6ms    8.47MB
+    #> 1 dt_unnest    4.62ms    5.48MB
+    #> 2 unnest       9.25ms    5.77MB
 
 ## Pivoting
 
-Finally, thanks to \[@mtfairbanks\](<https://github.com/mtfairbanks>),
-we now have pivoting translations to `data.table::melt()` and
+Thanks to \[@markfairbanks\](<https://github.com/markfairbanks>), we now
+have pivoting translations to `data.table::melt()` and
 `data.table::dcast()`. Consider the following example (similar to the
 example in `tidyr::pivot_longer()` and `tidyr::pivot_wider()`):
 
@@ -236,11 +235,11 @@ longer <- billboard %>%
      names_to = "week",
      values_to = "rank"
   )
-#> Warning in melt.data.table(data = dt_, id.vars = id_vars, measure.vars =
-#> cols, : 'measure.vars' [wk1, wk2, wk3, wk4, ...] are not all of the same
-#> type. By order of hierarchy, the molten data value column will be of type
-#> 'double'. All measure variables not of type 'double' will be coerced too.
-#> Check DETAILS in ?melt.data.table for more on coercion.
+#> Warning in melt.data.table(data = dt_, id.vars = id_vars, measure.vars = cols, :
+#> 'measure.vars' [wk1, wk2, wk3, wk4, ...] are not all of the same type. By
+#> order of hierarchy, the molten data value column will be of type 'double'. All
+#> measure variables not of type 'double' will be coerced too. Check DETAILS in ?
+#> melt.data.table for more on coercion.
 longer
 #>                  artist                   track date.entered week rank
 #>     1:            2 Pac Baby Don't Cry (Keep...   2000-02-26  wk1   87
@@ -280,20 +279,19 @@ techniques do not work across the board (e.g. cannot use `start_with()`
 and friends) and 2) the functions are new and likely prone to edge-case
 bugs.
 
-But let’s compare some basic speed and efficiency. Note that the figures
-are in log-base-10 scale. Because of the `data.table` functions, these
-are extremely fast and
+But let’s compare some basic speed and efficiency. Because of the
+`data.table` functions, these are extremely fast and
 efficient.
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" /><img src="man/figures/README-unnamed-chunk-9-2.png" width="70%" />
+<img src="man/figures/README-third_pivot-1.png" width="70%" /><img src="man/figures/README-third_pivot-2.png" width="70%" />
 
     #> # A tibble: 4 x 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer   1.01ms  993.47KB
-    #> 2 pivot_longer      6.29ms    2.63MB
-    #> 3 dt_pivot_wider   10.78ms    1.86MB
-    #> 4 pivot_wider     361.81ms    2.43MB
+    #> 1 dt_pivot_longer  993.7µs  996.21KB
+    #> 2 pivot_longer      7.19ms    2.67MB
+    #> 3 dt_pivot_wider    9.56ms    1.86MB
+    #> 4 pivot_wider       18.5ms    1.96MB
 
 ### If Else
 
@@ -337,14 +335,14 @@ identical(x_cat, x_cat_fif)
 Notably, `dt_case_when()` is very fast and memory efficient, given it is
 built on `data.table::fifelse()`.
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     123.8ms   148.8MB
-    #> 2 dt_case_when   32.5ms    34.3MB
-    #> 3 fifelse          34ms    34.3MB
+    #> 1 case_when     133.1ms   148.8MB
+    #> 2 dt_case_when   37.9ms    34.3MB
+    #> 3 fifelse        33.9ms    34.3MB
 
 ## Fill
 
@@ -447,13 +445,13 @@ marks3 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="70%" />
 
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   62.5ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   22.8ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   63.4ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   24.6ms    29.1MB
 
 ## Separate
 
@@ -490,14 +488,14 @@ Testing with a 4 MB data set with one variable that has columns of “A.B”
 repeatedly, shows that `dt_separate()` is fast but less memory efficient
 than `tidyr::separate()`.
 
-<img src="man/figures/README-unnamed-chunk-20-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               358ms    11.6MB
-    #> 2 dt_separate            113ms    30.6MB
-    #> 3 dt_separate-mutable    108ms    26.7MB
+    #> 1 separate               319ms    11.7MB
+    #> 2 dt_separate            112ms    30.6MB
+    #> 3 dt_separate-mutable    103ms    26.7MB
 
 ## Count and Uncount
 
@@ -525,7 +523,7 @@ counted
 
 ``` r
 uncounted <- dt_uncount(counted, N)
-print(uncounted)
+uncounted[]
 #>         grp
 #>      1:   1
 #>      2:   1
@@ -558,7 +556,7 @@ marks5 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-24-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-23-1.png" width="70%" />
 
 ## Notes
 
@@ -568,13 +566,13 @@ project, you agree to abide by its terms.
 
 We want to thank our wonderful contributors:
 
-  - [mtfairbanks](https://github.com/mtfairbanks) for PR \#6 providing
+  - [mtfairbanks](https://github.com/markfairbanks) for PR \#6 providing
     initial the pivoting functions. Note the
-    [`gdt`](https://github.com/mtfairbanks/gdt) package that compliments
-    some of `tidyfast`s functionality.
+    [`gdt`](https://github.com/markfairbanks/tidytable) package that
+    compliments some of `tidyfast`s functionality.
 
 **Complementary Packages:**
 
   - [`dtplyr`](https://dtplyr.tidyverse.org)
+  - [`tidytable`](https://github.com/markfairbanks/tidytable)
   - [`maditr`](https://github.com/gdemin/maditr)
-  - [`gdt`](https://github.com/mtfairbanks/gdt)

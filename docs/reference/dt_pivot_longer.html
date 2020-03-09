@@ -71,7 +71,7 @@ dt_pivot_longer(). Syntax based on the tidyr equivalents." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -116,8 +116,14 @@ decreasing the number of rows. The inverse transformation is
 <code>dt_pivot_longer()</code>. Syntax based on the <code>tidyr</code> equivalents.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dt_pivot_longer</span>(<span class='no'>dt_</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>names_to</span> <span class='kw'>=</span> <span class='st'>"name"</span>,
-  <span class='kw'>values_to</span> <span class='kw'>=</span> <span class='st'>"value"</span>, <span class='kw'>values_drop_na</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>dt_pivot_longer</span>(
+  <span class='no'>dt_</span>,
+  <span class='kw'>cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>names_to</span> <span class='kw'>=</span> <span class='st'>"name"</span>,
+  <span class='kw'>values_to</span> <span class='kw'>=</span> <span class='st'>"value"</span>,
+  <span class='kw'>values_drop_na</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,6 +162,16 @@ decreasing the number of rows. The inverse transformation is
 
 <span class='fu'>dt_pivot_longer</span>(<span class='no'>example_dt</span>,
                 <span class='kw'>cols</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>x</span>, <span class='no'>y</span>),
+                <span class='kw'>names_to</span> <span class='kw'>=</span> <span class='st'>"stuff"</span>,
+                <span class='kw'>values_to</span> <span class='kw'>=</span> <span class='st'>"things"</span>)</div><div class='output co'>#&gt;    z stuff things
+#&gt; 1: a     x      1
+#&gt; 2: b     x      2
+#&gt; 3: c     x      3
+#&gt; 4: a     y      4
+#&gt; 5: b     y      5
+#&gt; 6: c     y      6</div><div class='input'>
+<span class='fu'>dt_pivot_longer</span>(<span class='no'>example_dt</span>,
+                <span class='kw'>cols</span> <span class='kw'>=</span> -<span class='no'>z</span>,
                 <span class='kw'>names_to</span> <span class='kw'>=</span> <span class='st'>"stuff"</span>,
                 <span class='kw'>values_to</span> <span class='kw'>=</span> <span class='st'>"things"</span>)</div><div class='output co'>#&gt;    z stuff things
 #&gt; 1: a     x      1

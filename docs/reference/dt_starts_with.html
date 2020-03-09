@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Case When with data.table — dt_case_when • tidyfast</title>
+<title>Select helpers — dt_starts_with • tidyfast</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,14 @@
 
 
 
-<meta property="og:title" content="Case When with data.table — dt_case_when" />
-<meta property="og:description" content="Does what dplyr::case_when() does, with the same syntax, but with
-data.table::fifelse() under the hood" />
+<meta property="og:title" content="Select helpers — dt_starts_with" />
+<meta property="og:description" content="These functions allow you to select variables based on their names.
+dt_starts_with(): Starts with a prefix
+dt_starts_with(): Ends with a suffix
+dt_contains(): Contains a literal string
+dt_everything(): Matches all variables
+
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,59 +109,47 @@ data.table::fifelse() under the hood" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Case When with data.table</h1>
+    <h1>Select helpers</h1>
     
-    <div class="hidden name"><code>dt_case_when.Rd</code></div>
+    <div class="hidden name"><code>dt_starts_with.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Does what <code><a href='https://dplyr.tidyverse.org/reference/case_when.html'>dplyr::case_when()</a></code> does, with the same syntax, but with
-<code><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>data.table::fifelse()</a></code> under the hood</p>
+    <p>These functions allow you to select variables based on their names.</p><ul>
+<li><p><code>dt_starts_with()</code>: Starts with a prefix</p></li>
+<li><p><code>dt_starts_with()</code>: Ends with a suffix</p></li>
+<li><p><code>dt_contains()</code>: Contains a literal string</p></li>
+<li><p><code>dt_everything()</code>: Matches all variables</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>dt_case_when</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>dt_starts_with</span>(<span class='no'>match</span>)
+
+<span class='fu'>dt_contains</span>(<span class='no'>match</span>)
+
+<span class='fu'>dt_ends_with</span>(<span class='no'>match</span>)
+
+<span class='fu'>dt_everything</span>()</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>statements of the form: <code>condition ~ label</code>, where the label is applied if the condition is met</p></td>
+      <th>match</th>
+      <td><p>a character string to match to variable names</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>)
-<span class='fu'>dt_case_when</span>(
-  <span class='no'>x</span> <span class='kw'>&lt;</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span>(<span class='no'>x</span>) ~ <span class='st'>"low"</span>,
-  <span class='no'>x</span> <span class='kw'>&gt;=</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span>(<span class='no'>x</span>) ~ <span class='st'>"high"</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>x</span>) ~ <span class='st'>"other"</span>
-  )</div><div class='output co'>#&gt;   [1] "low"  "high" "low"  "low"  "high" "high" "low"  "low"  "low"  "low" 
-#&gt;  [11] "low"  "high" "high" "low"  "high" "low"  "low"  "low"  "high" "low" 
-#&gt;  [21] "high" "high" "low"  "high" "high" "low"  "low"  "low"  "low"  "low" 
-#&gt;  [31] "high" "high" "high" "high" "high" "low"  "low"  "low"  "low"  "high"
-#&gt;  [41] "low"  "low"  "low"  "low"  "high" "high" "low"  "high" "high" "low" 
-#&gt;  [51] "high" "low"  "low"  "low"  "low"  "high" "low"  "high" "low"  "high"
-#&gt;  [61] "high" "low"  "high" "low"  "low"  "low"  "high" "high" "high" "low" 
-#&gt;  [71] "low"  "high" "high" "high" "high" "high" "high" "low"  "high" "low" 
-#&gt;  [81] "high" "high" "high" "high" "low"  "high" "low"  "low"  "high" "low" 
-#&gt;  [91] "high" "high" "high" "low"  "high" "high" "low"  "high" "high" "low" </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>data.table</span>)
-<span class='no'>temp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>pseudo_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span>),
-                   <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='fl'>5</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
-<span class='no'>temp</span>[, <span class='no'>y</span> <span class='kw'>:=</span> <span class='fu'>dt_case_when</span>(<span class='no'>pseudo_id</span> <span class='kw'>==</span> <span class='fl'>1</span> ~ <span class='no'>x</span> * <span class='fl'>1</span>,
-                         <span class='no'>pseudo_id</span> <span class='kw'>==</span> <span class='fl'>2</span> ~ <span class='no'>x</span> * <span class='fl'>2</span>,
-                         <span class='no'>pseudo_id</span> <span class='kw'>==</span> <span class='fl'>3</span> ~ <span class='no'>x</span> * <span class='fl'>3</span>,
-                         <span class='no'>pseudo_id</span> <span class='kw'>==</span> <span class='fl'>4</span> ~ <span class='no'>x</span> * <span class='fl'>4</span>,
-                         <span class='no'>pseudo_id</span> <span class='kw'>==</span> <span class='fl'>5</span> ~ <span class='no'>x</span> * <span class='fl'>5</span>)]</div><div class='output co'>#&gt;    pseudo_id x  y
-#&gt; 1:         1 4  4
-#&gt; 2:         2 4  8
-#&gt; 3:         3 3  9
-#&gt; 4:         4 4 16
-#&gt; 5:         5 1  5</div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>data.table</span>)
+
+<span class='co'># example of using it with `dt_pivot_longer()`</span>
+<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>row</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>var</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>3</span>:<span class='fl'>4</span>)
+<span class='no'>pv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dt_pivot_wider.html'>dt_pivot_wider</a></span>(<span class='no'>df</span>,
+                     <span class='kw'>names_from</span> <span class='kw'>=</span> <span class='no'>var</span>,
+                     <span class='kw'>values_from</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'>dt_starts_with</span>(<span class='st'>"a"</span>), <span class='fu'>dt_ends_with</span>(<span class='st'>"b"</span>)))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -71,7 +71,7 @@ dt_pivot_longer(). Syntax based on the tidyr equivalents." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -116,8 +116,7 @@ decreasing the number of rows. The inverse transformation is
 <code><a href='dt_pivot_longer.html'>dt_pivot_longer()</a></code>. Syntax based on the <code>tidyr</code> equivalents.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dt_pivot_wider</span>(<span class='no'>dt_</span>, <span class='kw'>id_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>names_from</span>, <span class='kw'>names_sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>,
-  <span class='no'>values_from</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>dt_pivot_wider</span>(<span class='no'>dt_</span>, <span class='kw'>id_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>names_from</span>, <span class='kw'>names_sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>, <span class='no'>values_from</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,10 +141,6 @@ decreasing the number of rows. The inverse transformation is
       <th>values_from</th>
       <td><p>A pair of arguments describing which column (or columns) to get the name of the output column (<code>name_from</code>), and which column (or columns) to get the cell values from (<code>values_from</code>).</p></td>
     </tr>
-    <tr>
-      <th>drop</th>
-      <td><p>When <code>FALSE</code>, will cast by including all missing combinations. When <code>TRUE</code>, it is drop missing combination. <code><a href='https://rdrr.io/r/base/c.html'>c(FALSE, TRUE)</a></code> will only include all missing combinations of formula LHS; <code><a href='https://rdrr.io/r/base/c.html'>c(TRUE, FALSE)</a></code> will only include all missing combinations of formula RHS.</p></td>
-    </tr>
     </table>
 
 
@@ -157,6 +152,9 @@ decreasing the number of rows. The inverse transformation is
                          <span class='kw'>things</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>6</span>)
 
 <span class='fu'>dt_pivot_wider</span>(<span class='no'>example_dt</span>, <span class='kw'>names_from</span> <span class='kw'>=</span> <span class='no'>stuff</span>, <span class='kw'>values_from</span> <span class='kw'>=</span> <span class='no'>things</span>)</div><div class='output co'>#&gt;    z x y
+#&gt; 1: a 1 4
+#&gt; 2: b 2 5
+#&gt; 3: c 3 6</div><div class='input'><span class='fu'>dt_pivot_wider</span>(<span class='no'>example_dt</span>, <span class='kw'>names_from</span> <span class='kw'>=</span> <span class='no'>stuff</span>, <span class='kw'>values_from</span> <span class='kw'>=</span> <span class='no'>things</span>, <span class='kw'>id_cols</span> <span class='kw'>=</span> <span class='no'>z</span>)</div><div class='output co'>#&gt;    z x y
 #&gt; 1: a 1 4
 #&gt; 2: b 2 5
 #&gt; 3: c 3 6</div><div class='input'>

@@ -35,6 +35,9 @@ dt_separate(
 
 \item{...}{arguments passed to \code{data.table::tstrplit()}}
 }
+\value{
+A data.table with a column split into multiple columns.
+}
 \description{
 Separates a column of data into others, by splitting based a separator or regular expression
 }

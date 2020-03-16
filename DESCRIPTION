@@ -10,7 +10,7 @@ Authors@R: c(
     person(given = "Mark",
            family = "Fairbanks",
            role = "ctb"))
-Description: Some tidying functions built on data.table
+Description: Tidying functions built on 'data.table'
     to provide quick and efficient data manipulation with
     minimal overhead.
 Imports: 
@@ -26,6 +26,6 @@ Suggests:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 LinkingTo: 
     Rcpp

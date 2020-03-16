@@ -15,6 +15,9 @@ dt_fill(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"))
 
 \item{.direction}{either "down" or "up" (down fills values down, up fills values up), or "downup" (down first then up) or "updown" (up first then down)}
 }
+\value{
+A data.table with listed columns having values filled in
+}
 \description{
 Fills in values, similar to \code{tidyr::fill()}, by within \code{data.table}. This function relies on the
 \code{Rcpp} functions that drive \code{tidyr::fill()} but applies them within \code{data.table}.

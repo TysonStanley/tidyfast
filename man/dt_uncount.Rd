@@ -15,6 +15,9 @@ dt_uncount(dt_, weights, .remove = TRUE, .id = NULL)
 
 \item{.id}{an optional new id variable, providing a unique id for each row}
 }
+\value{
+A data.table with a row for each uncounted column.
+}
 \description{
 Uncount a counted data table
 }
@@ -27,9 +30,7 @@ dt_count <- data.table(
   w = c(2,1,4)
 )
 uncount <- dt_uncount(dt_count, w, .id = "id")
-uncount   # note that if .remove = TRUE or .id is not null
-          # this won't print the first time
-          # due to a printing behavior in data.table
+uncount[]      # note that `[]` forces the printing
 
 
 }

@@ -12,6 +12,7 @@
 #' @param values_drop_na If TRUE, rows will be dropped that contain NAs.
 #' @param ... Additional arguments to pass to `melt.data.table()`
 #'
+#' @return A reshaped data.table into longer format
 #'
 #' @examples
 #'

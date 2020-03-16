@@ -8,6 +8,7 @@
 #' @param nrows total number of rows to print (\code{options("datatable.print.nrows")})
 #' @param trunc.cols if \code{TRUE}, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to \code{tibbles}; \code{options("datatable.print.trunc.cols")}). This only works on \code{data.table} versions higher than \code{1.12.6} (i.e. not currently available but anticipating the eventual release).
 #'
+#' @return None. This function is used for its side effect of changing options.
 #'
 #' @examples
 #'

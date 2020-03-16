@@ -9,6 +9,9 @@ dt_case_when(...)
 \arguments{
 \item{...}{statements of the form: \code{condition ~ label}, where the label is applied if the condition is met}
 }
+\value{
+Vector of the same size as the input vector
+}
 \description{
 Does what \code{dplyr::case_when()} does, with the same syntax, but with
 \code{data.table::fifelse()} under the hood

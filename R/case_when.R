@@ -5,6 +5,8 @@
 #'
 #' @param ... statements of the form: \code{condition ~ label}, where the label is applied if the condition is met
 #'
+#' @return Vector of the same size as the input vector
+#'
 #' @import data.table
 #'
 #' @examples

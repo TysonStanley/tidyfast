@@ -10,6 +10,8 @@
 #'
 #' @param match a character string to match to variable names
 #'
+#' @return None. To be used within the `dt_pivot_*` functions.
+#'
 #' @md
 #' @examples
 #' library(data.table)

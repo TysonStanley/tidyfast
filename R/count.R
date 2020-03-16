@@ -7,6 +7,8 @@
 #' @param na.rm should any rows with missingness be removed before the count? Default is \code{FALSE}.
 #' @param wt the wt assigned to the counts (same number of rows as the data)
 #'
+#' @return A data.table with counts for each group (or combination of groups)
+#'
 #' @examples
 #'
 #' library(data.table)

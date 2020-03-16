@@ -18,6 +18,9 @@ dt_everything()
 \arguments{
 \item{match}{a character string to match to variable names}
 }
+\value{
+None. To be used within the \verb{dt_pivot_*} functions.
+}
 \description{
 These functions allow you to select variables based on their names.
 \itemize{

@@ -12,6 +12,9 @@
 #' @param immutable If \code{TRUE}, \code{.dt} is treated as immutable (it will not be modified in place). Alternatively, you can set \code{immutable = FALSE} to modify the input object.
 #' @param ... arguments passed to \code{data.table::tstrplit()}
 #'
+#'
+#' @return A data.table with a column split into multiple columns.
+#'
 #' @examples
 #'
 #' library(data.table)

@@ -23,6 +23,9 @@ dt_print_options(
 
 \item{trunc.cols}{if \code{TRUE}, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to \code{tibbles}; \code{options("datatable.print.trunc.cols")}). This only works on \code{data.table} versions higher than \code{1.12.6} (i.e. not currently available but anticipating the eventual release).}
 }
+\value{
+None. This function is used for its side effect of changing options.
+}
 \description{
 The function allows the user to define options relating to the print method for \code{data.table}.
 }

@@ -13,6 +13,9 @@ dt_nest(dt_, ..., .key = "data")
 
 \item{.key}{the name of the list column; default is "data"}
 }
+\value{
+A data.table with a list column containing data.tables
+}
 \description{
 Quickly nest data tables (similar to \code{dplyr::group_nest()}).
 }

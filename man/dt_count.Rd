@@ -15,6 +15,9 @@ dt_count(dt_, ..., na.rm = FALSE, wt = NULL)
 
 \item{wt}{the wt assigned to the counts (same number of rows as the data)}
 }
+\value{
+A data.table with counts for each group (or combination of groups)
+}
 \description{
 Count the numbers of observations within groups
 }

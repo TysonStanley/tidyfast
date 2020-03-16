@@ -11,6 +11,8 @@
 #' @param names_sep the separator between the names of the columns
 #' @param values_from A pair of arguments describing which column (or columns) to get the name of the output column (\code{name_from}), and which column (or columns) to get the cell values from (\code{values_from}).
 #'
+#' @return A reshaped data.table into wider format
+#'
 #' @examples
 #'
 #' library(data.table)

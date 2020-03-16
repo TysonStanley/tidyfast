@@ -8,6 +8,8 @@
 #' @param id the grouping variable(s) to fill within
 #' @param .direction either "down" or "up" (down fills values down, up fills values up), or "downup" (down first then up) or "updown" (up first then down)
 #'
+#' @return A data.table with listed columns having values filled in
+#'
 #' @examples
 #'
 #' set.seed(84322)

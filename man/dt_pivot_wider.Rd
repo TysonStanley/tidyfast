@@ -17,6 +17,9 @@ dt_pivot_wider(dt_, id_cols = NULL, names_from, names_sep = "_", values_from)
 
 \item{values_from}{A pair of arguments describing which column (or columns) to get the name of the output column (\code{name_from}), and which column (or columns) to get the cell values from (\code{values_from}).}
 }
+\value{
+A reshaped data.table into wider format
+}
 \description{
 \code{dt_pivot_wider()} "widens" data, increasing the number of columns and
 decreasing the number of rows. The inverse transformation is

@@ -26,6 +26,9 @@ dt_pivot_longer(
 
 \item{...}{Additional arguments to pass to `melt.data.table()`}
 }
+\value{
+A reshaped data.table into longer format
+}
 \description{
 \code{dt_pivot_wider()} "widens" data, increasing the number of columns and
 decreasing the number of rows. The inverse transformation is

@@ -6,7 +6,6 @@
 #' @param ... the variables to group by
 #' @param .key the name of the list column; default is "data"
 #'
-#'
 #' @examples
 #'
 #' library(data.table)
@@ -17,6 +16,8 @@
 #'   )
 #'
 #' dt_nest(dt, grp)
+#'
+#' @return A data.table with a list column containing data.tables
 #'
 #' @import data.table
 #'

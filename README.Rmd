@@ -75,7 +75,13 @@ Each function that takes data (labeled as `dt_` in the package docs) as its firs
 
 ## Installation
 
-You can install the development version from [GitHub](https://github.com/) with:
+You can install the stable version from CRAN with:
+
+``` r
+install.packages("tidyfast")
+```
+
+or you can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("remotes")
@@ -524,15 +530,13 @@ marks5$time %>%
 
 
 
-
-
 ## Notes
 
 Please note that the `tidyfast` project is released with a [Contributor Code of Conduct](https://github.com/TysonStanley/tidyfast/blob/master/.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
 
 We want to thank our wonderful contributors:
 
-- [markfairbanks](https://github.com/markfairbanks) for PR #6 providing initial the pivoting functions. Note the [`gdt`](https://github.com/markfairbanks/tidytable) package that compliments some of `tidyfast`s functionality.
+- [markfairbanks](https://github.com/markfairbanks) for PR #6 providing initial the pivoting functions. Note the [`tidytable`](https://github.com/markfairbanks/tidytable) package that compliments some of `tidyfast`s functionality.
 
 
 **Complementary Packages:**

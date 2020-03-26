@@ -91,7 +91,13 @@ functions will return a data table.
 
 ## Installation
 
-You can install the development version from
+You can install the stable version from CRAN with:
+
+``` r
+install.packages("tidyfast")
+```
+
+or you can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -210,13 +216,13 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.29ms    2.88MB
-    #> 2 group_nest   5.56ms    2.56MB
+    #> 1 dt_nest      3.31ms    2.88MB
+    #> 2 group_nest   5.73ms    2.56MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    4.61ms    5.48MB
-    #> 2 unnest       9.67ms    6.15MB
+    #> 1 dt_unnest    4.94ms    5.48MB
+    #> 2 unnest       9.76ms    6.15MB
 
 ## Pivoting
 
@@ -289,10 +295,10 @@ But let’s compare some basic speed and efficiency. Because of the
     #> # A tibble: 4 x 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer  953.2µs  996.21KB
-    #> 2 pivot_longer       7.7ms    3.13MB
-    #> 3 dt_pivot_wider    11.2ms    1.86MB
-    #> 4 pivot_wider       10.8ms    2.05MB
+    #> 1 dt_pivot_longer 958.91µs  996.21KB
+    #> 2 pivot_longer      7.54ms    3.13MB
+    #> 3 dt_pivot_wider   11.11ms    1.86MB
+    #> 4 pivot_wider      10.41ms    2.05MB
 
 ### If Else
 
@@ -341,9 +347,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     145.4ms   148.8MB
-    #> 2 dt_case_when     37ms    34.3MB
-    #> 3 fifelse        38.2ms    34.3MB
+    #> 1 case_when     137.5ms   148.8MB
+    #> 2 dt_case_when   36.3ms    34.3MB
+    #> 3 fifelse        36.7ms    34.3MB
 
 ## Fill
 
@@ -451,8 +457,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.9ms    30.7MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.4ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   65.7ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.8ms    29.1MB
 
 ## Separate
 
@@ -494,9 +500,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               357ms    11.8MB
-    #> 2 dt_separate            127ms    30.6MB
-    #> 3 dt_separate-mutable    116ms    26.7MB
+    #> 1 separate               363ms    11.8MB
+    #> 2 dt_separate            122ms    30.6MB
+    #> 3 dt_separate-mutable    118ms    26.7MB
 
 ## Count and Uncount
 
@@ -570,8 +576,8 @@ We want to thank our wonderful contributors:
 
   - [markfairbanks](https://github.com/markfairbanks) for PR \#6
     providing initial the pivoting functions. Note the
-    [`gdt`](https://github.com/markfairbanks/tidytable) package that
-    compliments some of `tidyfast`s functionality.
+    [`tidytable`](https://github.com/markfairbanks/tidytable) package
+    that compliments some of `tidyfast`s functionality.
 
 **Complementary Packages:**
 

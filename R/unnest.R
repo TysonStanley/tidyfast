@@ -21,12 +21,12 @@
 #' @import data.table
 #'
 #' @export
-dt_unnest <- function(dt_, col, ...){
+dt_unnest <- function(dt_, col, fill = FALSE, ...){
   UseMethod("dt_unnest", dt_)
 }
 
 #' @export
-dt_unnest.default <- function(dt_, col, ...){
+dt_unnest.default <- function(dt_, col, fill = FALSE, ...){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
@@ -45,7 +45,7 @@ dt_unnest.default <- function(dt_, col, ...){
   others_dt <- others_dt[, ..keep]
   others_dt <- lapply(others_dt, rep, times = rows)
 
-  dt_[, list(as.data.table(others_dt), rbindlist(eval(col)))]
+  dt_[, list(as.data.table(others_dt), rbindlist(eval(col), fill = fill))]
 }
 
 

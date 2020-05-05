@@ -29,3 +29,5 @@ LazyData: true
 RoxygenNote: 7.1.0
 LinkingTo: 
     Rcpp
+URL: https://github.com/TysonStanley/tidyfast
+BugReports: https://github.com/TysonStanley/tidyfast/issues

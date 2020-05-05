@@ -2,8 +2,9 @@
 
 
 test_that("can pivot all cols (unspecified) to long", {
-  df <- data.table(x = 1:2, y = 3:4)
-  pivot_df <- dt_pivot_longer(df)[order(name, value)]
+  dt <- data.table(x = 1:2, y = 3:4)
+  df <- as.data.frame(dt)
+  pivot_df <- dt_pivot_longer(dt)[order(name, value)]
   tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, cols = c(x,y)), name, value)
 
   expect_named(pivot_df, c("name", "value"))
@@ -13,8 +14,9 @@ test_that("can pivot all cols (unspecified) to long", {
 
 
 test_that("can pivot all cols (specified) to long", {
-  df <- data.table(x = 1:2, y = 3:4)
-  pivot_df <- dt_pivot_longer(df, cols = c(x,y))[order(name, value)]
+  dt <- data.table(x = 1:2, y = 3:4)
+  df <- as.data.frame(dt)
+  pivot_df <- dt_pivot_longer(dt, cols = c(x,y))[order(name, value)]
   tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, cols = c(x, y)), name, value)
 
   expect_named(pivot_df, c("name", "value"))
@@ -45,8 +47,10 @@ test_that("preserves original keys", {
 })
 
 test_that("can drop missing values", {
-  df <- data.table(x = c(1, NA), y = c(NA, 2))
-  pivot_df <- dt_pivot_longer(df, c(x,y), values_drop_na = TRUE)[order(name, value)]
+  dt <- data.table(x = c(1, NA), y = c(NA, 2))
+  df <- as.data.frame(dt)
+
+  pivot_df <- dt_pivot_longer(dt, c(x,y), values_drop_na = TRUE)[order(name, value)]
   tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, c(x,y), values_drop_na = TRUE), name, value)
 
   expect_equal(pivot_df$name, c("x", "y"))
@@ -81,8 +85,9 @@ test_that("works with select helpers", {
 })
 
 test_that("a single helper works outside of c() call", {
-  df <- data.table(x = 1:2, y = 3:4)
-  pivot_df <- dt_pivot_longer(df, cols = dt_everything())[order(name, value)]
+  dt <- data.table(x = 1:2, y = 3:4)
+  df <- as.data.frame(dt)
+  pivot_df <- dt_pivot_longer(dt, cols = dt_everything())[order(name, value)]
   tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, cols = dplyr::everything()), name, value)
 
   expect_named(pivot_df, c("name", "value"))

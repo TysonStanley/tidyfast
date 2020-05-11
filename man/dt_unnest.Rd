@@ -4,12 +4,14 @@
 \alias{dt_unnest}
 \title{Unnest: Fast Unnesting of Data Tables}
 \usage{
-dt_unnest(dt_, col, ...)
+dt_unnest(dt_, col, fill = FALSE, ...)
 }
 \arguments{
 \item{dt_}{the data table to unnest}
 
 \item{col}{the column to unnest}
+
+\item{fill}{when set to \code{TRUE}, it allows the user to unnest data.tables that have different variables in them (e.g. dt1 has x and y while dt2 has x and z). This uses the \code{fill} argument in \code{data.table::rbindlist()}.}
 
 \item{...}{any of the other variables in the nested table that you want to keep in the unnested table. Bare variable names. If none are provided, all variables are kept.}
 }

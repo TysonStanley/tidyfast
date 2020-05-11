@@ -4,6 +4,7 @@
 #'
 #' @param dt_ the data table to unnest
 #' @param col  the column to unnest
+#' @param fill when set to \code{TRUE}, it allows the user to unnest data.tables that have different variables in them (e.g. dt1 has x and y while dt2 has x and z). This uses the \code{fill} argument in \code{data.table::rbindlist()}.
 #' @param ... any of the other variables in the nested table that you want to keep in the unnested table. Bare variable names. If none are provided, all variables are kept.
 #'
 #' @examples
@@ -21,12 +22,12 @@
 #' @import data.table
 #'
 #' @export
-dt_unnest <- function(dt_, col, ...){
+dt_unnest <- function(dt_, col, fill = FALSE, ...){
   UseMethod("dt_unnest", dt_)
 }
 
 #' @export
-dt_unnest.default <- function(dt_, col, ...){
+dt_unnest.default <- function(dt_, col, fill = FALSE, ...){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
@@ -45,7 +46,7 @@ dt_unnest.default <- function(dt_, col, ...){
   others_dt <- others_dt[, ..keep]
   others_dt <- lapply(others_dt, rep, times = rows)
 
-  dt_[, list(as.data.table(others_dt), rbindlist(eval(col)))]
+  dt_[, list(as.data.table(others_dt), rbindlist(eval(col), fill = fill))]
 }
 
 

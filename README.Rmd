@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.2.2` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.2.3` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 
 <!-- badges: start -->
@@ -181,6 +181,7 @@ dt_hoist(nest_unnest, time) %>%
        y = "Time (seconds)") +
   facet_wrap(type~.,  scales = "free", ncol = 1) +
   scale_color_viridis_d(option = "plasma", end = .8) +
+  scale_y_log10() +
   NULL
 
 select(nesting, expression, median, mem_alloc)
@@ -255,6 +256,7 @@ pivot_timings %>%
   labs(x = "",
        y = "Time (seconds)") +
   scale_color_viridis_d(option = "plasma", end = .8) +
+  scale_y_log10() +
   facet_grid(~type, space = "free", scales = "free")
 
 pivot_timings %>%
@@ -268,6 +270,7 @@ pivot_timings %>%
   labs(x = "",
        y = "Time (seconds)") +
   scale_color_viridis_d(option = "plasma", end = .8) +
+  scale_y_log10() +
   facet_grid(~type, space = "free", scales = "free")
 
 pivot_timings %>% 
@@ -335,7 +338,8 @@ marks$time %>%
   ggbeeswarm::geom_beeswarm() +
   labs(x = "",
        y = "Time (seconds)") +
-    scale_color_viridis_d(option = "plasma", end = .8)
+    scale_color_viridis_d(option = "plasma", end = .8) +
+    scale_y_log10()
 
 marks %>% 
   select(expression, median, mem_alloc) %>% 
@@ -407,10 +411,8 @@ marks3$time %>%
   ggbeeswarm::geom_beeswarm() +
   labs(x = "",
        y = "Time (seconds)") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank(),
-        legend.position = "none") +
-  scale_color_viridis_d(end = .8)
+  scale_color_viridis_d(end = .8) +
+    scale_y_log10()
 
 marks3 %>% 
   select(expression, median, mem_alloc)
@@ -470,7 +472,8 @@ marks4$time %>%
   ggbeeswarm::geom_beeswarm() +
   labs(x = "",
        y = "Time (seconds)") +
-  scale_color_viridis_d(end = .8)
+  scale_color_viridis_d(end = .8) +
+  scale_y_log10()
 
 marks4 %>% 
   mutate(expression = c("separate", "dt_separate", "dt_separate-mutable")) %>% 
@@ -525,7 +528,7 @@ marks5$time %>%
        y = "Time (seconds)") +
   scale_color_viridis_d(option = "plasma", end = .8) +
   facet_grid(~type, space = "free", scales = "free") +
-  coord_cartesian(ylim = c(0, .007))
+  scale_y_log10()
 ```
 
 

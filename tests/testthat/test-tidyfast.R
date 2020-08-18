@@ -58,7 +58,7 @@ test_that("dt_unnest works", {
   unnest_dt <- dt_unnest(nest_dt, col = data)
   unnest_vec <- dt_hoist(dt, nested1, nested2)
 
-  expect_equal(dim(dt_unnest(nest_dt, col = data)), c(100000,6))
+  expect_equal(dim(dt_unnest(nest_dt, col = data)), c(100000,7))
   expect_equal(nrow(dt_hoist(dt,
                              nested1, nested2)),
                1000000)
@@ -69,7 +69,7 @@ test_that("dt_unnest works", {
   unnest_vec <- dt_hoist(d,
              nested1, nested2)
 
-  expect_equal(dim(dt_unnest(nest_d, col = data)), c(100000,6))
+  expect_equal(dim(dt_unnest(nest_d, col = data)), c(100000,7))
   expect_equal(nrow(dt_hoist(dt,
                              nested1, nested2)),
                1000000)

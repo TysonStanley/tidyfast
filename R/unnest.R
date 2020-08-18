@@ -29,16 +29,21 @@ dt_unnest.default <- function(dt_, col){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
+  # col to unnest
   col <- substitute(col)
   if (length(col) > 1)
     stop("dt_unnest() currently can only unnest a single column at a time", call. = FALSE)
 
+  # Get the others variables in there
   names <- colnames(dt_)
   if(!paste(col) %in% names)
     stop("Could not find `cols` in data.table", call. = FALSE)
   others <- names[-match(paste(col), names)]
+  others_class = sapply(others, function(x) class(dt_[[x]])[1L])
+  others = others[!others_class %in% c("list", "data.table", "data.frame", "tbl_df")]
 
-  dt_[, eval(col)[[1L]], by = others]
+  # Join them all together
+  dt_[, eval(col)[[1L]], by = others][dt_, on = others]
 }
 
 

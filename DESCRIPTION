@@ -17,7 +17,7 @@ Description: Tidying functions built on 'data.table'
     to provide quick and efficient data manipulation with
     minimal overhead.
 Imports: 
-    data.table (>= 1.12.4),
+    data.table (>= 1.13.0),
     Rcpp
 Suggests:
     remotes,

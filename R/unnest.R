@@ -43,7 +43,7 @@ dt_unnest.default <- function(dt_, col){
   others = others[!others_class %in% c("list", "data.table", "data.frame", "tbl_df")]
 
   # Join them all together
-  dt_[, eval(col)[[1L]], by = others][dt_, on = others]
+  dt_[seq_len(.N), eval(col)[[1L]], by = others][dt_, on = others]
 }
 
 

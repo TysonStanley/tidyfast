@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.2.3` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.3.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -183,6 +183,18 @@ dt_unnest(nested, col = data)
 #>  99998: thing2,thing2,thing2,thing2,thing2,thing2,... 99994
 #>  99999: thing2,thing2,thing2,thing2,thing2,thing2,... 99996
 #> 100000: thing2,thing2,thing2,thing2,thing2,thing2,... 99998
+#>                          data
+#>      1: <data.table[19638x5]>
+#>      2: <data.table[19638x5]>
+#>      3: <data.table[19638x5]>
+#>      4: <data.table[19638x5]>
+#>      5: <data.table[19638x5]>
+#>     ---                      
+#>  99996: <data.table[20073x5]>
+#>  99997: <data.table[20073x5]>
+#>  99998: <data.table[20073x5]>
+#>  99999: <data.table[20073x5]>
+#> 100000: <data.table[20073x5]>
 ```
 
 When our list columns don’t have data tables (as output from
@@ -216,13 +228,13 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.85ms    2.88MB
-    #> 2 group_nest   8.21ms    5.39MB
+    #> 1 dt_nest      3.42ms    2.88MB
+    #> 2 group_nest   5.62ms    2.57MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    4.77ms     5.1MB
-    #> 2 unnest       8.54ms    6.06MB
+    #> 1 dt_unnest    7.24ms   11.68MB
+    #> 2 unnest      10.44ms    5.77MB
 
 ## Pivoting
 
@@ -296,10 +308,10 @@ efficient.
     #> # A tibble: 4 x 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer   1.21ms  996.42KB
-    #> 2 pivot_longer       7.3ms    2.48MB
-    #> 3 dt_pivot_wider    8.87ms    1.86MB
-    #> 4 pivot_wider       8.08ms    2.09MB
+    #> 1 dt_pivot_longer   1.06ms  996.21KB
+    #> 2 pivot_longer      8.99ms    2.66MB
+    #> 3 dt_pivot_wider   10.92ms    1.86MB
+    #> 4 pivot_wider      20.32ms    1.95MB
 
 ### If Else
 
@@ -348,9 +360,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     138.8ms   148.8MB
-    #> 2 dt_case_when   39.9ms    34.3MB
-    #> 3 fifelse        38.1ms    34.3MB
+    #> 1 case_when     135.7ms   148.8MB
+    #> 2 dt_case_when   36.7ms    34.3MB
+    #> 3 fifelse        34.9ms    34.3MB
 
 ## Fill
 
@@ -458,8 +470,8 @@ marks3 <-
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   44.8ms    43.1MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   26.9ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   60.8ms    30.7MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   23.3ms    29.1MB
 
 ## Separate
 
@@ -501,9 +513,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               5.91s    3.89GB
-    #> 2 dt_separate          108.1ms   22.92MB
-    #> 3 dt_separate-mutable  94.75ms   19.09MB
+    #> 1 separate               364ms    11.8MB
+    #> 2 dt_separate            113ms    30.6MB
+    #> 3 dt_separate-mutable    103ms    26.7MB
 
 ## Count and Uncount
 

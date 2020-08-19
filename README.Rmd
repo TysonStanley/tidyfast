@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.2.3` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.3.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 
 <!-- badges: start -->
@@ -171,7 +171,9 @@ theme_set(
 
 
 library(ggplot2)
-dt_hoist(nest_unnest, time) %>% 
+as.data.table(nest_unnest$time) %>% 
+  setNames(c("dt_nest", "group_nest", "dt_unnest", "unnest")) %>% 
+  dt_pivot_longer(cols = dt_nest:unnest, names_to = "expression", values_to = "time") %>% 
   .[, type := dt_case_when(stringr::str_detect(expression, "unnest") ~ "Unnesting",
                            TRUE ~ "Nesting")] %>% 
   .[, time := as.numeric(time)] %>% 

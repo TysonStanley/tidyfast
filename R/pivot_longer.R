@@ -77,6 +77,29 @@ dt_pivot_longer.default <- function(dt_,
        value.factor = FALSE)
 }
 
+#' @export
+dt_pivot_longer.dtplyr_step <- function(dt_,
+                                    cols = NULL,
+                                    names_to = "name",
+                                    values_to = "value",
+                                    values_drop_na = FALSE,
+                                    ...) {
+
+  # collect data from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_pivot_longer.default(dt_,
+                                             cols,
+                                             names_to,
+                                             values_to,
+                                             values_drop_na,
+                                             ...))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+}
+
 column_selector <- function(.data, select_vars) {
 
   data_names <- colnames(.data)

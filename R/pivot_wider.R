@@ -83,3 +83,24 @@ dt_pivot_wider.default <- function(dt_,
       drop = TRUE)
   }
 }
+
+#' @export
+dt_pivot_wider.dtplyr_step <- function(dt_,
+                                   id_cols = NULL,
+                                   names_from,
+                                   names_sep = "_",
+                                   values_from) {
+
+  # collect from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_pivot_wider.default(dt_,
+                                            id_cols=id_cols,
+                                            names_from=names_from,
+                                            names_sep=names_sep,
+                                            values_from=values_from))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+}

@@ -1,6 +1,6 @@
 Package: tidyfast
 Title: Fast Tidying of Data
-Version: 0.2.3
+Version: 0.3.0
 Authors@R: c(
     person(given = "Tyson",
            family = "Barrett",

@@ -4,8 +4,6 @@
 #'
 #' @param dt_ the data table to unnest
 #' @param col  the column to unnest
-#' @param fill when set to \code{TRUE}, it allows the user to unnest data.tables that have different variables in them (e.g. dt1 has x and y while dt2 has x and z). This uses the \code{fill} argument in \code{data.table::rbindlist()}.
-#' @param ... any of the other variables in the nested table that you want to keep in the unnested table. Bare variable names. If none are provided, all variables are kept.
 #'
 #' @examples
 #'
@@ -22,31 +20,30 @@
 #' @import data.table
 #'
 #' @export
-dt_unnest <- function(dt_, col, fill = FALSE, ...){
+dt_unnest <- function(dt_, col){
   UseMethod("dt_unnest", dt_)
 }
 
 #' @export
-dt_unnest.default <- function(dt_, col, fill = FALSE, ...){
+dt_unnest.default <- function(dt_, col){
   if (isFALSE(is.data.table(dt_)))
     dt_ <- as.data.table(dt_)
 
-  col    <- substitute(col)
-  keep   <- substitute(alist(...))
-  names  <- colnames(dt_)
+  # col to unnest
+  col <- substitute(col)
+  if (length(col) > 1)
+    stop("dt_unnest() currently can only unnest a single column at a time", call. = FALSE)
+
+  # Get the others variables in there
+  names <- colnames(dt_)
+  if(!paste(col) %in% names)
+    stop("Could not find `cols` in data.table", call. = FALSE)
   others <- names[-match(paste(col), names)]
-  rows   <- sapply(dt_[[paste(col)]], NROW)
+  others_class = sapply(others, function(x) class(dt_[[x]])[1L])
+  others = others[!others_class %in% c("list", "data.table", "data.frame", "tbl_df")]
 
-  if (length(keep) > 1)
-    others <- others[others %in% paste(keep)[-1]]
-
-  others_dt <- dt_[, ..others]
-  classes   <- sapply(others_dt, typeof)
-  keep      <- names(classes)[classes != "list"]
-  others_dt <- others_dt[, ..keep]
-  others_dt <- lapply(others_dt, rep, times = rows)
-
-  dt_[, list(as.data.table(others_dt), rbindlist(eval(col), fill = fill))]
+  # Join them all together
+  dt_[seq_len(.N), eval(col)[[1L]], by = others][dt_, on = others]
 }
 
 

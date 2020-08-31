@@ -84,4 +84,30 @@ dt_separate.default <- function(dt_, col, into,
 }
 
 
+#' @export
+dt_separate.dtplyr_step <- function(dt_, col, into,
+                                sep = ".",
+                                remove = TRUE,
+                                fill = NA,
+                                fixed = TRUE,
+                                immutable = TRUE,
+                                ...){
+
+  # collect data from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_separate.default(dt_,
+                                         col=col, 
+                                         into=into,
+                                         sep=sep,
+                                         remove=remove,
+                                         fill=fill,
+                                         fixed=fixed,
+                                         immutable=immutable,
+                                         ...))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+}
 

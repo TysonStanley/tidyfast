@@ -43,3 +43,18 @@ dt_nest.default <- function(dt_, ..., .key = "data"){
 
 }
 
+
+#' @export
+dt_nest.dtplyr_step <- function(dt_, ..., .key = "data"){
+
+  # collect data from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_nest.default(dt_, ..., .key = .key))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+
+}
+

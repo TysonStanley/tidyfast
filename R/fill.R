@@ -54,3 +54,18 @@ dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "d
 paste_dots <- function(...){
   paste(substitute(c(...)))[-1]
 }
+
+
+#' @export
+dt_fill.dtplyr_step <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown")){
+
+  # collect data from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_fill.default(dt_, ..., id = id, .direction = .direction))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+
+}

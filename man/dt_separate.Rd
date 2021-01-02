@@ -13,6 +13,7 @@ dt_separate(
   fill = NA,
   fixed = TRUE,
   immutable = TRUE,
+  dev = FALSE,
   ...
 )
 }
@@ -32,6 +33,8 @@ dt_separate(
 \item{fixed}{logical. If TRUE match split exactly, otherwise use regular expressions. Has priority over perl.}
 
 \item{immutable}{If \code{TRUE}, \code{.dt} is treated as immutable (it will not be modified in place). Alternatively, you can set \code{immutable = FALSE} to modify the input object.}
+
+\item{dev}{If \code{TRUE}, the function can be used within other functions. It bypasses the usual non-standard evaluation. Default is \code{FALSE}.}
 
 \item{...}{arguments passed to \code{data.table::tstrplit()}}
 }

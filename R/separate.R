@@ -10,6 +10,7 @@
 #' @param fill if empty, fill is inserted. Default is \code{NA}.
 #' @param fixed logical. If TRUE match split exactly, otherwise use regular expressions. Has priority over perl.
 #' @param immutable If \code{TRUE}, \code{.dt} is treated as immutable (it will not be modified in place). Alternatively, you can set \code{immutable = FALSE} to modify the input object.
+#' @param dev If \code{TRUE}, the function can be used within other functions. It bypasses the usual non-standard evaluation. Default is \code{FALSE}.
 #' @param ... arguments passed to \code{data.table::tstrplit()}
 #'
 #'
@@ -44,24 +45,28 @@ dt_separate <- function(dt_, col, into,
                         fill = NA,
                         fixed = TRUE,
                         immutable = TRUE,
+                        dev = FALSE,
                         ...){
   UseMethod("dt_separate", dt_)
 }
 
 #' @export
 dt_separate.default <- function(dt_, col, into,
-                                sep = ".",
-                                remove = TRUE,
-                                fill = NA,
-                                fixed = TRUE,
-                                immutable = TRUE,
-                                ...){
+                         sep = ".",
+                         remove = TRUE,
+                         fill = NA,
+                         fixed = TRUE,
+                         immutable = TRUE,
+                         dev = FALSE,
+                         ...){
 
   # checks and nse
   if (isFALSE(is.data.table(dt_))) dt_ <- data.table::as.data.table(dt_)
-  if (isTRUE(remove)) to_remove <- substitute(col)
   if (isTRUE(immutable)) dt_ <- data.table::copy(dt_)
-  j <- substitute(col)
+  if (dev)
+    j <- col
+  else
+    j <- substitute(col)
 
   # use data.table::tstrsplit() to do the heavy lifting
   split_it <- quote(
@@ -75,7 +80,7 @@ dt_separate.default <- function(dt_, col, into,
 
   # removing col if remove = TRUE
   if (isTRUE(remove))
-    dt_[, eval(split_it)][, `:=`(paste(to_remove), NULL)]
+    dt_[, eval(split_it)][, `:=`(paste(j), NULL)]
   # keep col if remove = FALSE
   if (isFALSE(remove))
     dt_[, eval(split_it)]

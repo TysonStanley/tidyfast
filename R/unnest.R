@@ -47,6 +47,24 @@ dt_unnest.default <- function(dt_, col){
 }
 
 
+#' @export
+dt_unnest.dtplyr_step <- function(dt_, col, ...){
+
+  # collect data from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_unnest.default(dt_,
+                                       col=col,
+                                       ...))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+
+}
+
+
+
 #' Hoist: Fast Unnesting of Vectors
 #'
 #' Quickly unnest vectors nested in list columns. Still experimental (has some potentially unexpected behavior in some situations)!
@@ -113,3 +131,19 @@ dt_hoist.default <- function(dt_, ...){
            skip_absent = TRUE)
   dt_
 }
+
+
+#' @export
+dt_hoist.dtplyr_step <- function(dt_, ...){
+
+  # collect data from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_hoist.default(dt_, ...))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+
+}
+

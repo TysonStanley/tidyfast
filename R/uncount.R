@@ -45,3 +45,19 @@ dt_uncount.default <- function(dt_, weights, .remove = TRUE, .id = NULL){
 
   dt_
 }
+
+
+#' @export
+dt_uncount.dtplyr_step <- function(dt_, weights, .remove = TRUE, .id = NULL){
+
+  # collect data from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_uncount.default(dt_, weights=weights,
+                                        .remove=.remove, .id=.id))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+}
+

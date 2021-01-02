@@ -12,7 +12,11 @@ Authors@R: c(
            role = "ctb"),
     person(given = "Ivan",
            family = "Leung",
-           role = "ctb"))
+           role = "ctb"),
+    person(given = "Vincent",
+           family = "Arel-Bundock",
+           role = "ctb",
+           comment = c(ORCID = "0000-0003-2042-7063")))
 Description: Tidying functions built on 'data.table'
     to provide quick and efficient data manipulation with
     minimal overhead.
@@ -20,12 +24,13 @@ Imports:
     data.table (>= 1.13.0),
     Rcpp
 Suggests:
-    remotes,
-    magrittr,
-    tidyr,
+    covr,
     dplyr,
+    dtplyr,
+    magrittr,
+    remotes,
     testthat (>= 2.1.0),
-    covr
+    tidyr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

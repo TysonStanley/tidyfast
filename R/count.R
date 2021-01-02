@@ -49,3 +49,17 @@ dt_count.default <- function(dt_, ..., na.rm = FALSE, wt = NULL){
   dt_[, .N, keyby = eval(dots)]
 }
 
+
+#' @export
+dt_count.dtplyr_step <- function(dt_, ..., na.rm = FALSE, wt = NULL){
+  # collect data from lazy state
+  dt_ <- as.data.table(dt_)
+
+  expr <- substitute(dt_count.defaul(dt_, ..., na.rm = na.rm, wt = wt))
+  out <- eval(expr)
+
+  # return to lazy state
+  dtplyr::lazy_dt(out)
+}
+
+

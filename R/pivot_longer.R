@@ -17,18 +17,19 @@
 #' @examples
 #'
 #' library(data.table)
-#' example_dt <- data.table(x = c(1,2,3), y = c(4,5,6), z = c("a", "b", "c"))
+#' example_dt <- data.table(x = c(1, 2, 3), y = c(4, 5, 6), z = c("a", "b", "c"))
 #'
 #' dt_pivot_longer(example_dt,
-#'                 cols = c(x, y),
-#'                 names_to = "stuff",
-#'                 values_to = "things")
+#'   cols = c(x, y),
+#'   names_to = "stuff",
+#'   values_to = "things"
+#' )
 #'
 #' dt_pivot_longer(example_dt,
-#'                 cols = -z,
-#'                 names_to = "stuff",
-#'                 values_to = "things")
-#'
+#'   cols = -z,
+#'   names_to = "stuff",
+#'   values_to = "things"
+#' )
 #' @importFrom data.table melt
 #' @importFrom stats setNames
 #'
@@ -38,7 +39,7 @@ dt_pivot_longer <- function(dt_,
                             names_to = "name",
                             values_to = "value",
                             values_drop_na = FALSE,
-                            ...){
+                            ...) {
   UseMethod("dt_pivot_longer", dt_)
 }
 
@@ -49,7 +50,6 @@ dt_pivot_longer.default <- function(dt_,
                                     values_to = "value",
                                     values_drop_na = FALSE,
                                     ...) {
-
   if (!is.data.frame(dt_)) stop("dt_ must be a data.frame or data.table")
   if (!is.data.table(dt_)) dt_ <- as.data.table(dt_)
 
@@ -66,19 +66,20 @@ dt_pivot_longer.default <- function(dt_,
 
   id_vars <- names[!names %in% cols]
 
-  melt(data = dt_,
-       id.vars = id_vars,
-       measure.vars = cols,
-       variable.name = names_to,
-       value.name = values_to,
-       ...,
-       na.rm = values_drop_na,
-       variable.factor = FALSE,
-       value.factor = FALSE)
+  melt(
+    data = dt_,
+    id.vars = id_vars,
+    measure.vars = cols,
+    variable.name = names_to,
+    value.name = values_to,
+    ...,
+    na.rm = values_drop_na,
+    variable.factor = FALSE,
+    value.factor = FALSE
+  )
 }
 
 column_selector <- function(.data, select_vars) {
-
   data_names <- colnames(.data)
   data_vars <- setNames(as.list(seq_along(.data)), data_names)
 

@@ -13,35 +13,35 @@
 #'
 #' dt_count <- data.table(
 #'   x = LETTERS[1:3],
-#'   w = c(2,1,4)
+#'   w = c(2, 1, 4)
 #' )
 #' uncount <- dt_uncount(dt_count, w, .id = "id")
-#' uncount[]      # note that `[]` forces the printing
-#'
-#'
+#' uncount[] # note that `[]` forces the printing
 #' @import data.table
 #'
 #' @return A data.table with a row for each uncounted column.
 #'
 #' @export
-dt_uncount <- function(dt_, weights, .remove = TRUE, .id = NULL){
+dt_uncount <- function(dt_, weights, .remove = TRUE, .id = NULL) {
   UseMethod("dt_uncount", dt_)
 }
 
 #' @export
-dt_uncount.default <- function(dt_, weights, .remove = TRUE, .id = NULL){
-
-  if (isFALSE(is.data.table(dt_)))
+dt_uncount.default <- function(dt_, weights, .remove = TRUE, .id = NULL) {
+  if (isFALSE(is.data.table(dt_))) {
     dt_ <- as.data.table(dt_)
+  }
 
   w <- substitute(weights)
   dt_ <- dt_[rep(1:.N, eval(w))]
 
-  if (.remove)
+  if (.remove) {
     dt_[, `:=`(paste(w), NULL)]
+  }
 
-  if (!is.null(.id))
+  if (!is.null(.id)) {
     dt_[, `:=`(.id, 1:.N)]
+  }
 
   dt_
 }

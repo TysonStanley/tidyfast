@@ -16,13 +16,14 @@
 #' @examples
 #'
 #' library(data.table)
-#' example_dt <- data.table(z = rep(c("a", "b", "c"), 2),
-#'                          stuff = c(rep("x", 3), rep("y", 3)),
-#'                          things = 1:6)
+#' example_dt <- data.table(
+#'   z = rep(c("a", "b", "c"), 2),
+#'   stuff = c(rep("x", 3), rep("y", 3)),
+#'   things = 1:6
+#' )
 #'
 #' dt_pivot_wider(example_dt, names_from = stuff, values_from = things)
 #' dt_pivot_wider(example_dt, names_from = stuff, values_from = things, id_cols = z)
-#'
 #' @importFrom data.table dcast
 #' @importFrom stats as.formula
 #'
@@ -31,7 +32,7 @@ dt_pivot_wider <- function(dt_,
                            id_cols = NULL,
                            names_from,
                            names_sep = "_",
-                           values_from){
+                           values_from) {
   UseMethod("dt_pivot_wider", dt_)
 }
 
@@ -41,7 +42,6 @@ dt_pivot_wider.default <- function(dt_,
                                    names_from,
                                    names_sep = "_",
                                    values_from) {
-
   if (!is.data.frame(dt_)) stop("dt_ must be a data.frame or data.table")
   if (!is.data.table(dt_)) dt_ <- as.data.table(dt_)
 
@@ -57,12 +57,14 @@ dt_pivot_wider.default <- function(dt_,
 
   if (length(id_cols) == 0) {
     dcast_form <- as.formula(paste("...",
-                                   paste(names_from, collapse = " + "),
-                                   sep = " ~ "))
+      paste(names_from, collapse = " + "),
+      sep = " ~ "
+    ))
   } else {
     dcast_form <- as.formula(paste(paste(id_cols, collapse = " + "),
-                                   paste(names_from, collapse=" + "),
-                                   sep=" ~ "))
+      paste(names_from, collapse = " + "),
+      sep = " ~ "
+    ))
   }
 
   if (length(id_cols) == 0) {
@@ -72,7 +74,8 @@ dt_pivot_wider.default <- function(dt_,
       value.var = values_from,
       fun.aggregate = NULL,
       sep = names_sep,
-      drop = TRUE)[, . := NULL][]
+      drop = TRUE
+    )[, . := NULL][]
   } else {
     dcast.data.table(
       dt_,
@@ -80,6 +83,7 @@ dt_pivot_wider.default <- function(dt_,
       value.var = values_from,
       fun.aggregate = NULL,
       sep = names_sep,
-      drop = TRUE)
+      drop = TRUE
+    )
   }
 }

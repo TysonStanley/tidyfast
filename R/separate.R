@@ -19,8 +19,10 @@
 #' @examples
 #'
 #' library(data.table)
-#' d <- data.table(x = c("A.B", "A", "B", "B.A"),
-#'                 y = 1:4)
+#' d <- data.table(
+#'   x = c("A.B", "A", "B", "B.A"),
+#'   y = 1:4
+#' )
 #'
 #' # defaults
 #' dt_separate(d, x, c("c1", "c2"))
@@ -35,7 +37,6 @@
 #' # don't need to assign when `immutable = FALSE` (default)
 #' dt_separate(d, x, c("c1", "c2"), immutable = FALSE)
 #' d
-#'
 #' @importFrom data.table tstrsplit as.data.table copy
 #'
 #' @export
@@ -46,47 +47,51 @@ dt_separate <- function(dt_, col, into,
                         fixed = TRUE,
                         immutable = TRUE,
                         dev = FALSE,
-                        ...){
+                        ...) {
   UseMethod("dt_separate", dt_)
 }
 
 #' @export
 dt_separate.default <- function(dt_, col, into,
-                         sep = ".",
-                         remove = TRUE,
-                         fill = NA,
-                         fixed = TRUE,
-                         immutable = TRUE,
-                         dev = FALSE,
-                         ...){
+                                sep = ".",
+                                remove = TRUE,
+                                fill = NA,
+                                fixed = TRUE,
+                                immutable = TRUE,
+                                dev = FALSE,
+                                ...) {
 
   # checks and nse
   if (isFALSE(is.data.table(dt_))) dt_ <- data.table::as.data.table(dt_)
   if (isTRUE(immutable)) dt_ <- data.table::copy(dt_)
-  if (dev)
+  if (dev) {
     j <- col
-  else
+  } else {
     j <- substitute(col)
+  }
 
   # use data.table::tstrsplit() to do the heavy lifting
   split_it <- quote(
-    `:=`(eval(into),
-         data.table::tstrsplit(
-           eval(j),
-           split = sep,
-           fill = fill,
-           fixed = fixed,
-           ...)))
+    `:=`(
+      eval(into),
+      data.table::tstrsplit(
+        eval(j),
+        split = sep,
+        fill = fill,
+        fixed = fixed,
+        ...
+      )
+    )
+  )
 
   # removing col if remove = TRUE
-  if (isTRUE(remove))
+  if (isTRUE(remove)) {
     dt_[, eval(split_it)][, `:=`(paste(j), NULL)]
+  }
   # keep col if remove = FALSE
-  if (isFALSE(remove))
+  if (isFALSE(remove)) {
     dt_[, eval(split_it)]
+  }
 
   dt_
 }
-
-
-

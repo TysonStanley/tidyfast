@@ -24,7 +24,7 @@ Suggests:
     magrittr,
     tidyr,
     dplyr,
-    testthat (>= 2.1.0),
+    testthat (>= 3.0.0),
     covr
 License: GPL-3
 Encoding: UTF-8
@@ -34,3 +34,5 @@ LinkingTo:
     Rcpp
 URL: https://github.com/TysonStanley/tidyfast
 BugReports: https://github.com/TysonStanley/tidyfast/issues
+Config/testthat/edition: 3
+Config/testthat/parallel: true

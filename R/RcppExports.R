@@ -2,9 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 fillDown <- function(x) {
-  .Call("_tidyfast_fillDown", PACKAGE = "tidyfast", x)
+    .Call('_tidyfast_fillDown', PACKAGE = 'tidyfast', x)
 }
 
 fillUp <- function(x) {
-  .Call("_tidyfast_fillUp", PACKAGE = "tidyfast", x)
+    .Call('_tidyfast_fillUp', PACKAGE = 'tidyfast', x)
 }
+

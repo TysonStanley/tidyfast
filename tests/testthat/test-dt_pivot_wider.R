@@ -29,9 +29,9 @@ test_that("implicit missings turn into explicit missings", {
 test_that("can override default keys", {
   df <- dplyr::tribble(
     ~row, ~name, ~var, ~value,
-    1,    "Sam", "age", 10,
-    2,    "Sam", "height", 1.5,
-    3,    "Bob", "age", 20,
+    1, "Sam", "age", 10,
+    2, "Sam", "height", 1.5,
+    3, "Bob", "age", 20,
   )
 
   pv <- dt_pivot_wider(df, id_cols = name, names_from = var, values_from = value)
@@ -63,8 +63,9 @@ test_that("can pivot from multiple measure cols using all keys", {
 test_that("can pivot from multiple measure cols using helpers", {
   df <- data.table(row = 1, var = c("x", "y"), a = 1:2, b = 3:4)
   pv <- dt_pivot_wider(df,
-                       names_from = var,
-                       values_from = c(dt_starts_with("a"), dt_ends_with("b")))
+    names_from = var,
+    values_from = c(dt_starts_with("a"), dt_ends_with("b"))
+  )
 
   expect_named(pv, c("row", "a_x", "a_y", "b_x", "b_y"))
   expect_equal(pv$a_x, 1)

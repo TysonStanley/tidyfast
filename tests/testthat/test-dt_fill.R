@@ -25,10 +25,10 @@ test_that("missings are filled correctly", {
   out <- dt_fill(df, x, .direction = "up")
   expect_equal(out$x, c(1, 1, 2, 2, NA, NA))
 
-  out <- dt_fill(df, x, .direction = 'downup')
+  out <- dt_fill(df, x, .direction = "downup")
   expect_equal(out$x, c(1, 1, 1, 2, 2, 2))
 
-  out <- dt_fill(df, x, .direction = 'updown')
+  out <- dt_fill(df, x, .direction = "updown")
   expect_equal(out$x, c(1, 1, 2, 2, 2, 2))
 })
 

@@ -4,7 +4,6 @@
 starwars <- dplyr::starwars
 
 test_that("dt_nest() works", {
-
   res <- dt_nest(starwars, species, homeworld)
   expect_is(dplyr::pull(res), "list")
 
@@ -12,7 +11,6 @@ test_that("dt_nest() works", {
 
   expect_equal(nrow(res), nrow(dplyr_res))
   expect_equal(ncol(res), ncol(dplyr_res))
-
 })
 
 # not currently implemented
@@ -64,14 +62,18 @@ test_that("dt_nest() only uses observed factor levels", {
 # unnest and hoist ----------------------------------------------------
 
 test_that("hoist combines atomic vectors", {
-  dt <- data.table::data.table(x = list(1L, 2:3, 4:10),
-                               id = 1:3)
+  dt <- data.table::data.table(
+    x = list(1L, 2:3, 4:10),
+    id = 1:3
+  )
   expect_equal(dt_hoist(dt, x)$x, 1:10)
 })
 
 test_that("dt_hoist combines augmented vectors", {
-  df <- data.table::data.table(x = as.list(as.factor(letters[1:3])),
-                               id = 1:3)
+  df <- data.table::data.table(
+    x = as.list(as.factor(letters[1:3])),
+    id = 1:3
+  )
   expect_equal(dt_hoist(df, x)$x, factor(letters[1:3]))
 })
 
@@ -87,7 +89,8 @@ test_that("unnest row binds data frames", {
     data = list(
       data.table(x = 1:5),
       data.table(x = 6:10)
-  ))
+    )
+  )
   expect_equal(dt_unnest(df, data)$x, 1:10)
 })
 
@@ -98,8 +101,10 @@ test_that("can unnest mixture of name and unnamed lists of same length", {
     z = list(1:2),
     id = 1
   )
-  expect_identical(dt_hoist(df, x, y, z),
-                   data.table::data.table(id = c(1,1), x = c("a","a"), y = c(1:2), z = c(1:2)))
+  expect_identical(
+    dt_hoist(df, x, y, z),
+    data.table::data.table(id = c(1, 1), x = c("a", "a"), y = c(1:2), z = c(1:2))
+  )
 })
 
 # needs to be implemented in dt_hoist()

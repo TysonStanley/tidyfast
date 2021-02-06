@@ -16,19 +16,22 @@
 #'   x < median(x) ~ "low",
 #'   x >= median(x) ~ "high",
 #'   is.na(x) ~ "other"
-#'   )
+#' )
 #'
 #' library(data.table)
-#' temp <- data.table(pseudo_id = c(1, 2, 3, 4, 5),
-#'                    x = sample(1:5, 5, replace = TRUE))
-#' temp[, y := dt_case_when(pseudo_id == 1 ~ x * 1,
-#'                          pseudo_id == 2 ~ x * 2,
-#'                          pseudo_id == 3 ~ x * 3,
-#'                          pseudo_id == 4 ~ x * 4,
-#'                          pseudo_id == 5 ~ x * 5)]
-#'
+#' temp <- data.table(
+#'   pseudo_id = c(1, 2, 3, 4, 5),
+#'   x = sample(1:5, 5, replace = TRUE)
+#' )
+#' temp[, y := dt_case_when(
+#'   pseudo_id == 1 ~ x * 1,
+#'   pseudo_id == 2 ~ x * 2,
+#'   pseudo_id == 3 ~ x * 3,
+#'   pseudo_id == 4 ~ x * 4,
+#'   pseudo_id == 5 ~ x * 5
+#' )]
 #' @export
-dt_case_when <- function(...){
+dt_case_when <- function(...) {
   # grab the dots
   dots <- list(...)
   # checking the dots
@@ -39,21 +42,24 @@ dt_case_when <- function(...){
   conds <- conditions(dots)
   labels <- assigned_label(dots)
   class <- sapply(labels, typeof)
-  if (length(unique(class)) > 1 && (! "symbol" %in% unique(class)))
+  if (length(unique(class)) > 1 && (!"symbol" %in% unique(class))) {
     stop("The labels are of different types: ",
-         paste(unique(class), collapse = ", "), call. = FALSE)
+      paste(unique(class), collapse = ", "),
+      call. = FALSE
+    )
+  }
   class <- class[[1]]
 
   # make the right NA based on assigned labels
   na_type <- na_type_fun(class)
 
   # create fifelse() call
-  if (isTRUE(conds[[n]])){
+  if (isTRUE(conds[[n]])) {
     calls <- labels[[n]]
   } else {
     calls <- call("fifelse", conds[[n]], labels[[n]], eval(na_type))
   }
-  for (i in rev(seq_len(n))[-1]){
+  for (i in rev(seq_len(n))[-1]) {
     calls <- call("fifelse", conds[[i]], labels[[i]], calls)
   }
 
@@ -73,28 +79,30 @@ NULL
 
 # Helpers -----------------
 
-na_type_fun <- function(class){
+na_type_fun <- function(class) {
   switch(class,
-         "logical"   = NA,
-         "complex"   = NA_complex_,
-         "character" = NA_character_,
-         "integer"   = NA_integer_,
-         NA_real_)
+    "logical"   = NA,
+    "complex"   = NA_complex_,
+    "character" = NA_character_,
+    "integer"   = NA_integer_,
+    NA_real_
+  )
 }
-conditions <- function(list){
+conditions <- function(list) {
   unlist(lapply(list, function(x) x[[2]]))
 }
-assigned_label <- function(list){
+assigned_label <- function(list) {
   unlist(lapply(list, function(x) x[[3]]))
 }
-is_formula <- function(x){
+is_formula <- function(x) {
   is.call(x) && x[[1]] == quote(`~`)
 }
 
 # Check functions -------------------
 
-.check_dots <- function(dots){
+.check_dots <- function(dots) {
   forms <- all(unlist(lapply(dots, is_formula)))
-  if (!forms)
+  if (!forms) {
     stop("Not all arguments are formulas", call. = FALSE)
+  }
 }

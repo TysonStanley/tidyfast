@@ -19,9 +19,9 @@
 #' # example of using it with `dt_pivot_longer()`
 #' df <- data.table(row = 1, var = c("x", "y"), a = 1:2, b = 3:4)
 #' pv <- dt_pivot_wider(df,
-#'                      names_from = var,
-#'                      values_from = c(dt_starts_with("a"), dt_ends_with("b")))
-#'
+#'   names_from = var,
+#'   values_from = c(dt_starts_with("a"), dt_ends_with("b"))
+#' )
 #' @export
 dt_starts_with <- function(match) {
   .names <- names(parent.frame())

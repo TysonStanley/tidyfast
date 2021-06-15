@@ -14,7 +14,7 @@ Vector of the same size as the input vector
 }
 \description{
 Does what \code{dplyr::case_when()} does, with the same syntax, but with
-\code{data.table::fifelse()} under the hood
+\code{data.table::fcase()} under the hood.
 }
 \examples{
 
@@ -22,7 +22,7 @@ x <- rnorm(100)
 dt_case_when(
   x < median(x) ~ "low",
   x >= median(x) ~ "high",
-  is.na(x) ~ "other"
+  TRUE ~ "other"
   )
 
 library(data.table)

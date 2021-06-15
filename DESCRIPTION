@@ -1,6 +1,6 @@
 Package: tidyfast
 Title: Fast Tidying of Data
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: c(
     person(given = "Tyson",
            family = "Barrett",
@@ -17,7 +17,7 @@ Description: Tidying functions built on 'data.table'
     to provide quick and efficient data manipulation with
     minimal overhead.
 Imports: 
-    data.table (>= 1.13.0),
+    data.table (>= 1.13.4),
     Rcpp
 Suggests:
     remotes,

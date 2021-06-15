@@ -4,7 +4,13 @@
 \alias{dt_fill}
 \title{Fill with data.table}
 \usage{
-dt_fill(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"))
+dt_fill(
+  dt_,
+  ...,
+  id = NULL,
+  .direction = c("down", "up", "downup", "updown"),
+  immutable = TRUE
+)
 }
 \arguments{
 \item{dt_}{the data table (or if not a data.table then it is coerced with as.data.table)}
@@ -14,6 +20,8 @@ dt_fill(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"))
 \item{id}{the grouping variable(s) to fill within}
 
 \item{.direction}{either "down" or "up" (down fills values down, up fills values up), or "downup" (down first then up) or "updown" (up first then down)}
+
+\item{immutable}{If \code{TRUE}, \code{dt_} is treated as immutable (it will not be modified in place). Alternatively, you can set \code{immutable = FALSE} to modify the input object.}
 }
 \value{
 A data.table with listed columns having values filled in

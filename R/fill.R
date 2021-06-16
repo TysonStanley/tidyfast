@@ -39,7 +39,7 @@ dt_fill <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", 
 
 dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE){
 
-  if (isFALSE(is.data.table(dt_)))
+  if (isFALSE(is.data.table(dt_))){
     dt_ <- data.table::as.data.table(dt_)
   }
 

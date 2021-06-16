@@ -52,7 +52,7 @@ dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "d
   if (immutable)
     dt_ <- copy(dt_)
 
-  dt_[, paste0(dots) := lapply(.SD, fun), by = eval(by), .SDcols = dots]
+  dt_[, paste0(dots) := lapply(.SD, fun), by = eval(by), .SDcols = dots][]
 }
 
 paste_dots <- function(...){

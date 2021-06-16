@@ -165,6 +165,22 @@ test_that("dt_print_options works", {
 
 })
 
+test_that("dt_fill works", {
 
+  dt <- data.table(
+    x = c(1,2,3,4,NA),
+    y = c(NA, 1,2,3,4),
+    grp = c(1,2,1,2,1)
+  )
+
+  filled1 = dt_fill(dt, x)
+  filled2 = dt_fill(dt, y, .direction = "up")
+  filled3 = dt_fill(dt, x, y, .direction = "updown")
+
+  expect_equal(sum(is.na(filled1)), 1)
+  expect_equal(sum(is.na(filled2)), 1)
+  expect_equal(sum(is.na(filled3)), 0)
+  expect_equal(dim(filled3), c(5,3))
+})
 
 

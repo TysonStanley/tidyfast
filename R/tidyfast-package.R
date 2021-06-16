@@ -1,3 +1,4 @@
-#' @useDynLib tidyfast
-#' @importFrom Rcpp sourceCpp
-NULL
+#' @useDynLib tidyfast, .registration = TRUE
+"_PACKAGE"
+
+globalVariables(".")

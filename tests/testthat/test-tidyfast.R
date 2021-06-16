@@ -1,3 +1,5 @@
+library(tidyfast)
+
 test_that("dt_case_when works", {
   set.seed(843)
   x <- rnorm(1e5)
@@ -17,18 +19,29 @@ test_that("dt_case_when works", {
 
   expect_named(table(cased), c("high", "low"))
   expect_error(dt_case_when(x < median(x), 1))
-  expect_error(dt_case_when(
-    x < median(x), 1,
-    x >= median(x), 2
-  ))
-  expect_error(dt_case_when(
-    x < median(x) ~ "three",
-    TRUE ~ x
-  ))
-  expect_equal(
-    head(cased),
-    c("low", "low", "low", "low", "low", "high")
-  )
+  expect_error(dt_case_when(x < median(x), 1,
+                            x >= median(x), 2))
+  expect_error(dt_case_when(x < median(x) ~ "three",
+                            TRUE ~ x))
+  expect_equal(head(cased),
+               c("low","low","low","low","low","high"))
+
+  # Another
+  x <- c(1,2,3,4,5,NA)
+  cased3 =
+    dt_case_when(x == 1 ~ "a",
+                 x < 4 ~ "b",
+                 TRUE ~ "c")
+  expect_equal(tail(cased3, 1), "c")
+
+  cased4 =
+    dt_case_when(x == 1 ~ 1,
+                 x < 2 ~ 1,
+                 TRUE ~ x)
+  expect_equal(tail(cased4, 2), c(5, NA))
+
+  cased5 = dt_case_when(NA ~ 1, TRUE ~ 2)
+  expect_equal(cased5, 2)
 })
 
 
@@ -181,3 +194,22 @@ test_that("dt_print_options works", {
     )
   )
 })
+
+test_that("dt_fill works", {
+
+  dt <- data.table(
+    x = c(1,2,3,4,NA),
+    y = c(NA, 1,2,3,4),
+    grp = c(1,2,1,2,1)
+  )
+
+  filled1 = dt_fill(dt, x)
+  filled2 = dt_fill(dt, y, .direction = "up")
+  filled3 = dt_fill(dt, x, y, .direction = "updown")
+
+  expect_equal(sum(is.na(filled1)), 1)
+  expect_equal(sum(is.na(filled2)), 1)
+  expect_equal(sum(is.na(filled3)), 0)
+  expect_equal(dim(filled3), c(5,3))
+})
+

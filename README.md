@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.3.1` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.3.2` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -34,36 +34,36 @@ The current functions include:
 **Nesting and unnesting** (similar to `dplyr::group_nest()` and
 `tidyr::unnest()`):
 
-  - `dt_nest()` for nesting data tables
-  - `dt_unnest()` for unnesting data tables
-  - `dt_hoist()` for unnesting vectors in a list-column in a data table
+-   `dt_nest()` for nesting data tables
+-   `dt_unnest()` for unnesting data tables
+-   `dt_hoist()` for unnesting vectors in a list-column in a data table
 
 **Pivoting** (similar to `tidyr::pivot_longer()` and
 `tidyr::pivot_wider()`)
 
-  - `dt_pivot_longer()` for fast pivoting using `data.table::melt()`
-  - `dt_pivot_wider()` for fast pivoting using `data.table::dcast()`
+-   `dt_pivot_longer()` for fast pivoting using `data.table::melt()`
+-   `dt_pivot_wider()` for fast pivoting using `data.table::dcast()`
 
 **If Else** (similar to `dplyr::case_when()`):
 
-  - `dt_case_when()` for `dplyr::case_when()` syntax with the speed of
+-   `dt_case_when()` for `dplyr::case_when()` syntax with the speed of
     `data.table::fifelse()`
 
 **Fill** (similar to `tidyr::fill()`)
 
-  - `dt_fill()` for filling `NA` values with values before it, after it,
+-   `dt_fill()` for filling `NA` values with values before it, after it,
     or both. This can be done by a grouping variable (e.g. fill in `NA`
     values with values within an individual).
 
 **Count** and **Uncount** (similar to `tidyr::uncount()` and
 `dplyr::count()`)
 
-  - `dt_count()` for fast counting by group(s)
-  - `dt_uncount()` for creating full data from a count table
+-   `dt_count()` for fast counting by group(s)
+-   `dt_uncount()` for creating full data from a count table
 
 **Separate** (similar to `tidyr::separate()`)
 
-  - `dt_separate()` for splitting a single column into multiple based on
+-   `dt_separate()` for splitting a single column into multiple based on
     a match within the column (e.g., column with values like “A.B” could
     be split into two columns by using the period as the separator where
     column 1 would have “A” and 2 would have “B”). It is built on
@@ -72,7 +72,7 @@ The current functions include:
 
 **Adjust `data.table` print options**
 
-  - `dt_print_options()` for adjusting the options for
+-   `dt_print_options()` for adjusting the options for
     `print.data.table()`
 
 ## General API
@@ -183,6 +183,18 @@ dt_unnest(nested, col = data)
 #>  99998: thing2,thing2,thing2,thing2,thing2,thing2,... 99994
 #>  99999: thing2,thing2,thing2,thing2,thing2,thing2,... 99996
 #> 100000: thing2,thing2,thing2,thing2,thing2,thing2,... 99998
+#>                          data
+#>      1: <data.table[19638x5]>
+#>      2: <data.table[19638x5]>
+#>      3: <data.table[19638x5]>
+#>      4: <data.table[19638x5]>
+#>      5: <data.table[19638x5]>
+#>     ---                      
+#>  99996: <data.table[20073x5]>
+#>  99997: <data.table[20073x5]>
+#>  99998: <data.table[20073x5]>
+#>  99999: <data.table[20073x5]>
+#> 100000: <data.table[20073x5]>
 ```
 
 When our list columns don’t have data tables (as output from
@@ -211,18 +223,18 @@ highlighted below. Notably, the timings are without the `nested1` and
 `nested2` columns of the original `dt` object from above. Also, all
 `dplyr` and `tidyr` functions use a `tbl` version of the `dt` table.
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" />
 
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.29ms    2.88MB
-    #> 2 group_nest   8.07ms    5.38MB
+    #> 1 dt_nest      3.67ms    2.88MB
+    #> 2 group_nest   7.85ms    5.42MB
     #> # A tibble: 2 x 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    4.09ms     5.1MB
-    #> 2 unnest       8.92ms    6.06MB
+    #> 1 dt_unnest    8.48ms   12.04MB
+    #> 2 unnest       8.74ms    6.01MB
 
 ## Pivoting
 
@@ -295,10 +307,10 @@ But let’s compare some basic speed and efficiency. Because of the
     #> # A tibble: 4 x 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer   1.01ms  996.21KB
-    #> 2 pivot_longer      8.71ms    2.45MB
-    #> 3 dt_pivot_wider   11.15ms    1.86MB
-    #> 4 pivot_wider       9.06ms    2.09MB
+    #> 1 dt_pivot_longer   1.07ms  996.42KB
+    #> 2 pivot_longer      7.36ms    2.47MB
+    #> 3 dt_pivot_wider    9.02ms    1.99MB
+    #> 4 pivot_wider       7.76ms     2.1MB
 
 ### If Else
 
@@ -342,14 +354,14 @@ identical(x_cat, x_cat_fif)
 Notably, `dt_case_when()` is very fast and memory efficient, given it is
 built on `data.table::fifelse()`.
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     143.8ms   148.8MB
-    #> 2 dt_case_when   40.4ms    34.3MB
-    #> 3 fifelse        37.8ms    34.3MB
+    #> 1 case_when     138.7ms   148.8MB
+    #> 2 dt_case_when   18.8ms    19.1MB
+    #> 3 fifelse        39.7ms    34.3MB
 
 ## Fill
 
@@ -365,7 +377,8 @@ dt_with_nas <- data.table(
   y = shift(x, 2L),
   z = shift(x, -2L),
   a = sample(c(rep(NA, 10), x), 10),
-  id = sample(1:3, 10, replace = TRUE))
+  id = sample(1:3, 10, replace = TRUE)
+)
 
 # Original
 dt_with_nas
@@ -382,51 +395,51 @@ dt_with_nas
 #> 10: 10  8 NA  4  2
 
 # All defaults
-dt_fill(dt_with_nas, y, z, a)
-#>      y  z  a
-#>  1: NA  3 NA
-#>  2: NA  4  9
-#>  3:  1  5  9
-#>  4:  2  6  8
-#>  5:  3  7  8
-#>  6:  4  8  8
-#>  7:  5  9  7
-#>  8:  6 10  7
-#>  9:  7 10  7
-#> 10:  8 10  4
+dt_fill(dt_with_nas, y, z, a, immutable = FALSE)
+#>      x  y  z  a id
+#>  1:  1 NA  3 NA  3
+#>  2:  2 NA  4  9  3
+#>  3:  3  1  5  9  1
+#>  4:  4  2  6  8  3
+#>  5:  5  3  7  8  2
+#>  6:  6  4  8  8  2
+#>  7:  7  5  9  7  3
+#>  8:  8  6 10  7  2
+#>  9:  9  7 10  7  2
+#> 10: 10  8 10  4  2
 
 # by id variable called `grp`
 dt_fill(dt_with_nas, 
         y, z, a, 
         id = list(id))
-#>     id  y  z  a
-#>  1:  3 NA  3 NA
-#>  2:  3 NA  4  9
-#>  3:  3  2  6  8
-#>  4:  3  5  9  7
-#>  5:  1  1  5 NA
-#>  6:  2  3  7 NA
-#>  7:  2  4  8 NA
-#>  8:  2  6 10 NA
-#>  9:  2  7 10 NA
-#> 10:  2  8 10  4
+#>      x  y  z  a id
+#>  1:  1 NA  3 NA  3
+#>  2:  2 NA  4  9  3
+#>  3:  3  1  5  9  1
+#>  4:  4  2  6  8  3
+#>  5:  5  3  7  8  2
+#>  6:  6  4  8  8  2
+#>  7:  7  5  9  7  3
+#>  8:  8  6 10  7  2
+#>  9:  9  7 10  7  2
+#> 10: 10  8 10  4  2
 
 # both down and then up filling by group
 dt_fill(dt_with_nas, 
         y, z, a, 
         id = list(id), 
         .direction = "downup")
-#>     id y  z  a
-#>  1:  3 2  3  9
-#>  2:  3 2  4  9
-#>  3:  3 2  6  8
-#>  4:  3 5  9  7
-#>  5:  1 1  5 NA
-#>  6:  2 3  7  4
-#>  7:  2 4  8  4
-#>  8:  2 6 10  4
-#>  9:  2 7 10  4
-#> 10:  2 8 10  4
+#>      x y  z a id
+#>  1:  1 2  3 9  3
+#>  2:  2 2  4 9  3
+#>  3:  3 1  5 9  1
+#>  4:  4 2  6 8  3
+#>  5:  5 3  7 8  2
+#>  6:  6 4  8 8  2
+#>  7:  7 5  9 7  3
+#>  8:  8 6 10 7  2
+#>  9:  9 7 10 7  2
+#> 10: 10 8 10 4  2
 ```
 
 In its current form, `dt_fill()` is faster than `tidyr::fill()` and uses
@@ -452,13 +465,13 @@ marks3 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="70%" />
 
     #> # A tibble: 2 x 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   46.7ms    42.6MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   25.9ms    29.1MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   45.7ms    42.6MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   33.8ms    36.7MB
 
 ## Separate
 
@@ -495,14 +508,14 @@ Testing with a 4 MB data set with one variable that has columns of “A.B”
 repeatedly, shows that `dt_separate()` is fast but less memory efficient
 than `tidyr::separate()`.
 
-<img src="man/figures/README-unnamed-chunk-19-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-20-1.png" width="70%" />
 
     #> # A tibble: 3 x 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               6.42s    3.89GB
-    #> 2 dt_separate         120.91ms   30.55MB
-    #> 3 dt_separate-mutable 115.84ms   26.72MB
+    #> 1 separate               5.89s    3.89GB
+    #> 2 dt_separate         105.45ms   22.92MB
+    #> 3 dt_separate-mutable  97.92ms   19.09MB
 
 ## Count and Uncount
 
@@ -563,7 +576,7 @@ marks5 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-23-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-24-1.png" width="70%" />
 
 ## Notes
 
@@ -574,13 +587,13 @@ By contributing to this project, you agree to abide by its terms.
 
 We want to thank our wonderful contributors:
 
-  - [markfairbanks](https://github.com/markfairbanks) for PR \#6
+-   [markfairbanks](https://github.com/markfairbanks) for PR \#6
     providing initial the pivoting functions. Note the
     [`tidytable`](https://github.com/markfairbanks/tidytable) package
     that compliments some of `tidyfast`s functionality.
 
 **Complementary Packages:**
 
-  - [`dtplyr`](https://dtplyr.tidyverse.org)
-  - [`tidytable`](https://github.com/markfairbanks/tidytable)
-  - [`maditr`](https://github.com/gdemin/maditr)
+-   [`dtplyr`](https://dtplyr.tidyverse.org)
+-   [`tidytable`](https://github.com/markfairbanks/tidytable)
+-   [`maditr`](https://github.com/gdemin/maditr)

@@ -27,10 +27,8 @@ library(data.table)
 
 dt_count <- data.table(
   x = LETTERS[1:3],
-  w = c(2,1,4)
+  w = c(2, 1, 4)
 )
 uncount <- dt_uncount(dt_count, w, .id = "id")
-uncount[]      # note that `[]` forces the printing
-
-
+uncount[] # note that `[]` forces the printing
 }

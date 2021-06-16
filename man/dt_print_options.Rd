@@ -36,6 +36,6 @@ dt_print_options(
   topn = 5,
   rownames = TRUE,
   nrows = 100,
-  trunc.cols = TRUE)
-
+  trunc.cols = TRUE
+)
 }

@@ -1,6 +1,6 @@
 Package: tidyfast
 Title: Fast Tidying of Data
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: 
     c(person(given = "Tyson",
              family = "Barrett",
@@ -18,14 +18,14 @@ Authors@R:
              role = "ctb",
              email = "patilindrajeet.science@gmail.com",
              comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")))
-Description: Tidying functions built on 'data.table' to provide
-    quick and efficient data manipulation with minimal overhead.
-License: GPL-3
-URL: https://github.com/TysonStanley/tidyfast
-BugReports: https://github.com/TysonStanley/tidyfast/issues
+Description: Tidying functions built on 'data.table'
+    to provide quick and efficient data manipulation with
+    minimal overhead.
+Depends:
+    R (>= 3.1)
 Imports: 
-    data.table (>= 1.13.0),
-    Rcpp
+    data.table (>= 1.13.4),
+    cpp11
 Suggests:
     covr,
     dplyr,
@@ -33,12 +33,17 @@ Suggests:
     remotes,
     spelling,
     testthat (>= 3.0.0),
-    tidyr
+    tidyr,
+    knitr
 LinkingTo: 
-    Rcpp
+    cpp11 (>= 0.2.6)
 Encoding: UTF-8
 Language: en-US
 LazyData: true
+License: GPL-3
+VignetteBuilder: 
+    knitr
 RoxygenNote: 7.1.1
+SystemRequirements: C++11
 Config/testthat/edition: 3
 Config/testthat/parallel: true

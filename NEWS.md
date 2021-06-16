@@ -1,4 +1,8 @@
-# tidyfast 0.3.1
+# tidyfast 0.3.2
+
+* Fixes discrepancies between `tidyr` and `tidyfast`, specifically with `dt_fill()` and `dt_case_when()`
+* Changed to `cpp11` instead of `Rcpp` (since needs are fairly basic, no need for the advanced features)
+* Updated GitHub checking
 
 # tidyfast 0.2.1
 

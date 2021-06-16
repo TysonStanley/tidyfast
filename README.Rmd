@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.3.1` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.3.2` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/tidyfast)](https://CRAN.R-project.org/package=tidyfast)
@@ -94,6 +94,11 @@ The initial versions of the nesting and unnesting functions were shown in a [pre
 ### Nesting and Unnesting
 
 The following data table will be used for the nesting/unnesting examples.
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+devtools::load_all(here::here())
+```
+
 
 ```{r, message = FALSE, warning = FALSE}
 set.seed(84322)
@@ -360,13 +365,14 @@ dt_with_nas <- data.table(
   y = shift(x, 2L),
   z = shift(x, -2L),
   a = sample(c(rep(NA, 10), x), 10),
-  id = sample(1:3, 10, replace = TRUE))
+  id = sample(1:3, 10, replace = TRUE)
+)
 
 # Original
 dt_with_nas
 
 # All defaults
-dt_fill(dt_with_nas, y, z, a)
+dt_fill(dt_with_nas, y, z, a, immutable = FALSE)
 
 # by id variable called `grp`
 dt_fill(dt_with_nas, 

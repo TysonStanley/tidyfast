@@ -1,3 +1,5 @@
+library(tidyfast)
+
 test_that("dt_case_when works", {
   set.seed(843)
   x <- rnorm(1e5)

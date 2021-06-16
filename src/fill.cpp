@@ -1,10 +1,8 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include "cpp11/protect.hpp"
 
-// Currently, these functions are used verbatim from tidyr
-//   https://github.com/tidyverse/tidyr/blob/master/src/fill.cpp
+// from tidyr: https://github.com/tidyverse/tidyr/blob/master/src/fill.cpp
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 SEXP fillDown(SEXP x) {
   int n = Rf_length(x);
   SEXP out = Rf_allocVector(TYPEOF(x), n);
@@ -74,7 +72,7 @@ SEXP fillDown(SEXP x) {
 
   }
   default:
-    stop("Don't know how to handle column of type", Rf_type2char(TYPEOF(x)));
+    cpp11::stop("Don't know how to handle column of type", Rf_type2char(TYPEOF(x)));
   }
 
   Rf_copyMostAttrib(x, out);
@@ -82,7 +80,7 @@ SEXP fillDown(SEXP x) {
 }
 
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 SEXP fillUp(SEXP x) {
   int n = Rf_length(x);
   SEXP out = Rf_allocVector(TYPEOF(x), n);
@@ -152,7 +150,7 @@ SEXP fillUp(SEXP x) {
 
   }
   default:
-    stop("Don't know how to handle column of type", Rf_type2char(TYPEOF(x)));
+    cpp11::stop("Don't know how to handle column of type", Rf_type2char(TYPEOF(x)));
   }
 
   Rf_copyMostAttrib(x, out);

@@ -26,8 +26,7 @@ dt <- data.table(
   x = rnorm(1e5),
   y = runif(1e5),
   grp = sample(1L:3L, 1e5, replace = TRUE)
-  )
+)
 
 dt_nest(dt, grp)
-
 }

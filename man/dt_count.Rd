@@ -29,10 +29,9 @@ dt <- data.table(
   y = runif(1e5),
   grp = sample(1L:3L, 1e5, replace = TRUE),
   wt = runif(1e5, 1, 100)
-  )
+)
 
 dt_count(dt, grp)
 dt_count(dt, grp, na.rm = TRUE)
 dt_count(dt, grp, na.rm = TRUE, wt = wt)
-
 }

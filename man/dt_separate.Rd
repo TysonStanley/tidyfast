@@ -47,8 +47,10 @@ Separates a column of data into others, by splitting based a separator or regula
 \examples{
 
 library(data.table)
-d <- data.table(x = c("A.B", "A", "B", "B.A"),
-                y = 1:4)
+d <- data.table(
+  x = c("A.B", "A", "B", "B.A"),
+  y = 1:4
+)
 
 # defaults
 dt_separate(d, x, c("c1", "c2"))
@@ -63,5 +65,4 @@ separated
 # don't need to assign when `immutable = FALSE` (default)
 dt_separate(d, x, c("c1", "c2"), immutable = FALSE)
 d
-
 }

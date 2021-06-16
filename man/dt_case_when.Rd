@@ -22,16 +22,19 @@ x <- rnorm(100)
 dt_case_when(
   x < median(x) ~ "low",
   x >= median(x) ~ "high",
-  TRUE ~ "other"
-  )
+  is.na(x) ~ "other"
+)
 
 library(data.table)
-temp <- data.table(pseudo_id = c(1, 2, 3, 4, 5),
-                   x = sample(1:5, 5, replace = TRUE))
-temp[, y := dt_case_when(pseudo_id == 1 ~ x * 1,
-                         pseudo_id == 2 ~ x * 2,
-                         pseudo_id == 3 ~ x * 3,
-                         pseudo_id == 4 ~ x * 4,
-                         pseudo_id == 5 ~ x * 5)]
-
+temp <- data.table(
+  pseudo_id = c(1, 2, 3, 4, 5),
+  x = sample(1:5, 5, replace = TRUE)
+)
+temp[, y := dt_case_when(
+  pseudo_id == 1 ~ x * 1,
+  pseudo_id == 2 ~ x * 2,
+  pseudo_id == 3 ~ x * 3,
+  pseudo_id == 4 ~ x * 4,
+  pseudo_id == 5 ~ x * 5
+)]
 }

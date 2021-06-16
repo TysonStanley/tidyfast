@@ -19,13 +19,12 @@ Quickly unnest vectors nested in list columns. Still experimental (has some pote
 
 library(data.table)
 dt <- data.table(
-   x = rnorm(1e5),
-   y = runif(1e5),
-   nested1 = lapply(1:10, sample, 10, replace = TRUE),
-   nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
-   id = 1:1e5
-   )
+  x = rnorm(1e5),
+  y = runif(1e5),
+  nested1 = lapply(1:10, sample, 10, replace = TRUE),
+  nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
+  id = 1:1e5
+)
 
 dt_hoist(dt, nested1, nested2)
-
 }

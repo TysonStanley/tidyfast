@@ -37,16 +37,17 @@ decreasing the number of rows. The inverse transformation is
 \examples{
 
 library(data.table)
-example_dt <- data.table(x = c(1,2,3), y = c(4,5,6), z = c("a", "b", "c"))
+example_dt <- data.table(x = c(1, 2, 3), y = c(4, 5, 6), z = c("a", "b", "c"))
 
 dt_pivot_longer(example_dt,
-                cols = c(x, y),
-                names_to = "stuff",
-                values_to = "things")
+  cols = c(x, y),
+  names_to = "stuff",
+  values_to = "things"
+)
 
 dt_pivot_longer(example_dt,
-                cols = -z,
-                names_to = "stuff",
-                values_to = "things")
-
+  cols = -z,
+  names_to = "stuff",
+  values_to = "things"
+)
 }

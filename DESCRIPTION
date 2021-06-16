@@ -1,18 +1,23 @@
 Package: tidyfast
 Title: Fast Tidying of Data
 Version: 0.3.2
-Authors@R: c(
-    person(given = "Tyson",
-           family = "Barrett",
-           role = c("aut", "cre"),
-           email = "t.barrett@aggiemail.usu.edu",
-           comment = c(ORCID = "0000-0002-2137-1391")),
-    person(given = "Mark",
-           family = "Fairbanks",
-           role = "ctb"),
-    person(given = "Ivan",
-           family = "Leung",
-           role = "ctb"))
+Authors@R: 
+    c(person(given = "Tyson",
+             family = "Barrett",
+             role = c("aut", "cre"),
+             email = "t.barrett@aggiemail.usu.edu",
+             comment = c(ORCID = "0000-0002-2137-1391")),
+      person(given = "Mark",
+             family = "Fairbanks",
+             role = "ctb"),
+      person(given = "Ivan",
+             family = "Leung",
+             role = "ctb"),
+      person(given = "Indrajeet",
+             family = "Patil",
+             role = "ctb",
+             email = "patilindrajeet.science@gmail.com",
+             comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")))
 Description: Tidying functions built on 'data.table'
     to provide quick and efficient data manipulation with
     minimal overhead.
@@ -20,17 +25,18 @@ Imports:
     data.table (>= 1.13.4),
     Rcpp
 Suggests:
-    remotes,
-    magrittr,
-    tidyr,
+    covr,
     dplyr,
-    testthat (>= 2.1.0),
-    covr
-License: GPL-3
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.1
+    magrittr,
+    remotes,
+    spelling,
+    testthat (>= 3.0.0),
+    tidyr
 LinkingTo: 
     Rcpp
-URL: https://github.com/TysonStanley/tidyfast
-BugReports: https://github.com/TysonStanley/tidyfast/issues
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+RoxygenNote: 7.1.1
+Config/testthat/edition: 3
+Config/testthat/parallel: true

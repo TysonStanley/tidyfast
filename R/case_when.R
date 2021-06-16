@@ -15,20 +15,23 @@
 #' dt_case_when(
 #'   x < median(x) ~ "low",
 #'   x >= median(x) ~ "high",
-#'   TRUE ~ "other"
-#'   )
+#'   is.na(x) ~ "other"
+#' )
 #'
 #' library(data.table)
-#' temp <- data.table(pseudo_id = c(1, 2, 3, 4, 5),
-#'                    x = sample(1:5, 5, replace = TRUE))
-#' temp[, y := dt_case_when(pseudo_id == 1 ~ x * 1,
-#'                          pseudo_id == 2 ~ x * 2,
-#'                          pseudo_id == 3 ~ x * 3,
-#'                          pseudo_id == 4 ~ x * 4,
-#'                          pseudo_id == 5 ~ x * 5)]
-#'
+#' temp <- data.table(
+#'   pseudo_id = c(1, 2, 3, 4, 5),
+#'   x = sample(1:5, 5, replace = TRUE)
+#' )
+#' temp[, y := dt_case_when(
+#'   pseudo_id == 1 ~ x * 1,
+#'   pseudo_id == 2 ~ x * 2,
+#'   pseudo_id == 3 ~ x * 3,
+#'   pseudo_id == 4 ~ x * 4,
+#'   pseudo_id == 5 ~ x * 5
+#' )]
 #' @export
-dt_case_when <- function(...){
+dt_case_when <- function(...) {
   # grab the dots
   dots <- list(...)
   # checking the dots
@@ -72,28 +75,30 @@ NULL
 
 # Helpers -----------------
 
-na_type_fun <- function(class){
+na_type_fun <- function(class) {
   switch(class,
-         "logical"   = NA,
-         "complex"   = NA_complex_,
-         "character" = NA_character_,
-         "integer"   = NA_integer_,
-         NA_real_)
+    "logical"   = NA,
+    "complex"   = NA_complex_,
+    "character" = NA_character_,
+    "integer"   = NA_integer_,
+    NA_real_
+  )
 }
-conditions <- function(list){
+conditions <- function(list) {
   unlist(lapply(list, function(x) x[[2]]))
 }
-assigned_label <- function(list){
+assigned_label <- function(list) {
   unlist(lapply(list, function(x) x[[3]]))
 }
-is_formula <- function(x){
+is_formula <- function(x) {
   is.call(x) && x[[1]] == quote(`~`)
 }
 
 # Check functions -------------------
 
-.check_dots <- function(dots){
+.check_dots <- function(dots) {
   forms <- all(unlist(lapply(dots, is_formula)))
-  if (!forms)
+  if (!forms) {
     stop("Not all arguments are formulas", call. = FALSE)
+  }
 }

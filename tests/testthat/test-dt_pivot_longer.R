@@ -5,7 +5,7 @@ test_that("can pivot all cols (unspecified) to long", {
   dt <- data.table(x = 1:2, y = 3:4)
   df <- as.data.frame(dt)
   pivot_df <- dt_pivot_longer(dt)[order(name, value)]
-  tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, cols = c(x,y)), name, value)
+  tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, cols = c(x, y)), name, value)
 
   expect_named(pivot_df, c("name", "value"))
   expect_equal(pivot_df$name, tidyr_df$name)
@@ -16,7 +16,7 @@ test_that("can pivot all cols (unspecified) to long", {
 test_that("can pivot all cols (specified) to long", {
   dt <- data.table(x = 1:2, y = 3:4)
   df <- as.data.frame(dt)
-  pivot_df <- dt_pivot_longer(dt, cols = c(x,y))[order(name, value)]
+  pivot_df <- dt_pivot_longer(dt, cols = c(x, y))[order(name, value)]
   tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, cols = c(x, y)), name, value)
 
   expect_named(pivot_df, c("name", "value"))
@@ -50,29 +50,29 @@ test_that("can drop missing values", {
   dt <- data.table(x = c(1, NA), y = c(NA, 2))
   df <- as.data.frame(dt)
 
-  pivot_df <- dt_pivot_longer(dt, c(x,y), values_drop_na = TRUE)[order(name, value)]
-  tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, c(x,y), values_drop_na = TRUE), name, value)
+  pivot_df <- dt_pivot_longer(dt, c(x, y), values_drop_na = TRUE)[order(name, value)]
+  tidyr_df <- dplyr::arrange(tidyr::pivot_longer(df, c(x, y), values_drop_na = TRUE), name, value)
 
   expect_equal(pivot_df$name, c("x", "y"))
   expect_equal(pivot_df$value, tidyr_df$value)
 })
 
 test_that("... args to melt", {
-  df <- data.table(x = c(1, 2), y = c(2,2))
-  expect_named(dt_pivot_longer(df, c(x,y), verbose = TRUE), c("name", "value"))
+  df <- data.table(x = c(1, 2), y = c(2, 2))
+  expect_named(dt_pivot_longer(df, c(x, y), verbose = TRUE), c("name", "value"))
 })
 
 test_that("testing removal of multiple columns", {
-  df <- data.table(x = c(1, 2), y = c(2,2), z = c(1,1))
+  df <- data.table(x = c(1, 2), y = c(2, 2), z = c(1, 1))
   expect_named(dt_pivot_longer(df, c(-x)), c("x", "name", "value"))
   expect_named(dt_pivot_longer(df, -x), c("x", "name", "value"))
-  expect_named(dt_pivot_longer(df, c(-x,-y)), c("x", "y", "name", "value"))
-  expect_warning(dt_pivot_longer(df, c(-x,-y,-z)))
+  expect_named(dt_pivot_longer(df, c(-x, -y)), c("x", "y", "name", "value"))
+  expect_warning(dt_pivot_longer(df, c(-x, -y, -z)))
 })
 
 test_that("stops if given vector", {
-  df <- data.table(x = c(1, 2), y = c(2,2))
-  expect_error(dt_pivot_longer(df$x, c(x,-y)))
+  df <- data.table(x = c(1, 2), y = c(2, 2))
+  expect_error(dt_pivot_longer(df$x, c(x, -y)))
 })
 
 test_that("works with select helpers", {
@@ -94,4 +94,3 @@ test_that("a single helper works outside of c() call", {
   expect_equal(pivot_df$name, tidyr_df$name)
   expect_equal(pivot_df$value, tidyr_df$value)
 })
-

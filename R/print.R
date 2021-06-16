@@ -17,8 +17,8 @@
 #'   topn = 5,
 #'   rownames = TRUE,
 #'   nrows = 100,
-#'   trunc.cols = TRUE)
-#'
+#'   trunc.cols = TRUE
+#' )
 #' @importFrom utils packageVersion
 #'
 #' @export
@@ -26,13 +26,12 @@ dt_print_options <- function(class = TRUE,
                              topn = 5,
                              rownames = TRUE,
                              nrows = 100,
-                             trunc.cols = TRUE){
-
+                             trunc.cols = TRUE) {
   if (isTRUE(class)) options("datatable.print.class" = TRUE)
   options("datatable.print.topn" = topn)
   options("datatable.print.nrows" = nrows)
   options("datatable.print.rownames" = rownames)
-  if (packageVersion("data.table") >= "1.12.9")
+  if (packageVersion("data.table") >= "1.12.9") {
     options("datatable.print.trunc.cols" = trunc.cols)
-
+  }
 }

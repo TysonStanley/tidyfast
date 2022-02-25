@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `tidyfast v0.3.2` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.3.3` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 
@@ -14,6 +14,10 @@ coverage](https://codecov.io/gh/TysonStanley/tidyfast/branch/master/graph/badge.
 [![R build
 status](https://github.com/TysonStanley/tidyfast/workflows/R-CMD-check/badge.svg)](https://github.com/TysonStanley/tidyfast/actions)
 <!-- badges: end -->
+
+**Note: The expansion of `dtplyr` has made some of the functionality in
+`tidyfast` redundant. See `dtplyr` for a list of functions that are
+handled within that framework.**
 
 The goal of `tidyfast` is to provide fast and efficient alternatives to
 some `tidyr` (and a few `dplyr`) functions using `data.table` under the
@@ -223,18 +227,18 @@ highlighted below. Notably, the timings are without the `nested1` and
 `nested2` columns of the original `dt` object from above. Also, all
 `dplyr` and `tidyr` functions use a `tbl` version of the `dt` table.
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" />
 
-    #> # A tibble: 2 x 3
+    #> # A tibble: 2 × 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      3.67ms    2.88MB
-    #> 2 group_nest   7.85ms    5.42MB
-    #> # A tibble: 2 x 3
+    #> 1 dt_nest      2.58ms    2.88MB
+    #> 2 group_nest   6.42ms    5.54MB
+    #> # A tibble: 2 × 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    8.48ms   12.04MB
-    #> 2 unnest       8.74ms    6.01MB
+    #> 1 dt_unnest     4.9ms   11.68MB
+    #> 2 unnest       4.98ms    5.89MB
 
 ## Pivoting
 
@@ -304,13 +308,13 @@ But let’s compare some basic speed and efficiency. Because of the
 
 <img src="man/figures/README-third_pivot-1.png" width="70%" /><img src="man/figures/README-third_pivot-2.png" width="70%" />
 
-    #> # A tibble: 4 x 3
+    #> # A tibble: 4 × 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer   1.07ms  996.42KB
-    #> 2 pivot_longer      7.36ms    2.47MB
-    #> 3 dt_pivot_wider    9.02ms    1.99MB
-    #> 4 pivot_wider       7.76ms     2.1MB
+    #> 1 dt_pivot_longer  904.6µs  996.42KB
+    #> 2 pivot_longer      3.81ms    2.05MB
+    #> 3 dt_pivot_wider    8.86ms    1.86MB
+    #> 4 pivot_wider       6.35ms    2.09MB
 
 ### If Else
 
@@ -354,14 +358,14 @@ identical(x_cat, x_cat_fif)
 Notably, `dt_case_when()` is very fast and memory efficient, given it is
 built on `data.table::fifelse()`.
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="70%" />
 
-    #> # A tibble: 3 x 3
+    #> # A tibble: 3 × 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when     138.7ms   148.8MB
-    #> 2 dt_case_when   18.8ms    19.1MB
-    #> 3 fifelse        39.7ms    34.3MB
+    #> 1 case_when     114.7ms   148.8MB
+    #> 2 dt_case_when   19.1ms    19.1MB
+    #> 3 fifelse        31.5ms    34.3MB
 
 ## Fill
 
@@ -465,13 +469,13 @@ marks3 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="70%" />
 
-    #> # A tibble: 2 x 3
+    #> # A tibble: 2 × 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   45.7ms    42.6MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   33.8ms    36.7MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   27.1ms    42.9MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   16.8ms    36.7MB
 
 ## Separate
 
@@ -508,14 +512,14 @@ Testing with a 4 MB data set with one variable that has columns of “A.B”
 repeatedly, shows that `dt_separate()` is fast but less memory efficient
 than `tidyr::separate()`.
 
-<img src="man/figures/README-unnamed-chunk-20-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="70%" />
 
-    #> # A tibble: 3 x 3
+    #> # A tibble: 3 × 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               5.89s    3.89GB
-    #> 2 dt_separate         105.45ms   22.92MB
-    #> 3 dt_separate-mutable  97.92ms   19.09MB
+    #> 1 separate                5.3s    3.89GB
+    #> 2 dt_separate           72.3ms   22.92MB
+    #> 3 dt_separate-mutable   68.6ms   19.09MB
 
 ## Count and Uncount
 
@@ -576,7 +580,7 @@ marks5 <-
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-24-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-23-1.png" width="70%" />
 
 ## Notes
 

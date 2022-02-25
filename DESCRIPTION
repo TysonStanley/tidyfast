@@ -1,11 +1,11 @@
 Package: tidyfast
 Title: Fast Tidying of Data
-Version: 0.3.2
+Version: 0.3.3
 Authors@R: 
     c(person(given = "Tyson",
              family = "Barrett",
              role = c("aut", "cre"),
-             email = "t.barrett@aggiemail.usu.edu",
+             email = "t.barrett88@gmail.com",
              comment = c(ORCID = "0000-0002-2137-1391")),
       person(given = "Mark",
              family = "Fairbanks",

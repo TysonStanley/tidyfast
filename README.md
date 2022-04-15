@@ -11,6 +11,7 @@ status](https://www.r-pkg.org/badges/version/tidyfast)](https://CRAN.R-project.o
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Codecov test
 coverage](https://codecov.io/gh/TysonStanley/tidyfast/branch/master/graph/badge.svg)](https://codecov.io/gh/TysonStanley/tidyfast?branch=master)
+![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/tidyfast)
 [![R build
 status](https://github.com/TysonStanley/tidyfast/workflows/R-CMD-check/badge.svg)](https://github.com/TysonStanley/tidyfast/actions)
 <!-- badges: end -->

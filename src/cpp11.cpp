@@ -3,6 +3,7 @@
 
 
 #include "cpp11/declarations.hpp"
+#include <R_ext/Visibility.h>
 
 // fill.cpp
 SEXP fillDown(SEXP x);
@@ -20,10 +21,6 @@ extern "C" SEXP _tidyfast_fillUp(SEXP x) {
 }
 
 extern "C" {
-/* .Call calls */
-extern SEXP _tidyfast_fillDown(SEXP);
-extern SEXP _tidyfast_fillUp(SEXP);
-
 static const R_CallMethodDef CallEntries[] = {
     {"_tidyfast_fillDown", (DL_FUNC) &_tidyfast_fillDown, 1},
     {"_tidyfast_fillUp",   (DL_FUNC) &_tidyfast_fillUp,   1},
@@ -31,7 +28,7 @@ static const R_CallMethodDef CallEntries[] = {
 };
 }
 
-extern "C" void R_init_tidyfast(DllInfo* dll){
+extern "C" attribute_visible void R_init_tidyfast(DllInfo* dll){
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
   R_forceSymbols(dll, TRUE);

@@ -1,3 +1,7 @@
+# tidyfast 0.3.4
+
+Updated email and note that `dtplyr` has several overlapping functions now with `tidyfast`
+
 # tidyfast 0.3.2
 
 * Fixes discrepancies between `tidyr` and `tidyfast`, specifically with `dt_fill()` and `dt_case_when()`

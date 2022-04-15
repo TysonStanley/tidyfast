@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.3.3` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.3.4` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/tidyfast)](https://CRAN.R-project.org/package=tidyfast)

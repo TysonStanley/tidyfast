@@ -11,7 +11,7 @@ Tidying functions built on 'data.table'
     minimal overhead.
 }
 \author{
-\strong{Maintainer}: Tyson Barrett \email{t.barrett@aggiemail.usu.edu} (\href{https://orcid.org/0000-0002-2137-1391}{ORCID})
+\strong{Maintainer}: Tyson Barrett \email{t.barrett88@gmail.com} (\href{https://orcid.org/0000-0002-2137-1391}{ORCID})
 
 Other contributors:
 \itemize{

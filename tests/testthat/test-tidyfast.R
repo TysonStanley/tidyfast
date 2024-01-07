@@ -138,51 +138,42 @@ test_that("dt_uncount works", {
 })
 
 test_that("dt_separate works", {
-  dt <- data.table(
+  dt <- data.table::data.table(
     x = c("A.B", "A", "B", "B.A"),
     y = 1:4
   )
 
-  expect_equal(
-    capture.output(dt_separate(dt, x, c("c1", "c2"))[]),
-    c(
-      "   y c1   c2",
-      "1: 1  A    B",
-      "2: 2  A <NA>",
-      "3: 3  B <NA>",
-      "4: 4  B    A"
-    )
+  dt2 <- dt_separate(dt, x, c("c1", "c2"))
+  dt3 <- data.table::data.table(
+    y = 1:4,
+    c1 = c("A", "A", "B", "B"),
+    c2 = c("B", NA_character_, NA_character_, "A")
   )
+
+  expect_equal(dt2, dt3)
 
   # can keep the original column with `remove = FALSE`
-  expect_equal(
-    capture.output(dt_separate(dt, x, c("c1", "c2"), remove = FALSE)[]),
-    c(
-      "     x y c1   c2",
-      "1: A.B 1  A    B",
-      "2:   A 2  A <NA>",
-      "3:   B 3  B <NA>",
-      "4: B.A 4  B    A"
-    )
+  dt4 <- dt_separate(dt, x, c("c1", "c2"), remove = FALSE)
+  dt5 <- data.table::data.table(
+    x = c("A.B", "A", "B", "B.A"),
+    y = 1:4,
+    c1 = c("A", "A", "B", "B"),
+    c2 = c("B", NA_character_, NA_character_, "A")
   )
 
+  expect_equal(dt4, dt5)
+
   # need to assign when `immutable = TRUE`
-  expect_equal(
-    capture.output(dt_separate(dt, x, c("c1", "c2"), immutable = TRUE)),
-    c(
-      "   y c1   c2",
-      "1: 1  A    B",
-      "2: 2  A <NA>",
-      "3: 3  B <NA>",
-      "4: 4  B    A"
-    )
-  )
+  dt6 <- dt_separate(dt, x, c("c1", "c2"), immutable = TRUE)
+
+  expect_equal(dt6, dt3)
 })
 
 
-
+# now the default so set options to old to check
 test_that("dt_print_options works", {
-  dt <- data.table(x = 1)
+  options("datatable.print.class" = FALSE)
+  dt <- data.table::data.table(x = 1)
   dt_print_options()
 
   expect_equal(
@@ -197,7 +188,7 @@ test_that("dt_print_options works", {
 
 test_that("dt_fill works", {
 
-  dt <- data.table(
+  dt <- data.table::data.table(
     x = c(1,2,3,4,NA),
     y = c(NA, 1,2,3,4),
     grp = c(1,2,1,2,1)

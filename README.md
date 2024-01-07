@@ -12,8 +12,7 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lif
 [![Codecov test
 coverage](https://codecov.io/gh/TysonStanley/tidyfast/branch/master/graph/badge.svg)](https://app.codecov.io/gh/TysonStanley/tidyfast?branch=master)
 ![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/tidyfast)
-[![R build
-status](https://github.com/TysonStanley/tidyfast/workflows/R-CMD-check/badge.svg)](https://github.com/TysonStanley/tidyfast/actions)
+[![R-CMD-check](https://github.com/TysonStanley/tidyfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/TysonStanley/tidyfast/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **Note: The expansion of `dtplyr` has made some of the functionality in
@@ -245,13 +244,13 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 × 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      1.16ms    2.88MB
-    #> 2 group_nest   1.88ms    5.12MB
+    #> 1 dt_nest      1.15ms    2.88MB
+    #> 2 group_nest   1.93ms    5.12MB
     #> # A tibble: 2 × 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    2.06ms   11.84MB
-    #> 2 unnest        2.3ms    5.96MB
+    #> 1 dt_unnest    2.04ms   11.84MB
+    #> 2 unnest       2.31ms    5.96MB
 
 ## Pivoting
 
@@ -326,10 +325,10 @@ But let’s compare some basic speed and efficiency. Because of the
     #> # A tibble: 4 × 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer 358.63µs 1001.23KB
-    #> 2 pivot_longer      1.93ms    1.73MB
-    #> 3 dt_pivot_wider    5.69ms    1.99MB
-    #> 4 pivot_wider       3.82ms    2.71MB
+    #> 1 dt_pivot_longer 366.17µs 1001.23KB
+    #> 2 pivot_longer      1.95ms    1.73MB
+    #> 3 dt_pivot_wider    5.54ms    1.99MB
+    #> 4 pivot_wider       3.81ms    2.71MB
 
 ### If Else
 
@@ -378,9 +377,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 × 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when      44.7ms    72.5MB
-    #> 2 dt_case_when   10.6ms    19.1MB
-    #> 3 fifelse        20.1ms    34.3MB
+    #> 1 case_when      45.2ms    72.5MB
+    #> 2 dt_case_when   10.7ms    19.1MB
+    #> 3 fifelse        19.9ms    34.3MB
 
 ## Fill
 
@@ -493,8 +492,8 @@ marks3 <-
     #> # A tibble: 2 × 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)     16ms    46.4MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))     12ms    17.6MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   15.6ms    46.4MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   12.6ms    17.6MB
 
 ## Separate
 
@@ -537,9 +536,9 @@ than `tidyr::separate()`.
     #> # A tibble: 3 × 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               2.81s    3.89GB
-    #> 2 dt_separate          48.28ms   26.73MB
-    #> 3 dt_separate-mutable  47.78ms   26.72MB
+    #> 1 separate               2.78s    3.89GB
+    #> 2 dt_separate          47.91ms   26.73MB
+    #> 3 dt_separate-mutable  47.51ms   26.72MB
 
 ## Count and Uncount
 

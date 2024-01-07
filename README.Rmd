@@ -23,7 +23,7 @@ set.seed(843)
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![Codecov test coverage](https://codecov.io/gh/TysonStanley/tidyfast/branch/master/graph/badge.svg)](https://app.codecov.io/gh/TysonStanley/tidyfast?branch=master)
 ![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/tidyfast)
-[![R build status](https://github.com/TysonStanley/tidyfast/workflows/R-CMD-check/badge.svg)](https://github.com/TysonStanley/tidyfast/actions)
+[![R-CMD-check](https://github.com/TysonStanley/tidyfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/TysonStanley/tidyfast/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **Note: The expansion of `dtplyr` has made some of the functionality in `tidyfast` redundant. See `dtplyr` for a list of functions that are handled within that framework.**

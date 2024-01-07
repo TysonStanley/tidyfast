@@ -63,7 +63,7 @@ dt_separate.default <- function(dt_, col, into,
 
   # checks and nse
   if (isFALSE(is.data.table(dt_))) dt_ <- data.table::as.data.table(dt_)
-  if (isTRUE(immutable)) dt_ <- data.table::copy(dt_)
+  if (isTRUE(immutable)) dt_ <- data.table:::shallow(dt_)
   if (dev) {
     j <- col
   } else {

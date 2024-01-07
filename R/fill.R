@@ -40,7 +40,7 @@ dt_fill <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", 
 
 dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE){
 
-  if (isFALSE(is.data.table(dt_))){
+  if (isFALSE(data.table::is.data.table(dt_))){
     dt_ <- data.table::as.data.table(dt_)
   }
 
@@ -56,7 +56,7 @@ dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "d
   by <- substitute(id)
 
   if (immutable)
-    dt_ <- copy(dt_)
+    dt_ <- data.table:::shallow(dt_)
 
   dt_[, paste(dots) := lapply(.SD, fun), by = eval(by), .SDcols = dots][]
 }

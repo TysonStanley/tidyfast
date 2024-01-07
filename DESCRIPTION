@@ -1,6 +1,6 @@
 Package: tidyfast
 Title: Fast Tidying of Data
-Version: 0.3.4
+Version: 0.4.0
 Authors@R: 
     c(person(given = "Tyson",
              family = "Barrett",
@@ -43,7 +43,6 @@ LazyData: true
 License: GPL-3
 VignetteBuilder: 
     knitr
-RoxygenNote: 7.1.1
-SystemRequirements: C++11
+RoxygenNote: 7.2.3
 Config/testthat/edition: 3
 Config/testthat/parallel: true

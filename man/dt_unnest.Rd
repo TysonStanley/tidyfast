@@ -4,12 +4,14 @@
 \alias{dt_unnest}
 \title{Unnest: Fast Unnesting of Data Tables}
 \usage{
-dt_unnest(dt_, col)
+dt_unnest(dt_, col, keep = TRUE)
 }
 \arguments{
 \item{dt_}{the data table to unnest}
 
 \item{col}{the column to unnest}
+
+\item{keep}{whether to keep the nested column, default is \code{TRUE}}
 }
 \description{
 Quickly unnest data tables, particularly those nested by \code{dt_nest()}.

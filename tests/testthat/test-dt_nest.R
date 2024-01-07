@@ -5,7 +5,7 @@ starwars <- dplyr::starwars
 
 test_that("dt_nest() works", {
   res <- dt_nest(starwars, species, homeworld)
-  expect_is(dplyr::pull(res), "list")
+  expect_type(dplyr::pull(res), "list")
 
   dplyr_res <- dplyr::group_nest(starwars, species, homeworld)
 
@@ -106,6 +106,23 @@ test_that("can unnest mixture of name and unnamed lists of same length", {
     data.table::data.table(id = c(1, 1), x = c("a", "a"), y = c(1:2), z = c(1:2))
   )
 })
+
+
+test_that("unnest keep argument", {
+  test_df <- data.table::data.table(x = 1:2)
+  nested_df <- data.table::data.table(id = 1L:2L, list_column = list(test_df, test_df))
+  expect_identical(
+    dt_unnest(nested_df, list_column, keep = TRUE),
+    data.table::data.table(id = c(1L,1L,2L,2L), x = c(1L,2L,1L,2L), list_column = list(test_df, test_df))
+  )
+
+  expect_identical(
+    dt_unnest(nested_df, list_column, keep = FALSE),
+    data.table::data.table(id = c(1L,1L,2L,2L), x = c(1L,2L,1L,2L))
+  )
+})
+
+
 
 # needs to be implemented in dt_hoist()
 # test_that("hoist: elements must all be of same type", {

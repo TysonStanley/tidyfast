@@ -3,7 +3,8 @@
 #' Quickly unnest data tables, particularly those nested by \code{dt_nest()}.
 #'
 #' @param dt_ the data table to unnest
-#' @param col  the column to unnest
+#' @param col the column to unnest
+#' @param keep whether to keep the nested column, default is \code{TRUE}
 #'
 #' @examples
 #'
@@ -19,14 +20,14 @@
 #' @import data.table
 #'
 #' @export
-dt_unnest <- function(dt_, col) {
+dt_unnest <- function(dt_, col, keep = TRUE) {
   UseMethod("dt_unnest", dt_)
 }
 
 #' @export
-dt_unnest.default <- function(dt_, col) {
-  if (isFALSE(is.data.table(dt_))) {
-    dt_ <- as.data.table(dt_)
+dt_unnest.default <- function(dt_, col, keep = TRUE) {
+  if (isFALSE(data.table::is.data.table(dt_))) {
+    dt_ <- data.table::as.data.table(dt_)
   }
 
   # col to unnest
@@ -45,7 +46,13 @@ dt_unnest.default <- function(dt_, col) {
   others <- others[!others_class %in% c("list", "data.table", "data.frame", "tbl_df")]
 
   # Join them all together
-  dt_[seq_len(.N), eval(col)[[1L]], by = others][dt_, on = others]
+  dt_2 <- dt_[seq_len(.N), eval(col)[[1L]], by = others]
+
+  if (isFALSE(keep)){
+    dt_[, deparse(col) := NULL]
+  }
+
+  dt_2[dt_, on = others]
 }
 
 

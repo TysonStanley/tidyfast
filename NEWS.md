@@ -1,6 +1,9 @@
-# tidyfast 0.3.4
+# tidyfast 0.4.0
 
-Updated email and note that `dtplyr` has several overlapping functions now with `tidyfast`
+* Updated maintainer email
+* Added note that `dtplyr` has several overlapping functions now with `tidyfast`
+* Also fixed issue that data.table 1.15.0 created (minor). 
+* Added `keep` argument to `dt_separate()`
 
 # tidyfast 0.3.2
 

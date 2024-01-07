@@ -6,9 +6,7 @@
 \alias{tidyfast-package}
 \title{tidyfast: Fast Tidying of Data}
 \description{
-Tidying functions built on 'data.table'
-    to provide quick and efficient data manipulation with
-    minimal overhead.
+Tidying functions built on 'data.table' to provide quick and efficient data manipulation with minimal overhead.
 }
 \author{
 \strong{Maintainer}: Tyson Barrett \email{t.barrett88@gmail.com} (\href{https://orcid.org/0000-0002-2137-1391}{ORCID})

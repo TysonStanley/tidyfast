@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 set.seed(843)
 ```
 
-# `tidyfast v0.3.4` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
+# `tidyfast v0.4.0` <img src="man/figures/tidyfast_hex.png" align="right" width="30%" height="30%" />
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/tidyfast)](https://CRAN.R-project.org/package=tidyfast)
@@ -89,9 +89,19 @@ or you can install the development version from [GitHub](https://github.com/) wi
 remotes::install_github("TysonStanley/tidyfast")
 ```
 
+```{r, echo=FALSE}
+devtools::load_all(here::here())
+```
+
+
 ## Examples
 
 The initial versions of the nesting and unnesting functions were shown in a [preprint](https://psyarxiv.com/u8ekc/). Herein is shown some simple applications and the functions' speed/efficiency.
+
+```{r, eval=FALSE}
+library(tidyfast)
+```
+
 
 ### Nesting and Unnesting
 
@@ -100,7 +110,6 @@ The following data table will be used for the nesting/unnesting examples.
 ```{r, message = FALSE, warning = FALSE}
 set.seed(84322)
 
-library(tidyfast)
 library(data.table)
 library(dplyr)       # to compare with case_when()
 library(tidyr)       # to compare with fill() and separate()

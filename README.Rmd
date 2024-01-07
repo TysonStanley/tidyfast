@@ -28,7 +28,7 @@ set.seed(843)
 
 **Note: The expansion of `dtplyr` has made some of the functionality in `tidyfast` redundant. See `dtplyr` for a list of functions that are handled within that framework.**
 
-The goal of `tidyfast` is to provide fast and efficient alternatives to some `tidyr` (and a few `dplyr`) functions using `data.table` under the hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in `dtplyr` (but notably does not use the `lazy_dt()` framework of `dtplyr`). This package imports `data.table` and `Rcpp` (no other dependencies).
+The goal of `tidyfast` is to provide fast and efficient alternatives to some `tidyr` (and a few `dplyr`) functions using `data.table` under the hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs such as RStudio. These should compliment some of the current functionality in `dtplyr` (but notably does not use the `lazy_dt()` framework of `dtplyr`). This package imports `data.table` and `cpp11` (no other dependencies).
 
 These are, in essence, translations from a more `tidyverse` grammar to `data.table`. Most functions herein are in places where, in my opinion, the `data.table` syntax is not obvious or clear. As such, these functions can translate a simple function call into the fast, efficient, and concise syntax of `data.table`.
 
@@ -457,7 +457,7 @@ head(dt_separate(dt_to_split, x, into = c("lower", "upper")))
 ```
 
 
-Testing with a 4 MB data set with one variable that has columns of "A.B" repeatedly, shows that `dt_separate()` is fast but less memory efficient than `tidyr::separate()`.
+Testing with a 4 MB data set with one variable that has columns of "A.B" repeatedly, shows that `dt_separate()` is fast and far more memory efficient compared to `tidyr::separate()`.
 
 ```{r, echo = FALSE, warning = FALSE}
 dt4 <- data.table(

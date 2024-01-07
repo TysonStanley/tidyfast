@@ -9,3 +9,9 @@ devtools::document(here::here())
 devtools::check(here::here())
 # fix github actions
 usethis::use_github_action()
+# check win-builder
+devtools::check_win_devel(here::here())
+devtools::check_win_release(here::here())
+devtools::check_win_oldrelease(here::here())
+# update pkg site
+pkgdown::build_site(here::here())

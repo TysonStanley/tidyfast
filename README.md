@@ -24,8 +24,8 @@ some `tidyr` (and a few `dplyr`) functions using `data.table` under the
 hood. Each have the prefix of `dt_` to allow for autocomplete in IDEs
 such as RStudio. These should compliment some of the current
 functionality in `dtplyr` (but notably does not use the `lazy_dt()`
-framework of `dtplyr`). This package imports `data.table` and `Rcpp` (no
-other dependencies).
+framework of `dtplyr`). This package imports `data.table` and `cpp11`
+(no other dependencies).
 
 These are, in essence, translations from a more `tidyverse` grammar to
 `data.table`. Most functions herein are in places where, in my opinion,
@@ -244,13 +244,13 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 × 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      1.15ms    2.88MB
-    #> 2 group_nest   1.93ms    5.12MB
+    #> 1 dt_nest      1.16ms    2.88MB
+    #> 2 group_nest   1.94ms    5.12MB
     #> # A tibble: 2 × 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    2.04ms   11.84MB
-    #> 2 unnest       2.31ms    5.96MB
+    #> 1 dt_unnest    2.22ms   11.84MB
+    #> 2 unnest       2.38ms    5.96MB
 
 ## Pivoting
 
@@ -325,10 +325,10 @@ But let’s compare some basic speed and efficiency. Because of the
     #> # A tibble: 4 × 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer 366.17µs 1001.23KB
-    #> 2 pivot_longer      1.95ms    1.73MB
-    #> 3 dt_pivot_wider    5.54ms    1.99MB
-    #> 4 pivot_wider       3.81ms    2.71MB
+    #> 1 dt_pivot_longer 360.92µs 1001.23KB
+    #> 2 pivot_longer      1.93ms    1.73MB
+    #> 3 dt_pivot_wider    5.62ms    1.99MB
+    #> 4 pivot_wider       3.96ms    2.71MB
 
 ### If Else
 
@@ -377,9 +377,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 × 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when      45.2ms    72.5MB
-    #> 2 dt_case_when   10.7ms    19.1MB
-    #> 3 fifelse        19.9ms    34.3MB
+    #> 1 case_when      44.9ms    72.5MB
+    #> 2 dt_case_when   10.6ms    19.1MB
+    #> 3 fifelse          20ms    34.3MB
 
 ## Fill
 
@@ -492,8 +492,8 @@ marks3 <-
     #> # A tibble: 2 × 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   15.6ms    46.4MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   12.6ms    17.6MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   15.9ms    46.4MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   12.7ms    17.6MB
 
 ## Separate
 
@@ -528,17 +528,17 @@ dt_separate(dt_to_split, x, into = c("lower", "upper"))
     #> 6:      f      F
 
 Testing with a 4 MB data set with one variable that has columns of “A.B”
-repeatedly, shows that `dt_separate()` is fast but less memory efficient
-than `tidyr::separate()`.
+repeatedly, shows that `dt_separate()` is fast and far more memory
+efficient compared to `tidyr::separate()`.
 
 <img src="man/figures/README-unnamed-chunk-21-1.png" width="70%" />
 
     #> # A tibble: 3 × 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               2.78s    3.89GB
-    #> 2 dt_separate          47.91ms   26.73MB
-    #> 3 dt_separate-mutable  47.51ms   26.72MB
+    #> 1 separate               2.76s    3.89GB
+    #> 2 dt_separate          46.59ms   26.73MB
+    #> 3 dt_separate-mutable  46.47ms   26.72MB
 
 ## Count and Uncount
 

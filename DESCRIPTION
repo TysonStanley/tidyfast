@@ -39,7 +39,6 @@ LinkingTo:
     cpp11 (>= 0.2.6)
 Encoding: UTF-8
 Language: en-US
-LazyData: true
 License: GPL-3
 VignetteBuilder: 
     knitr

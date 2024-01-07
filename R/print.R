@@ -27,6 +27,7 @@ dt_print_options <- function(class = TRUE,
                              rownames = TRUE,
                              nrows = 100,
                              trunc.cols = TRUE) {
+  old <- options()
   if (isTRUE(class)) options("datatable.print.class" = TRUE)
   options("datatable.print.topn" = topn)
   options("datatable.print.nrows" = nrows)
@@ -34,4 +35,5 @@ dt_print_options <- function(class = TRUE,
   if (packageVersion("data.table") >= "1.12.9") {
     options("datatable.print.trunc.cols" = trunc.cols)
   }
+  invisible(old)
 }

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -47,94 +47,115 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dt_separate</span><span class="op">(</span>
-  <span class="va">dt_</span>,
-  <span class="va">col</span>,
-  <span class="va">into</span>,
-  sep <span class="op">=</span> <span class="st">"."</span>,
-  remove <span class="op">=</span> <span class="cn">TRUE</span>,
-  fill <span class="op">=</span> <span class="cn">NA</span>,
-  fixed <span class="op">=</span> <span class="cn">TRUE</span>,
-  immutable <span class="op">=</span> <span class="cn">TRUE</span>,
-  dev <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dt_separate</span><span class="op">(</span></span>
+<span>  <span class="va">dt_</span>,</span>
+<span>  <span class="va">col</span>,</span>
+<span>  <span class="va">into</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  remove <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fill <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  fixed <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  immutable <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  dev <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dt_</dt>
 <dd><p>the data table (or if not a data.table then it is coerced with as.data.table)</p></dd>
+
+
 <dt>col</dt>
 <dd><p>the column to separate</p></dd>
+
+
 <dt>into</dt>
 <dd><p>the names of the new columns created from splitting <code>col</code>.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>the regular expression stating how <code>col</code> should be separated. Default is <code>.</code>.</p></dd>
+
+
 <dt>remove</dt>
 <dd><p>should <code>col</code> be removed in the returned data table? Default is <code>TRUE</code></p></dd>
+
+
 <dt>fill</dt>
 <dd><p>if empty, fill is inserted. Default is <code>NA</code>.</p></dd>
+
+
 <dt>fixed</dt>
 <dd><p>logical. If TRUE match split exactly, otherwise use regular expressions. Has priority over perl.</p></dd>
+
+
 <dt>immutable</dt>
 <dd><p>If <code>TRUE</code>, <code>.dt</code> is treated as immutable (it will not be modified in place). Alternatively, you can set <code>immutable = FALSE</code> to modify the input object.</p></dd>
+
+
 <dt>dev</dt>
 <dd><p>If <code>TRUE</code>, the function can be used within other functions. It bypasses the usual non-standard evaluation. Default is <code>FALSE</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed to <code>data.table::tstrplit()</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table with a column split into multiple columns.</p>
+    
+
+<p>A data.table with a column split into multiple columns.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A.B"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B.A"</span><span class="op">)</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># defaults</span></span>
-<span class="r-in"><span class="fu">dt_separate</span><span class="op">(</span><span class="va">d</span>, <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A.B"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B.A"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># defaults</span></span></span>
+<span class="r-in"><span><span class="fu">dt_separate</span><span class="op">(</span><span class="va">d</span>, <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        y     c1     c2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;char&gt; &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1      A      B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2      A   &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3      B   &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:     4      B      A</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># can keep the original column with `remove = FALSE`</span></span>
-<span class="r-in"><span class="fu">dt_separate</span><span class="op">(</span><span class="va">d</span>, <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span>, remove <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># can keep the original column with `remove = FALSE`</span></span></span>
+<span class="r-in"><span><span class="fu">dt_separate</span><span class="op">(</span><span class="va">d</span>, <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span>, remove <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         x     y     c1     c2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt; &lt;char&gt; &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    A.B     1      A      B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      A     2      A   &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      B     3      B   &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:    B.A     4      B      A</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># need to assign when `immutable = TRUE`</span></span>
-<span class="r-in"><span class="va">separated</span> <span class="op">&lt;-</span> <span class="fu">dt_separate</span><span class="op">(</span><span class="va">d</span>, <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span>, immutable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">separated</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># need to assign when `immutable = TRUE`</span></span></span>
+<span class="r-in"><span><span class="va">separated</span> <span class="op">&lt;-</span> <span class="fu">dt_separate</span><span class="op">(</span><span class="va">d</span>, <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span>, immutable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">separated</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        y     c1     c2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;char&gt; &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1      A      B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2      A   &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3      B   &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:     4      B      A</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># don't need to assign when `immutable = FALSE` (default)</span></span>
-<span class="r-in"><span class="fu">dt_separate</span><span class="op">(</span><span class="va">d</span>, <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span>, immutable <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># don't need to assign when `immutable = FALSE` (default)</span></span></span>
+<span class="r-in"><span><span class="fu">dt_separate</span><span class="op">(</span><span class="va">d</span>, <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c1"</span>, <span class="st">"c2"</span><span class="op">)</span>, immutable <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        y     c1     c2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;char&gt; &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1      A      B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2      A   &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3      B   &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:     4      B      A</span>
-<span class="r-in"><span class="va">d</span></span>
+<span class="r-in"><span><span class="va">d</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        y     c1     c2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;char&gt; &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1      A      B</span>
@@ -155,8 +176,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

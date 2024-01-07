@@ -23,7 +23,7 @@ dt_everything(): Matches all variables
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -56,35 +56,38 @@ dt_everything(): Matches all variables
 </ul></div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dt_starts_with</span><span class="op">(</span><span class="va">match</span><span class="op">)</span>
-
-<span class="fu">dt_contains</span><span class="op">(</span><span class="va">match</span><span class="op">)</span>
-
-<span class="fu">dt_ends_with</span><span class="op">(</span><span class="va">match</span><span class="op">)</span>
-
-<span class="fu">dt_everything</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dt_starts_with</span><span class="op">(</span><span class="va">match</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">dt_contains</span><span class="op">(</span><span class="va">match</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">dt_ends_with</span><span class="op">(</span><span class="va">match</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">dt_everything</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>match</dt>
 <dd><p>a character string to match to variable names</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>None. To be used within the <code>dt_pivot_*</code> functions.</p>
+    
+
+<p>None. To be used within the <code>dt_pivot_*</code> functions.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example of using it with `dt_pivot_longer()`</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>row <span class="op">=</span> <span class="fl">1</span>, var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, b <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pv</span> <span class="op">&lt;-</span> <span class="fu"><a href="dt_pivot_wider.html">dt_pivot_wider</a></span><span class="op">(</span><span class="va">df</span>,</span>
-<span class="r-in">  names_from <span class="op">=</span> <span class="va">var</span>,</span>
-<span class="r-in">  values_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">dt_starts_with</span><span class="op">(</span><span class="st">"a"</span><span class="op">)</span>, <span class="fu">dt_ends_with</span><span class="op">(</span><span class="st">"b"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example of using it with `dt_pivot_longer()`</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>row <span class="op">=</span> <span class="fl">1</span>, var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, b <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pv</span> <span class="op">&lt;-</span> <span class="fu"><a href="dt_pivot_wider.html">dt_pivot_wider</a></span><span class="op">(</span><span class="va">df</span>,</span></span>
+<span class="r-in"><span>  names_from <span class="op">=</span> <span class="va">var</span>,</span></span>
+<span class="r-in"><span>  values_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">dt_starts_with</span><span class="op">(</span><span class="st">"a"</span><span class="op">)</span>, <span class="fu">dt_ends_with</span><span class="op">(</span><span class="st">"b"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -99,8 +102,7 @@ dt_everything(): Matches all variables
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

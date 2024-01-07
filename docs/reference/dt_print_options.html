@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -47,43 +47,54 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dt_print_options</span><span class="op">(</span>
-  class <span class="op">=</span> <span class="cn">TRUE</span>,
-  topn <span class="op">=</span> <span class="fl">5</span>,
-  rownames <span class="op">=</span> <span class="cn">TRUE</span>,
-  nrows <span class="op">=</span> <span class="fl">100</span>,
-  trunc.cols <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dt_print_options</span><span class="op">(</span></span>
+<span>  class <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  topn <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  rownames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  nrows <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  trunc.cols <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>class</dt>
 <dd><p>should the variable class be printed? (<code>options("datatable.print.class")</code>)</p></dd>
+
+
 <dt>topn</dt>
 <dd><p>the number of rows to print (both head and tail) if <code>nrows(DT) &gt; nrows</code>. (<code>options("datatable.print.topn")</code>)</p></dd>
+
+
 <dt>rownames</dt>
 <dd><p>should rownames be printed? (<code>options("datatable.print.rownames")</code>)</p></dd>
+
+
 <dt>nrows</dt>
 <dd><p>total number of rows to print (<code>options("datatable.print.nrows")</code>)</p></dd>
+
+
 <dt>trunc.cols</dt>
 <dd><p>if <code>TRUE</code>, only the columns that fit in the console are printed (with a message stating the variables not shown, similar to <code>tibbles</code>; <code>options("datatable.print.trunc.cols")</code>). This only works on <code>data.table</code> versions higher than <code>1.12.6</code> (i.e. not currently available but anticipating the eventual release).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>None. This function is used for its side effect of changing options.</p>
+    
+
+<p>None. This function is used for its side effect of changing options.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">dt_print_options</span><span class="op">(</span></span>
-<span class="r-in">  class <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">  topn <span class="op">=</span> <span class="fl">5</span>,</span>
-<span class="r-in">  rownames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">  nrows <span class="op">=</span> <span class="fl">100</span>,</span>
-<span class="r-in">  trunc.cols <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">dt_print_options</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  class <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  topn <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>  rownames <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  nrows <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  trunc.cols <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -98,8 +109,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

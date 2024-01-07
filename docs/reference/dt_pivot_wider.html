@@ -19,7 +19,7 @@ dt_pivot_longer(). Syntax based on the tidyr equivalents.'><!-- mathjax --><scri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -51,47 +51,62 @@ decreasing the number of rows. The inverse transformation is
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dt_pivot_wider</span><span class="op">(</span><span class="va">dt_</span>, id_cols <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">names_from</span>, names_sep <span class="op">=</span> <span class="st">"_"</span>, <span class="va">values_from</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dt_pivot_wider</span><span class="op">(</span><span class="va">dt_</span>, id_cols <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">names_from</span>, names_sep <span class="op">=</span> <span class="st">"_"</span>, <span class="va">values_from</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dt_</dt>
 <dd><p>the data table to widen</p></dd>
+
+
 <dt>id_cols</dt>
 <dd><p>A set of columns that uniquely identifies each observation. Defaults to all columns in the data table except for the columns specified in <code>names_from</code> and <code>values_from</code>. Typically used when you have additional variables that is directly related.</p></dd>
+
+
 <dt>names_from</dt>
 <dd><p>A pair of arguments describing which column (or columns) to get the name of the output column (<code>name_from</code>), and which column (or columns) to get the cell values from (<code>values_from</code>).</p></dd>
+
+
 <dt>names_sep</dt>
 <dd><p>the separator between the names of the columns</p></dd>
+
+
 <dt>values_from</dt>
 <dd><p>A pair of arguments describing which column (or columns) to get the name of the output column (<code>name_from</code>), and which column (or columns) to get the cell values from (<code>values_from</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A reshaped data.table into wider format</p>
+    
+
+<p>A reshaped data.table into wider format</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">example_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
-<span class="r-in">  z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">  stuff <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  things <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">dt_pivot_wider</span><span class="op">(</span><span class="va">example_dt</span>, names_from <span class="op">=</span> <span class="va">stuff</span>, values_from <span class="op">=</span> <span class="va">things</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    z x y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: a 1 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: b 2 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: c 3 6</span>
-<span class="r-in"><span class="fu">dt_pivot_wider</span><span class="op">(</span><span class="va">example_dt</span>, names_from <span class="op">=</span> <span class="va">stuff</span>, values_from <span class="op">=</span> <span class="va">things</span>, id_cols <span class="op">=</span> <span class="va">z</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    z x y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: a 1 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: b 2 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: c 3 6</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">example_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  stuff <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  things <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">dt_pivot_wider</span><span class="op">(</span><span class="va">example_dt</span>, names_from <span class="op">=</span> <span class="va">stuff</span>, values_from <span class="op">=</span> <span class="va">things</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;z&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         z     x     y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a     1     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     2     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c     3     6</span>
+<span class="r-in"><span><span class="fu">dt_pivot_wider</span><span class="op">(</span><span class="va">example_dt</span>, names_from <span class="op">=</span> <span class="va">stuff</span>, values_from <span class="op">=</span> <span class="va">things</span>, id_cols <span class="op">=</span> <span class="va">z</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;z&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         z     x     y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a     1     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     2     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c     3     6</span>
 </code></pre></div>
     </div>
   </div>
@@ -106,8 +121,7 @@ decreasing the number of rows. The inverse transformation is
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

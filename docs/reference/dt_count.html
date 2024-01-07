@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -47,51 +47,66 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dt_count</span><span class="op">(</span><span class="va">dt_</span>, <span class="va">...</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span>, wt <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dt_count</span><span class="op">(</span><span class="va">dt_</span>, <span class="va">...</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span>, wt <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dt_</dt>
 <dd><p>the data table to uncount</p></dd>
+
+
 <dt>...</dt>
 <dd><p>groups</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>should any rows with missingness be removed before the count? Default is <code>FALSE</code>.</p></dd>
+
+
 <dt>wt</dt>
 <dd><p>the wt assigned to the counts (same number of rows as the data)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table with counts for each group (or combination of groups)</p>
+    
+
+<p>A data.table with counts for each group (or combination of groups)</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e5</span><span class="op">)</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">1e5</span><span class="op">)</span>,</span>
-<span class="r-in">  grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">:</span><span class="fl">3L</span>, <span class="fl">1e5</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span class="r-in">  wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">1e5</span>, <span class="fl">1</span>, <span class="fl">100</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">dt_count</span><span class="op">(</span><span class="va">dt</span>, <span class="va">grp</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    grp     N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   1 33214</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   2 33417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   3 33369</span>
-<span class="r-in"><span class="fu">dt_count</span><span class="op">(</span><span class="va">dt</span>, <span class="va">grp</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    grp     N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   1 33214</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   2 33417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   3 33369</span>
-<span class="r-in"><span class="fu">dt_count</span><span class="op">(</span><span class="va">dt</span>, <span class="va">grp</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, wt <span class="op">=</span> <span class="va">wt</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    grp       N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   1 1676721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   2 1681753</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   3 1675696</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">1e5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">:</span><span class="fl">3L</span>, <span class="fl">1e5</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">1e5</span>, <span class="fl">1</span>, <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">dt_count</span><span class="op">(</span><span class="va">dt</span>, <span class="va">grp</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;grp&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      grp     N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1 33215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2 33623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3 33162</span>
+<span class="r-in"><span><span class="fu">dt_count</span><span class="op">(</span><span class="va">dt</span>, <span class="va">grp</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;grp&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      grp     N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1 33215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2 33623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3 33162</span>
+<span class="r-in"><span><span class="fu">dt_count</span><span class="op">(</span><span class="va">dt</span>, <span class="va">grp</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, wt <span class="op">=</span> <span class="va">wt</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;grp&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      grp       N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt;   &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1 1679015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2 1704372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3 1662926</span>
 </code></pre></div>
     </div>
   </div>
@@ -106,8 +121,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

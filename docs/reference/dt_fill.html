@@ -18,7 +18,7 @@ Rcpp functions that drive tidyr::fill() but applies them within data.table."><!-
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -49,84 +49,97 @@ Rcpp functions that drive tidyr::fill() but applies them within data.table."><!-
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dt_fill</span><span class="op">(</span>
-  <span class="va">dt_</span>,
-  <span class="va">...</span>,
-  id <span class="op">=</span> <span class="cn">NULL</span>,
-  .direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"down"</span>, <span class="st">"up"</span>, <span class="st">"downup"</span>, <span class="st">"updown"</span><span class="op">)</span>,
-  immutable <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dt_fill</span><span class="op">(</span></span>
+<span>  <span class="va">dt_</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  .direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"down"</span>, <span class="st">"up"</span>, <span class="st">"downup"</span>, <span class="st">"updown"</span><span class="op">)</span>,</span>
+<span>  immutable <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dt_</dt>
 <dd><p>the data table (or if not a data.table then it is coerced with as.data.table)</p></dd>
+
+
 <dt>...</dt>
 <dd><p>the columns to fill</p></dd>
+
+
 <dt>id</dt>
 <dd><p>the grouping variable(s) to fill within</p></dd>
+
+
 <dt>.direction</dt>
 <dd><p>either "down" or "up" (down fills values down, up fills values up), or "downup" (down first then up) or "updown" (up first then down)</p></dd>
+
+
 <dt>immutable</dt>
 <dd><p>If <code>TRUE</code>, <code>dt_</code> is treated as immutable (it will not be modified in place). Alternatively, you can set <code>immutable = FALSE</code> to modify the input object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table with listed columns having values filled in</p>
+    
+
+<p>A data.table with listed columns having values filled in</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">84322</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
-<span class="r-in">  v1 <span class="op">=</span> <span class="va">x</span>,</span>
-<span class="r-in">  v2 <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html" class="external-link">shift</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
-<span class="r-in">  v3 <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/shift.html" class="external-link">shift</a></span><span class="op">(</span><span class="va">x</span>, <span class="op">-</span><span class="fl">1L</span><span class="op">)</span>,</span>
-<span class="r-in">  v4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">10</span><span class="op">)</span>, <span class="va">x</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span>,</span>
-<span class="r-in">  grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">10</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu">dt_fill</span><span class="op">(</span><span class="va">dt</span>, <span class="va">v2</span>, <span class="va">v3</span>, <span class="va">v4</span>, id <span class="op">=</span> <span class="va">grp</span>, .direction <span class="op">=</span> <span class="st">"downup"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     v1 v2 v3 v4 grp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1  2  2  7   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2  1  3  3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3  2  4  7   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  4  3  5  3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5  4  6  3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6  5  7  3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  7  6  8  2   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8  7  9  9   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9  8 10  9   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10  9  8  2   3</span>
-<span class="r-in"><span class="fu">dt_fill</span><span class="op">(</span><span class="va">dt</span>, <span class="va">v2</span>, <span class="va">v3</span>, <span class="va">v4</span>, id <span class="op">=</span> <span class="va">grp</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     v1 v2 v3 v4 grp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1 NA  2 NA   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2  1  3 NA   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3  2  4  7   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  4  3  5  3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5  4  6  3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6  5  7  3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  7  6  8  2   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8  7  9  9   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9  8 10  9   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10  9  8  2   3</span>
-<span class="r-in"><span class="fu">dt_fill</span><span class="op">(</span><span class="va">dt</span>, .direction <span class="op">=</span> <span class="st">"up"</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>length(LHS)==0; no columns to delete or assign RHS to.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     v1 v2 v3 v4 grp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  1 NA  2 NA   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  2  1  3 NA   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  3  2  4  7   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  4  3  5  3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  5  4  6 NA   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  6  5  7 NA   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  7  6  8  2   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  8  7  9  9   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  9  8 10 NA   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 10  9 NA NA   3</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">84322</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  v1 <span class="op">=</span> <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  v2 <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/shift.html" class="external-link">shift</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  v3 <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/shift.html" class="external-link">shift</a></span><span class="op">(</span><span class="va">x</span>, <span class="op">-</span><span class="fl">1L</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  v4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">10</span><span class="op">)</span>, <span class="va">x</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">10</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">dt_fill</span><span class="op">(</span><span class="va">dt</span>, <span class="va">v2</span>, <span class="va">v3</span>, <span class="va">v4</span>, id <span class="op">=</span> <span class="va">grp</span>, .direction <span class="op">=</span> <span class="st">"downup"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        v1    v2    v3    v4   grp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1     2     2     7     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2     1     3     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     3     2     4     7     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     4     3     5     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     5     4     6     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     6     5     7     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     7     6     8     2     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     8     7     9     9     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     9     8    10     9     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    10     9     8     2     3</span>
+<span class="r-in"><span><span class="fu">dt_fill</span><span class="op">(</span><span class="va">dt</span>, <span class="va">v2</span>, <span class="va">v3</span>, <span class="va">v4</span>, id <span class="op">=</span> <span class="va">grp</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        v1    v2    v3    v4   grp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1     2     2     7     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2     1     3     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     3     2     4     7     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     4     3     5     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     5     4     6     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     6     5     7     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     7     6     8     2     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     8     7     9     9     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     9     8    10     9     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    10     9     8     2     3</span>
+<span class="r-in"><span><span class="fu">dt_fill</span><span class="op">(</span><span class="va">dt</span>, .direction <span class="op">=</span> <span class="st">"up"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        v1    v2    v3    v4   grp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1     2     2     7     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:     2     1     3     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     3     2     4     7     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:     4     3     5     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     5     4     6     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:     6     5     7     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     7     6     8     2     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     8     7     9     9     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:     9     8    10     9     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    10     9     8     2     3</span>
 </code></pre></div>
     </div>
   </div>
@@ -141,8 +154,7 @@ Rcpp functions that drive tidyr::fill() but applies them within data.table."><!-
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

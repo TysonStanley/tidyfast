@@ -15,3 +15,5 @@ devtools::check_win_release(here::here())
 devtools::check_win_oldrelease(here::here())
 # update pkg site
 pkgdown::build_site(here::here())
+# release to CRAN
+devtools::release(here::here())

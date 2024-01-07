@@ -114,8 +114,8 @@ remotes::install_github("TysonStanley/tidyfast")
 ## Examples
 
 The initial versions of the nesting and unnesting functions were shown
-in a [preprint](https://psyarxiv.com/u8ekc/). Herein is shown some
-simple applications and the functions’ speed/efficiency.
+in a [preprint](https://osf.io/preprints/psyarxiv/u8ekc/). Herein is
+shown some simple applications and the functions’ speed/efficiency.
 
 ``` r
 library(tidyfast)
@@ -244,13 +244,13 @@ highlighted below. Notably, the timings are without the `nested1` and
     #> # A tibble: 2 × 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_nest      1.16ms    2.88MB
-    #> 2 group_nest   1.94ms    5.12MB
+    #> 1 dt_nest      1.14ms    2.88MB
+    #> 2 group_nest   1.91ms    5.12MB
     #> # A tibble: 2 × 3
     #>   expression   median mem_alloc
     #>   <chr>      <bch:tm> <bch:byt>
-    #> 1 dt_unnest    2.22ms   11.84MB
-    #> 2 unnest       2.38ms    5.96MB
+    #> 1 dt_unnest    2.08ms   11.84MB
+    #> 2 unnest       2.33ms    5.96MB
 
 ## Pivoting
 
@@ -325,10 +325,10 @@ But let’s compare some basic speed and efficiency. Because of the
     #> # A tibble: 4 × 3
     #>   expression        median mem_alloc
     #>   <chr>           <bch:tm> <bch:byt>
-    #> 1 dt_pivot_longer 360.92µs 1001.23KB
-    #> 2 pivot_longer      1.93ms    1.73MB
-    #> 3 dt_pivot_wider    5.62ms    1.99MB
-    #> 4 pivot_wider       3.96ms    2.71MB
+    #> 1 dt_pivot_longer 359.98µs 1001.23KB
+    #> 2 pivot_longer      1.94ms    1.73MB
+    #> 3 dt_pivot_wider     5.8ms    1.99MB
+    #> 4 pivot_wider       3.87ms    2.71MB
 
 ### If Else
 
@@ -377,9 +377,9 @@ built on `data.table::fifelse()`.
     #> # A tibble: 3 × 3
     #>   expression     median mem_alloc
     #>   <chr>        <bch:tm> <bch:byt>
-    #> 1 case_when      44.9ms    72.5MB
-    #> 2 dt_case_when   10.6ms    19.1MB
-    #> 3 fifelse          20ms    34.3MB
+    #> 1 case_when      45.2ms    72.5MB
+    #> 2 dt_case_when   10.7ms    19.1MB
+    #> 3 fifelse        20.1ms    34.3MB
 
 ## Fill
 
@@ -492,8 +492,8 @@ marks3 <-
     #> # A tibble: 2 × 3
     #>   expression                                    median mem_alloc
     #>   <bch:expr>                                  <bch:tm> <bch:byt>
-    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   15.9ms    46.4MB
-    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   12.7ms    17.6MB
+    #> 1 tidyr::fill(dplyr::group_by(df3, id), x, y)   15.4ms    46.4MB
+    #> 2 tidyfast::dt_fill(dt3, x, y, id = list(id))   12.4ms    17.6MB
 
 ## Separate
 
@@ -536,9 +536,9 @@ efficient compared to `tidyr::separate()`.
     #> # A tibble: 3 × 3
     #>   expression            median mem_alloc
     #>   <chr>               <bch:tm> <bch:byt>
-    #> 1 separate               2.76s    3.89GB
-    #> 2 dt_separate          46.59ms   26.73MB
-    #> 3 dt_separate-mutable  46.47ms   26.72MB
+    #> 1 separate               2.79s    3.89GB
+    #> 2 dt_separate          47.31ms   26.73MB
+    #> 3 dt_separate-mutable  46.85ms   26.72MB
 
 ## Count and Uncount
 

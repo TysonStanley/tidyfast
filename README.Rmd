@@ -96,7 +96,7 @@ devtools::load_all(here::here())
 
 ## Examples
 
-The initial versions of the nesting and unnesting functions were shown in a [preprint](https://psyarxiv.com/u8ekc/). Herein is shown some simple applications and the functions' speed/efficiency.
+The initial versions of the nesting and unnesting functions were shown in a [preprint](https://osf.io/preprints/psyarxiv/u8ekc/). Herein is shown some simple applications and the functions' speed/efficiency.
 
 ```{r, eval=FALSE}
 library(tidyfast)

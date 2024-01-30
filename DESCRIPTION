@@ -42,6 +42,6 @@ Language: en-US
 License: GPL-3
 VignetteBuilder: 
     knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Config/testthat/edition: 3
 Config/testthat/parallel: true

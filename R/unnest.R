@@ -98,7 +98,6 @@ dt_hoist.default <- function(dt_, ...) {
   drop <- v.names[classes == "list" | typeofs == "list"]
   drop <- drop[!drop %in% pasted_dots]
   keep <- keep[!keep %in% pasted_dots]
-  keep <- paste(keep, collapse = ",")
   cols <- substitute(unlist(list(...), recursive = FALSE))
 
   if (length(drop) > 1) {

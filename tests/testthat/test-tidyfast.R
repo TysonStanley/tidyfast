@@ -24,10 +24,10 @@ test_that("dt_case_when works", {
   expect_error(dt_case_when(x < median(x) ~ "three",
                             TRUE ~ x))
   expect_equal(head(cased),
-               c("low","low","low","low","low","high"))
+               c("low", "low", "low", "low", "low", "high"))
 
   # Another
-  x <- c(1,2,3,4,5,NA)
+  x <- c(1, 2, 3, 4, 5, NA)
   cased3 =
     dt_case_when(x == 1 ~ "a",
                  x < 4 ~ "b",
@@ -49,7 +49,7 @@ test_that("dt_nest works", {
   dt <- data.table(
     x = rnorm(1e5),
     y = runif(1e5),
-    grp = sample(1L:3L, 1e5, replace = TRUE)
+    grp = sample.int(3L, 1e5, replace = TRUE)
   )
   d <- as.data.frame(dt)
 
@@ -65,7 +65,7 @@ test_that("dt_unnest works", {
   dt <- data.table(
     x = rnorm(1e5),
     y = runif(1e5),
-    grp = sample(1L:3L, 1e5, replace = TRUE),
+    grp = sample.int(3L, 1e5, replace = TRUE),
     nested1 = lapply(1:10, sample, 10, replace = TRUE),
     nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
     id = 1:1e5
@@ -127,7 +127,7 @@ test_that("dt_uncount works", {
   counted <- dt_count(dt, grp)
   counted2 <- dt_count(dt, grp, grp2)
 
-  expect_named(dt_uncount(counted, N)[], c("grp"))
+  expect_named(dt_uncount(counted, N)[], "grp")
   expect_equal(
     as.data.frame(dt_uncount(counted2, N)[order(grp, grp2)]),
     as.data.frame(dt[order(grp, grp2), .(grp, grp2)])
@@ -189,9 +189,9 @@ test_that("dt_print_options works", {
 test_that("dt_fill works", {
 
   dt <- data.table::data.table(
-    x = c(1,2,3,4,NA),
-    y = c(NA, 1,2,3,4),
-    grp = c(1,2,1,2,1)
+    x = c(1, 2, 3, 4, NA),
+    y = c(NA, 1, 2, 3, 4),
+    grp = c(1, 2, 1, 2, 1)
   )
 
   filled1 = dt_fill(dt, x)
@@ -201,6 +201,5 @@ test_that("dt_fill works", {
   expect_equal(sum(is.na(filled1)), 1)
   expect_equal(sum(is.na(filled2)), 1)
   expect_equal(sum(is.na(filled3)), 0)
-  expect_equal(dim(filled3), c(5,3))
+  expect_equal(dim(filled3), c(5, 3))
 })
-

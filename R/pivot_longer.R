@@ -53,18 +53,18 @@ dt_pivot_longer.default <- function(dt_,
   if (!is.data.frame(dt_)) stop("dt_ must be a data.frame or data.table")
   if (!is.data.table(dt_)) dt_ <- as.data.table(dt_)
 
-  names <- colnames(dt_)
+  dt_names <- colnames(dt_)
 
   if (is.null(substitute(cols))) {
     # All columns if cols = NULL
-    cols <- names
+    cols <- dt_names
   } else {
     cols <- column_selector(dt_, substitute(c(cols)))
   }
 
   if (length(cols) == 0) warning("No columns remaining after removing")
 
-  id_vars <- names[!names %in% cols]
+  id_vars <- dt_names[!dt_names %in% cols]
 
   melt(
     data = dt_,

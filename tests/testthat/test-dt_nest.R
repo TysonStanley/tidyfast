@@ -47,7 +47,7 @@ test_that("group_nest() works if no grouping column", {
   res <- dt_nest(iris)
   dplyr_res <- dplyr::group_nest(iris)
   expect_equal(res$data, list(data.table::as.data.table(iris)))
-  expect_equal(names(res), "data")
+  expect_named(res, "data")
   expect_equal(nrow(res), nrow(dplyr_res))
   expect_equal(ncol(res), ncol(dplyr_res))
 })
@@ -96,14 +96,14 @@ test_that("unnest row binds data frames", {
 
 test_that("can unnest mixture of name and unnamed lists of same length", {
   df <- data.table::data.table(
-    x = c("a"),
+    x = "a",
     y = list(y = 1:2),
     z = list(1:2),
     id = 1
   )
   expect_identical(
     dt_hoist(df, x, y, z),
-    data.table::data.table(id = c(1, 1), x = c("a", "a"), y = c(1:2), z = c(1:2))
+    data.table::data.table(id = c(1, 1), x = c("a", "a"), y = 1:2, z = 1:2)
   )
 })
 
@@ -113,12 +113,12 @@ test_that("unnest keep argument", {
   nested_df <- data.table::data.table(id = 1L:2L, list_column = list(test_df, test_df))
   expect_identical(
     dt_unnest(nested_df, list_column, keep = TRUE),
-    data.table::data.table(id = c(1L,1L,2L,2L), x = c(1L,2L,1L,2L), list_column = list(test_df, test_df))
+    data.table::data.table(id = c(1L, 1L, 2L, 2L), x = c(1L, 2L, 1L, 2L), list_column = list(test_df, test_df))
   )
 
   expect_identical(
     dt_unnest(nested_df, list_column, keep = FALSE),
-    data.table::data.table(id = c(1L,1L,2L,2L), x = c(1L,2L,1L,2L))
+    data.table::data.table(id = c(1L, 1L, 2L, 2L), x = c(1L, 2L, 1L, 2L))
   )
 })
 

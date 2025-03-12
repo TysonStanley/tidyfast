@@ -37,18 +37,18 @@ dt_unnest.default <- function(dt_, col, keep = TRUE) {
   }
 
   # Get the others variables in there
-  names <- colnames(dt_)
-  if (!paste(col) %in% names) {
+  dt_names <- colnames(dt_)
+  if (!paste(col) %in% dt_names) {
     stop("Could not find `cols` in data.table", call. = FALSE)
   }
-  others <- names[-match(paste(col), names)]
-  others_class <- sapply(others, function(x) class(dt_[[x]])[1L])
+  others <- dt_names[-match(paste(col), dt_names)]
+  others_class <- vapply(others, function(x) class(dt_[[x]])[1L], character(1L))
   others <- others[!others_class %in% c("list", "data.table", "data.frame", "tbl_df")]
 
   # Join them all together
   dt_2 <- dt_[seq_len(.N), eval(col)[[1L]], by = others]
 
-  if (isFALSE(keep)){
+  if (isFALSE(keep)) {
     dt_[, deparse(col) := NULL]
   }
 
@@ -91,24 +91,24 @@ dt_hoist.default <- function(dt_, ...) {
   }
 
   pasted_dots <- paste(substitute(list(...)))[-1L]
-  classes <- sapply(dt_, class)
-  typeofs <- sapply(dt_, typeof)
-  v.names <- names(classes)
-  keep <- v.names[classes != "list" & typeofs != "list"]
-  drop <- v.names[classes == "list" | typeofs == "list"]
-  drop <- drop[!drop %in% pasted_dots]
-  keep <- keep[!keep %in% pasted_dots]
+  classes <- vapply(dt_, function(x) class(x)[1L], character(1L))
+  typeofs <- vapply(dt_, typeof, character(1L))
+  v.names <- names(dt_)
+  keep.names <- v.names[classes != "list" & typeofs != "list"]
+  drop.names <- v.names[classes == "list" | typeofs == "list"]
+  drop.names <- drop.names[!drop.names %in% pasted_dots]
+  keep.names <- keep.names[!keep.names %in% pasted_dots]
   cols <- substitute(unlist(list(...), recursive = FALSE))
 
-  if (length(drop) > 1) {
+  if (length(drop.names) > 1) {
     message(
       "The following columns were dropped because ",
       "they are list-columns (but not being hoisted): ",
-      paste(drop, collapse = ", ")
+      toString(drop.names)
     )
   }
 
-  dt_ <- dt_[, eval(cols), by = keep]
+  dt_ <- dt_[, eval(cols), by = keep.names]
   dt_ <- .naming(dt_, substitute(list(...)))
   dt_
 }

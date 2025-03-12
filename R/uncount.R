@@ -33,14 +33,14 @@ dt_uncount.default <- function(dt_, weights, .remove = TRUE, .id = NULL) {
   }
 
   w <- substitute(weights)
-  dt_ <- dt_[rep(1:.N, eval(w))]
+  dt_ <- dt_[rep(seq_len(.N), eval(w))]
 
   if (.remove) {
     dt_[, `:=`(paste(w), NULL)]
   }
 
   if (!is.null(.id)) {
-    dt_[, `:=`(.id, 1:.N)]
+    dt_[, `:=`(.id, seq_len(.N))]
   }
 
   dt_

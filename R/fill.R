@@ -32,15 +32,15 @@
 #'
 #' @export
 
-dt_fill <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE){
+dt_fill <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE) {
   UseMethod("dt_fill", dt_)
 }
 
 #' @export
 
-dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE){
+dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE) {
 
-  if (isFALSE(data.table::is.data.table(dt_))){
+  if (isFALSE(data.table::is.data.table(dt_))) {
     dt_ <- data.table::as.data.table(dt_)
   }
 
@@ -53,12 +53,12 @@ dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "d
   )
 
   dots <- paste_dots(...)
-  by <- substitute(id)
+  bysub <- substitute(id)
 
   if (immutable)
-    dt_ <- data.table:::shallow(dt_)
+    dt_ <- data.table:::shallow(dt_) # nolint: undesirable_operator_linter.
 
-  dt_[, paste(dots) := lapply(.SD, fun), by = eval(by), .SDcols = dots][]
+  dt_[, paste(dots) := lapply(.SD, fun), by = eval(bysub), .SDcols = dots][]
 }
 
 paste_dots <- function(...) {

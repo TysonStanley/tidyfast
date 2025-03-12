@@ -40,23 +40,23 @@ dt_case_when <- function(...) {
   # extract info from dots
   n <- length(dots)
   conds <- conditions(dots)
-  labels <- assigned_label(dots)
+  assigned_labels <- assigned_label(dots)
 
   # create fcase() call
   forms = vector("list")
   for (i in seq_along(conds)){
-    forms[[i]] = list(conds[[i]], labels[[i]])
+    forms[[i]] = list(conds[[i]], assigned_labels[[i]])
   }
 
   calling = call("fcase", unlist(forms, recursive = FALSE))
   calling = deparse(calling)
-  calling = gsub("list\\(", "", calling)
+  calling = gsub("list(", "", calling, fixed = TRUE)
   calling = gsub("\\)$", "", calling)
-  if (isTRUE(conds[[n]]) && ! is.name(labels[[n]])){
-    calling = gsub("TRUE,", "default =", calling)
+  if (isTRUE(conds[[n]]) && ! is.name(assigned_labels[[n]])) {
+    calling = gsub("TRUE,", "default =", calling, fixed = TRUE)
   } else if (isTRUE(conds[[n]])) {
-    last = labels[[n]]
-    calling = gsub("TRUE", paste("rep(TRUE, length(", substitute(last), "))"), calling)
+    last = assigned_labels[[n]] # nolint: object_usage_linter. Used (and hidden) in substitute().
+    calling = gsub("TRUE", paste("rep(TRUE, length(", substitute(last), "))"), calling, fixed = TRUE)
   }
   calling = parse(text = calling)
   eval(calling, envir = parent.frame())

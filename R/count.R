@@ -33,7 +33,7 @@ dt_count <- function(dt_, ..., na.rm = FALSE, wt = NULL) {
 #' @export
 dt_count.default <- function(dt_, ..., na.rm = FALSE, wt = NULL) {
   if (isFALSE(is.data.table(dt_))) {
-    .dt <- as.data.table(dt_)
+    dt_ <- as.data.table(dt_)
   }
 
   dots <- substitute(list(...))

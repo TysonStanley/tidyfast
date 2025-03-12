@@ -49,7 +49,7 @@ test_that("dt_nest works", {
   dt <- data.table(
     x = rnorm(1e5),
     y = runif(1e5),
-    grp = sample(1L:3L, 1e5, replace = TRUE)
+    grp = sample.int(3L, 1e5, replace = TRUE)
   )
   d <- as.data.frame(dt)
 
@@ -65,7 +65,7 @@ test_that("dt_unnest works", {
   dt <- data.table(
     x = rnorm(1e5),
     y = runif(1e5),
-    grp = sample(1L:3L, 1e5, replace = TRUE),
+    grp = sample.int(3L, 1e5, replace = TRUE),
     nested1 = lapply(1:10, sample, 10, replace = TRUE),
     nested2 = lapply(c("thing1", "thing2"), sample, 10, replace = TRUE),
     id = 1:1e5

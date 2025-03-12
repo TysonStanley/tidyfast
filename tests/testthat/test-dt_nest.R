@@ -47,7 +47,7 @@ test_that("group_nest() works if no grouping column", {
   res <- dt_nest(iris)
   dplyr_res <- dplyr::group_nest(iris)
   expect_equal(res$data, list(data.table::as.data.table(iris)))
-  expect_equal(names(res), "data")
+  expect_named(res, "data")
   expect_equal(nrow(res), nrow(dplyr_res))
   expect_equal(ncol(res), ncol(dplyr_res))
 })

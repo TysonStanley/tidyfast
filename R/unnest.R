@@ -37,12 +37,12 @@ dt_unnest.default <- function(dt_, col, keep = TRUE) {
   }
 
   # Get the others variables in there
-  names <- colnames(dt_)
-  if (!paste(col) %in% names) {
+  dt_names <- colnames(dt_)
+  if (!paste(col) %in% dt_names) {
     stop("Could not find `cols` in data.table", call. = FALSE)
   }
-  others <- names[-match(paste(col), names)]
-  others_class <- sapply(others, function(x) class(dt_[[x]])[1L])
+  others <- dt_names[-match(paste(col), dt_names)]
+  others_class <- vapply(others, function(x) class(dt_[[x]])[1L], character(1L))
   others <- others[!others_class %in% c("list", "data.table", "data.frame", "tbl_df")]
 
   # Join them all together
@@ -91,9 +91,9 @@ dt_hoist.default <- function(dt_, ...) {
   }
 
   pasted_dots <- paste(substitute(list(...)))[-1L]
-  classes <- sapply(dt_, class)
-  typeofs <- sapply(dt_, typeof)
-  v.names <- names(classes)
+  classes <- vapply(dt_, function(x) class(x)[1L], character(1L))
+  typeofs <- vapply(dt_, typeof, character(1L))
+  v.names <- names(dt_)
   keep.names <- v.names[classes != "list" & typeofs != "list"]
   drop.names <- v.names[classes == "list" | typeofs == "list"]
   drop.names <- drop.names[!drop.names %in% pasted_dots]

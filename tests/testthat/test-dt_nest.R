@@ -96,14 +96,14 @@ test_that("unnest row binds data frames", {
 
 test_that("can unnest mixture of name and unnamed lists of same length", {
   df <- data.table::data.table(
-    x = c("a"),
+    x = "a",
     y = list(y = 1:2),
     z = list(1:2),
     id = 1
   )
   expect_identical(
     dt_hoist(df, x, y, z),
-    data.table::data.table(id = c(1, 1), x = c("a", "a"), y = c(1:2), z = c(1:2))
+    data.table::data.table(id = c(1, 1), x = c("a", "a"), y = 1:2, z = 1:2)
   )
 })
 

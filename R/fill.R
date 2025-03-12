@@ -53,12 +53,12 @@ dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "d
   )
 
   dots <- paste_dots(...)
-  by <- substitute(id)
+  bysub <- substitute(id)
 
   if (immutable)
-    dt_ <- data.table:::shallow(dt_)
+    dt_ <- data.table:::shallow(dt_) # nolint: undesirable_operator_linter.
 
-  dt_[, paste(dots) := lapply(.SD, fun), by = eval(by), .SDcols = dots][]
+  dt_[, paste(dots) := lapply(.SD, fun), by = eval(bysub), .SDcols = dots][]
 }
 
 paste_dots <- function(...) {

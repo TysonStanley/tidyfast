@@ -34,10 +34,10 @@ dt_nest.default <- function(dt_, ..., .key = "data") {
   }
 
   # groups
-  by <- substitute(list(...))
+  bysub <- substitute(list(...))
 
   # call to data.table
-  dt_ <- dt_[, list(list(.SD)), keyby = eval(by)]
+  dt_ <- dt_[, list(list(.SD)), keyby = eval(bysub)]
   setnames(dt_, old = "V1", new = .key)
   dt_
 }

@@ -127,7 +127,7 @@ test_that("dt_uncount works", {
   counted <- dt_count(dt, grp)
   counted2 <- dt_count(dt, grp, grp2)
 
-  expect_named(dt_uncount(counted, N)[], c("grp"))
+  expect_named(dt_uncount(counted, N)[], "grp")
   expect_equal(
     as.data.frame(dt_uncount(counted2, N)[order(grp, grp2)]),
     as.data.frame(dt[order(grp, grp2), .(grp, grp2)])

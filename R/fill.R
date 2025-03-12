@@ -32,15 +32,15 @@
 #'
 #' @export
 
-dt_fill <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE){
+dt_fill <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE) {
   UseMethod("dt_fill", dt_)
 }
 
 #' @export
 
-dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE){
+dt_fill.default <- function(dt_, ..., id = NULL, .direction = c("down", "up", "downup", "updown"), immutable=TRUE) {
 
-  if (isFALSE(data.table::is.data.table(dt_))){
+  if (isFALSE(data.table::is.data.table(dt_))) {
     dt_ <- data.table::as.data.table(dt_)
   }
 

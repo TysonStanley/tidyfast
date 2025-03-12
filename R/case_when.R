@@ -52,10 +52,10 @@ dt_case_when <- function(...) {
   calling = deparse(calling)
   calling = gsub("list\\(", "", calling)
   calling = gsub("\\)$", "", calling)
-  if (isTRUE(conds[[n]]) && ! is.name(labels[[n]])){
+  if (isTRUE(conds[[n]]) && ! is.name(labels[[n]])) {
     calling = gsub("TRUE,", "default =", calling)
   } else if (isTRUE(conds[[n]])) {
-    last = labels[[n]]
+    last = labels[[n]] # nolint: object_usage_linter. Used (and hidden) in substitute().
     calling = gsub("TRUE", paste("rep(TRUE, length(", substitute(last), "))"), calling)
   }
   calling = parse(text = calling)

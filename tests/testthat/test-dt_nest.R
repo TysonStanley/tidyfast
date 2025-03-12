@@ -113,12 +113,12 @@ test_that("unnest keep argument", {
   nested_df <- data.table::data.table(id = 1L:2L, list_column = list(test_df, test_df))
   expect_identical(
     dt_unnest(nested_df, list_column, keep = TRUE),
-    data.table::data.table(id = c(1L,1L,2L,2L), x = c(1L,2L,1L,2L), list_column = list(test_df, test_df))
+    data.table::data.table(id = c(1L, 1L, 2L, 2L), x = c(1L, 2L, 1L, 2L), list_column = list(test_df, test_df))
   )
 
   expect_identical(
     dt_unnest(nested_df, list_column, keep = FALSE),
-    data.table::data.table(id = c(1L,1L,2L,2L), x = c(1L,2L,1L,2L))
+    data.table::data.table(id = c(1L, 1L, 2L, 2L), x = c(1L, 2L, 1L, 2L))
   )
 })
 

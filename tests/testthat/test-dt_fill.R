@@ -34,7 +34,7 @@ test_that("missings are filled correctly", {
 
 test_that("missings filled down for each atomic vector", {
   df <- data.table::data.table(
-    lgl = c(T, NA),
+    lgl = c(TRUE, NA),
     int = c(1L, NA),
     dbl = c(1, NA),
     chr = c("a", NA),
@@ -51,7 +51,7 @@ test_that("missings filled down for each atomic vector", {
 
 test_that("missings filled up for each vector", {
   df <- data.table::data.table(
-    lgl = c(NA, T),
+    lgl = c(NA, TRUE),
     int = c(NA, 1L),
     dbl = c(NA, 1),
     chr = c(NA, "a"),

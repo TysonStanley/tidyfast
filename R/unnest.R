@@ -48,7 +48,7 @@ dt_unnest.default <- function(dt_, col, keep = TRUE) {
   # Join them all together
   dt_2 <- dt_[seq_len(.N), eval(col)[[1L]], by = others]
 
-  if (isFALSE(keep)){
+  if (isFALSE(keep)) {
     dt_[, deparse(col) := NULL]
   }
 
